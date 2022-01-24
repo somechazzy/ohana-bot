@@ -1,0 +1,721 @@
+[
+  {
+    "name": "help",
+    "aliases": [
+      "h"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Shows the help page, listing all available commands. If followed with another command: shows info on that command",
+    "short_description": "Shows help page",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]help",
+      "[prefix]help [command name]",
+      "[prefix]help linkmal",
+      "[prefix]help countdown"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "read_message_history",
+      "add_reactions"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "uwufy",
+    "aliases": [
+      "uwu"
+    ],
+    "sub_commands": [],
+    "section": "Fun",
+    "description": "Uwufies the given text",
+    "short_description": "Uwufies the given text",
+    "further_details": "Use uwufydel instead if you want your command message to be deleted",
+    "usage_examples": [
+      "[prefix]uwufy [thing you want the bot to uwufy]",
+      "[prefix]uwufy hello friends"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "uwufyDel",
+    "aliases": [
+      "uwudel"
+    ],
+    "sub_commands": [],
+    "section": "Fun",
+    "description": "Uwufies the given text and deletes the user's command message",
+    "short_description": "Uwufies the given text and deletes the command message",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]uwufydel [thing you want the bot to uwufy]",
+      "[prefix]uwufydel im a stinky bot"
+    ],
+    "show_on_listing": "Only section specific",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "manage_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "snipe",
+    "aliases": [
+      "s"
+    ],
+    "sub_commands": [],
+    "section": "Fun",
+    "description": "Snipes the most recently deleted message in the channel. Only works on recent messages as old messages are not cached",
+    "short_description": "Snipe the message someone just deleted",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]snipe"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "avatar",
+    "aliases": [
+      "av",
+      "pfp"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Returns your avatar if sent on its own, or the avatar of user/ID mentioned. Provide with `-s` option to return the user's server avatar",
+    "short_description": "Returns your avatar or avatar of user mentioned",
+    "further_details": "User mentioned needs to in the same guild as the command",
+    "usage_examples": [
+      "[prefix]avatar",
+      "[prefix]avatar [optional: -s] [optional: someone's mention or someone's ID]",
+      "[prefix]avatar @someone",
+      "[prefix]avatar -s @someone",
+      "[prefix]avatar 218547152328758603"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "banner",
+    "aliases": [
+      "cover"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Returns your banner if sent on its own, or the banner of user/ID mentioned. Provide with `-s` option to return the user's server banner (currently not supported)",
+    "short_description": "Returns your banner or banner of user mentioned",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]banner",
+      "[prefix]banner [optional: -s] [optional: someone's mention or someone's ID]",
+      "[prefix]banner @someone",
+      "[prefix]banner -s @someone",
+      "[prefix]banner 218547152328758603"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "remindMe",
+    "aliases": [
+      "remind", "reminder"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Takes a period in weeks, days, hours, minutes or any combination, followed by a reminder text. After the time specified has elapsed, I'll send a DM with the reminder",
+    "short_description": "Reminds you about something after some time",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]remindme [period] [reminder]",
+      "[prefix]remindme 2h 30m pizza time",
+      "[prefix]remindme 1d 12h"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "countdown",
+    "aliases": [
+      "cd"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Takes a duration in days, hours, minutes or both, followed by an optional title for the countdown. Returns an embed that updates twice a minute",
+    "short_description": "Returns a countdown embed",
+    "further_details": "Defaults to 10 minutes if no time is provided",
+    "usage_examples": [
+      "[prefix]countdown [optional: time in days, hours and/or minutes] [optional: title]",
+      "[prefix]countdown 5h 30m submission deadline",
+      "[prefix]countdown 3d 6h",
+      "[prefix]countdown movie night"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "read_message_history"
+    ],
+    "member_perms": [
+      "embed_links"
+    ]
+  },
+  {
+    "name": "urban",
+    "aliases": [
+      "ud", "urbanDictionary"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Provide it with a term to search for on urban dictionary and it will return a multi-page embed with results",
+    "short_description": "Returns a list of definitions from urban dictionary",
+    "further_details": "Uses RapidAPI's Urban Dictionary API",
+    "usage_examples": [
+      "[prefix]urban [term to search for]",
+      "[prefix]urban weeb",
+      "[prefix]ud discord mod"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "read_message_history"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "define",
+    "aliases": [
+      "d", "dictionary"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Provide it with a term to search for on Merriam Webster and it will return a list of definitions",
+    "short_description": "Returns a list of definitions from Merriam Webster",
+    "further_details": "Returns suggestions for other terms if no definition found",
+    "usage_examples": [
+      "[prefix]define [term to search for]",
+      "[prefix]define dictionary"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "server",
+    "aliases": [
+      "guild", "serverInfo"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Returns info about the current server",
+    "short_description": "Show info about the current server",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]server"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "user",
+    "aliases": [
+      "member", "userInfo", "memberInfo"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Returns info for the member tagged or yourself if no member is tagged",
+    "short_description": "Show info for a member",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]user [someone's att or ID]",
+      "[prefix]user",
+      "[prefix]user @chazzy"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "emoji",
+    "aliases": [
+      "emote",
+      "enlarge"
+    ],
+    "sub_commands": [],
+    "section": "Utility",
+    "description": "Takes an emoji or a message ID, and returns the image URL of the first emoji provided or the first emoji in the linked message",
+    "short_description": "Returns the image URL of an emoji",
+    "further_details": "Works only on non-default emotes. When using a message ID it returns URL to the first emoji that exists in that message",
+    "usage_examples": [
+      "[prefix]emoji [emoji or message ID that contains that emoji]",
+      "[prefix]emoji 779412106977391357"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "read_message_history"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "feedback",
+    "aliases": [
+      "fb"
+    ],
+    "sub_commands": [],
+    "section": "Other",
+    "description": "Use this command to send feedback to developers in case you encounter bugs and such or if you just have a suggestion. Leave your message after the command",
+    "short_description": "Send feedback to developers",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]feedback [the message you'd like to leave]",
+      "[prefix]feedback the bot stops responding when I request my MAL profile, my username is user123"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "invite",
+    "aliases": [],
+    "sub_commands": [],
+    "section": "Other",
+    "description": "Returns a link to invite this bot to other servers",
+    "short_description": "Invite me to your server",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]invite"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "anime",
+    "aliases": [
+      "searchAnime"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Searches the anime name you provide on MyAnimeList, and allows the user to choose the title they were going for, and then displays details for that anime. Can take a user mention as an argument before the anime name to grab stats of the selected show for that user as well",
+    "short_description": "Searches and displays anime info from MyAnimeList",
+    "further_details": "Gets user specific stats for the requesting user if no user is mentioned, and both require that a MAL is linked (using `[prefix]linkmal)`",
+    "usage_examples": [
+      "[prefix]anime [optional: user mention or ID] [anime name]",
+      "[prefix]anime steins gate",
+      "[prefix]anime @someone sangatsu no lion"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "add_reactions",
+      "read_message_history"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "manga",
+    "aliases": [
+      "searchManga"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Searches the manga name you provide on MyAnimeList, and allows the user to choose the title they were going for, and then displays details for that manga. Can take a user mention as an argument before the anime name to grab stats of the selected manga for that user as well",
+    "short_description": "Searches and displays manga info from MyAnimeList",
+    "further_details": "Gets user specific stats for the requesting user if no user is mentioned, and both require that a MAL is linked (using `[prefix]linkmal)`",
+    "usage_examples": [
+      "[prefix]manga [optional: user mention or ID] [manga name]",
+      "[prefix]manga one piece",
+      "[prefix]manga @someone solanin"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "add_reactions",
+      "read_message_history"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "linkMAL",
+    "aliases": [
+      "linkMyAnimeList",
+      "addMAL",
+      "addMyAnimeList"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Links your discord account to your MyAnimeList account through me, for usage in other commands (`mal`, `anime` and `manga`)",
+    "short_description": "Links your MyAnimeList to your discord through me",
+    "further_details": "Necessary for `[prefix]getmal` to work on you. It also provides details from your list inside anime/manga info embeds",
+    "usage_examples": [
+      "[prefix]linkmal [your MAL username]",
+      "[prefix]linkmal myusername"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "linkAL",
+    "aliases": [
+      "linkAnilist",
+      "addAL",
+      "addAnilist"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Links your discord account to your Anilist account through me, for other usage in other commands (`mal`, `anime` and `manga`)",
+    "short_description": "Links your Anilist to your discord through me",
+    "further_details": "Necessary for `[prefix]getal` to work on you. It also provides details from your list inside anime/manga info embeds",
+    "usage_examples": [
+      "[prefix]linkal [your AL username]",
+      "[prefix]linkal myusername"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "getMAL",
+    "aliases": [
+      "getMyAnimeList",
+      "mal",
+      "MyAnimeList"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Returns the user's (or mentioned user's/username) MyAnimeList profile embed with ability to navigate through anime and manga lists as well as favorites. Can take a user mention, ID or username to get their profile",
+    "short_description": "Returns navigatable MyAnimeList profile",
+    "further_details": "When using with a mention or an ID, user must have their MAL linked (using `[prefix]linkmal`)",
+    "usage_examples": [
+      "[prefix]getmal",
+      "[prefix]getmal [someone's mention, ID, or username]",
+      "[prefix]getmal @someone",
+      "[prefix]getmal some_username",
+      "[prefix]getmal 218547152328758603"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "add_reactions",
+      "read_message_history"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "getAL",
+    "aliases": [
+      "getAnilist",
+      "al",
+      "anilist"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Returns the user's (or mentioned user's/username) Anilist profile embed with ability to navigate through anime and manga lists as well as favorites. Can take a user mention, ID or username to get their profile",
+    "short_description": "Returns navigatable Anilist profile",
+    "further_details": "When using with a mention or an ID, user must have their AL linked (using `[prefix]linkal`)",
+    "usage_examples": [
+      "[prefix]getal",
+      "[prefix]getal [someone's mention, ID, or username]",
+      "[prefix]getal @someone",
+      "[prefix]getal some_username",
+      "[prefix]getal 218547152328758603"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "add_reactions",
+      "read_message_history"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "unlinkMAL",
+    "aliases": [
+      "unlinkMyAnimeList",
+      "removeMAL",
+      "removeMyAnimeList"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Removes the pairing between your Discord profile and your MAL username from this bot",
+    "short_description": "Unlinks your MAL username",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]unlinkmal"
+    ],
+    "show_on_listing": "Only section specific",
+    "bot_perms": [
+      "send_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "unlinkAL",
+    "aliases": [
+      "unlinkAnilist",
+      "removeAL",
+      "removeAnilist"
+    ],
+    "sub_commands": [],
+    "section": "Anime and Manga",
+    "description": "Removes the pairing between your Discord profile and your Anilist username from this bot",
+    "short_description": "Unlinks your Anilist username",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]unlinkal"
+    ],
+    "show_on_listing": "Only section specific",
+    "bot_perms": [
+      "send_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "level",
+    "aliases": [
+      "lvl",
+      "xp",
+      "rank"
+    ],
+    "sub_commands": [],
+    "section": "XP and Levels",
+    "description": "Returns your level and XP info unless provided with a member ID or mention, then it gets their info",
+    "short_description": "Your level and XP info",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]level",
+      "[prefix]level @Someone"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "attach_files"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "leaderboard",
+    "aliases": [
+      "lb",
+      "top10",
+      "top"
+    ],
+    "sub_commands": [],
+    "section": "XP and Levels",
+    "description": "Returns a list of the top 10 members in the server, sorted by XP",
+    "short_description": "Members XP leaderboard",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]leaderboard",
+      "[prefix]lb"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages",
+      "embed_links",
+      "add_reactions",
+      "read_message_history"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "roles",
+    "aliases": [
+    ],
+    "sub_commands": [],
+    "section": "XP and Levels",
+    "description": "Returns a list of all achievable roles on this server",
+    "short_description": "List of achievable roles",
+    "further_details": "",
+    "usage_examples": [
+      "[prefix]roles"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "send_messages"
+    ],
+    "member_perms": [
+    ]
+  },
+  {
+    "name": "mute",
+    "aliases": [
+      "timeout", "m"
+    ],
+    "sub_commands": [],
+    "section": "Moderation",
+    "description": "Gives timeout to member, preventing them from sending text to text channels or speaking in voice channels. Takes a duration after the member mention (hours, minutes or both). Accepts an optional reason after the duration",
+    "short_description": "Timeout (mute) a member",
+    "further_details": "Needs 'Moderate Members' permission for requesting user. Defaults to 10 minutes if no time provided",
+    "usage_examples": [
+      "[prefix]mute [member mention or ID] [optional: duration in hours and/or minutes] [optional: reason]",
+      "[prefix]mute @someperson 1h 30m rude",
+      "[prefix]mute @someone 15m"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "moderate_members"
+    ],
+    "member_perms": [
+      "moderate_members"
+    ]
+  },
+  {
+    "name": "unmute",
+    "aliases": [
+      "um", "unTimeout"
+    ],
+    "sub_commands": [],
+    "section": "Moderation",
+    "description": "Ends timeout for a member.",
+    "short_description": "End a member's timeout (mute)",
+    "further_details": "Needs 'Moderate Members' permission for requesting user",
+    "usage_examples": [
+      "[prefix]unmute [member mention or ID]",
+      "[prefix]unmute @someperson"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "moderate_members"
+    ],
+    "member_perms": [
+      "moderate_members"
+    ]
+  },
+  {
+    "name": "kick",
+    "aliases": [
+      "k"
+    ],
+    "sub_commands": [],
+    "section": "Moderation",
+    "description": "Kicks a member from the server. Accepts a reason after the member mention/ID. A DM is sent to the member explaining the reason",
+    "short_description": "Kicks a member from the server",
+    "further_details": " Needs 'Kick Members' permission for requesting user",
+    "usage_examples": [
+      "[prefix]kick [member mention or ID] [optional: reason]",
+      "[prefix]kick @someperson stole my discord gf",
+      "[prefix]kick @someone"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "kick_members"
+    ],
+    "member_perms": [
+      "kick_members"
+    ]
+  },
+  {
+    "name": "ban",
+    "aliases": [
+      "b"
+    ],
+    "sub_commands": [],
+    "section": "Moderation",
+    "description": "Bans a member from the server. Accepts a reason after the member mention/ID. A DM is sent to the member explaining the reason",
+    "short_description": "Bans a member from the server",
+    "further_details": " Needs 'Ban Members' permission for requesting user. Use bandel to delete messages of that member from the last 24 hours",
+    "usage_examples": [
+      "[prefix]ban [member mention or ID] [optional: reason]",
+      "[prefix]ban @someperson raiding",
+      "[prefix]ban @someone"
+    ],
+    "show_on_listing": "Show",
+    "bot_perms": [
+      "ban_members"
+    ],
+    "member_perms": [
+      "ban_members"
+    ]
+  },
+  {
+    "name": "banDel",
+    "aliases": [
+      "bd"
+    ],
+    "sub_commands": [],
+    "section": "Moderation",
+    "description": "Bans a member from the server and deletes all messages they sent within the last 24 hours. Accepts a reason after the member mention/ID. A DM is sent to the member explaining the reason",
+    "short_description": "Bans a member from the server while deleting their messages from the last 24 hours",
+    "further_details": " Needs 'Ban Members' permission for requesting user",
+    "usage_examples": [
+      "[prefix]bandel [member mention or ID] [optional: reason]",
+      "[prefix]bandel @someperson raiding",
+      "[prefix]bandel @someone"
+    ],
+    "show_on_listing": "Only section specific",
+    "bot_perms": [
+      "ban_members"
+    ],
+    "member_perms": [
+      "ban_members"
+    ]
+  }
+]
