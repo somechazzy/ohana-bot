@@ -64,10 +64,12 @@ PLAYER_HEADER_IMAGE = "https://cdn.discordapp.com/attachments/794891724345442316
 PLAYER_IDLE_IMAGE = "https://cdn.discordapp.com/attachments/794891724345442316/916657976641720360/player_idle.gif"
 
 """
-Music Player control emojis as seen in player channels.
+Music Player control emojis as seen in player channels (https://files.catbox.moe/a26rzu.png).
 You can leave them empty if you want your bot to use default emojis, otherwise replace the values with emoji IDs that 
  your bot can see; that is: make sure your bot is in the server where these emojis are uploaded to.
 Each control must have a unique emoji from the other controls (e.g. join can't have the same emoji as resume/pause etc.)
+Here's the list of emojis that Ohana normally uses, feel free to re-upload them:
+ https://gist.github.com/somechazzy/29ab4f43ec03414651682abd7e035ad0
 """
 PLAYER_JOIN_EMOJI_ID = 916704053642293298
 PLAYER_RESUME_PAUSE_EMOJI_ID = 916704131287248936

@@ -2,7 +2,12 @@ import disnake as discord
 
 
 def bot_has_permission_to_send_text_in_channel(channel):
-    if isinstance(channel, discord.channel.DMChannel):
+    """
+    Simple function that returns whether or not you bot can send a message in a channel
+    :param (discord.TextChannel or discord.DMChannel) channel: 
+    :return: bool
+    """
+    if isinstance(channel, discord.DMChannel):
         return True
     bot_member = channel.guild.me
     permissions = channel.permissions_for(bot_member)
@@ -10,7 +15,7 @@ def bot_has_permission_to_send_text_in_channel(channel):
 
 
 def bot_has_permission_to_send_embed_in_channel(channel):
-    if isinstance(channel, discord.channel.DMChannel):
+    if isinstance(channel, discord.DMChannel):
         return True
     bot_member = channel.guild.me
     permissions: discord.Permissions = channel.permissions_for(bot_member)
@@ -18,6 +23,14 @@ def bot_has_permission_to_send_embed_in_channel(channel):
 
 
 def can_moderate_target_member(requesting_member, target_member, check_bot_hierarchy=True):
+    """
+    Checks whether or not a particular member can have a moderation action taken against them
+    by the requesting user and by the bot.
+    :param (discord.Member) requesting_member:
+    :param (discord.Member) target_member:
+    :param (bool) check_bot_hierarchy:
+    :return: bool
+    """
     if requesting_member_can_moderate_target_member(requesting_member, target_member):
         if bot_can_moderate_target_member(target_member) or not check_bot_hierarchy:
             return True, "None"

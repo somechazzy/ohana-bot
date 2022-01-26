@@ -11,6 +11,12 @@ from models.guild import GuildXP
 
 
 async def handle_xp(message: discord.Message, guilds_prefs: GuildPrefs):
+    """
+    Handles XP for each message sent in any channel the bot can see, as long as they have XP gain enabled
+    :param (discord.Message) message:
+    :param (GuildPrefs) guilds_prefs:
+    :return:
+    """
     xp_settings = guilds_prefs.xp_settings
     member = message.author
     guild = message.guild

@@ -19,8 +19,7 @@
     "bot_perms": [
       "send_messages",
       "embed_links",
-      "read_message_history",
-      "add_reactions"
+      "read_message_history"
     ],
     "member_perms": [
     ]
@@ -356,7 +355,6 @@
     "bot_perms": [
       "send_messages",
       "embed_links",
-      "add_reactions",
       "read_message_history"
     ],
     "member_perms": [
@@ -381,7 +379,6 @@
     "bot_perms": [
       "send_messages",
       "embed_links",
-      "add_reactions",
       "read_message_history"
     ],
     "member_perms": [
@@ -456,7 +453,6 @@
     "bot_perms": [
       "send_messages",
       "embed_links",
-      "add_reactions",
       "read_message_history"
     ],
     "member_perms": [
@@ -485,7 +481,6 @@
     "bot_perms": [
       "send_messages",
       "embed_links",
-      "add_reactions",
       "read_message_history"
     ],
     "member_perms": [
@@ -579,7 +574,6 @@
     "bot_perms": [
       "send_messages",
       "embed_links",
-      "add_reactions",
       "read_message_history"
     ],
     "member_perms": [

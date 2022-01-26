@@ -32,12 +32,9 @@ os_type = "Linux"
 
 performed_on_launch_tasks = False
 
-guild_member_count_map = {}
-
 guild_music_services = {}
 cached_youtube_search_results = {}
 cached_youtube_info = {}
 youtube_download_queue = []
-guilds_with_music_vc = {}
 
 channel_id_sniped_message_map = {}

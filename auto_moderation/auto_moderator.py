@@ -16,6 +16,12 @@ from models.guild import GuildPrefs
 
 
 async def automod(message: discord.Message, guild_prefs: GuildPrefs):
+    """
+    Perform a few checks on the message, mostly related to automoderation
+    :param (discord.Message) message: message to perform checks on
+    :param (GuildPrefs) guild_prefs: guild preferences object the guild was sent on
+    :return:
+    """
     # returns skip status for commands, if true then any command in the message is skipped
     deleted = await scan_for_blacklisted_words(message, guild_prefs)
     if deleted:

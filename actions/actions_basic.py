@@ -11,11 +11,25 @@ from helpers import bot_has_permission_to_send_text_in_channel, shorten_text_if_
 # This function got way too messy over time and I'm too lazy to rewrite it - but it works
 async def send_message(message, channel, embed=None, files=None, log_message=True, embed_feedback_message=False,
                        reply_to=None, force_send_without_embed=False, delete_after=None, view=None):
+    """
+    Function to use for sending messages either on DMs or on servers.
+    :param (str or None) message: message content to send
+    :param (discord.TextChannel or discord.DMChannel) channel: target channel
+    :param (discord.Embed or None) embed: embed to go with the message
+    :param (list of discord.File or None) files: list of files to send with the message
+    :param (bool) log_message: whether to log the message or not
+    :param (bool) embed_feedback_message: whether this message is a feedback message (not really important)
+    :param (discord.Message or None) reply_to: parent message to reply to
+    :param (bool) force_send_without_embed: whether to force send the message as text in case the bot can't embed
+    :param (int or None) delete_after: seconds to wait before deleting the sent message
+    :param (discord.ui.View or None) view: discord UI views to go with the message
+    :return: (discord.Message or None) sent message
+    """
     if message is None:
         message = ""
     if isinstance(channel, discord.Member) or isinstance(channel, discord.User):
         channel = await get_dm_channel(user=channel)
-    is_dm = True if isinstance(channel, discord.channel.DMChannel) else False
+    is_dm = True if isinstance(channel, discord.DMChannel) else False
     guild_id = channel.guild.id if getattr(channel, 'guild', None) else None
 
     if not is_dm and not bot_has_permission_to_send_text_in_channel(channel):
@@ -43,7 +57,7 @@ async def send_message(message, channel, embed=None, files=None, log_message=Tru
                               log_to_discord=False, guild_id=guild_id)
                 return ret_message
             else:
-                if not message == "" and force_send_without_embed:
+                if message and force_send_without_embed:
                     if reply_to:
                         try:
                             ret_message = await reply_to.reply(message, mention_author=False,
@@ -103,6 +117,21 @@ async def send_message(message, channel, embed=None, files=None, log_message=Tru
 
 async def send_embed(message, channel, emoji='💬', color=BOT_COLOR, logging=True, reply_to=None,
                      bold=True, thumbnail_url=None, fields_values=None, delete_after=None, view=None):
+    """
+    Function used to quickly send simple embeds.
+    :param (str) message: text to quick-embed
+    :param (discord.TextChannel or discord.DMChannel) channel: target channel
+    :param (str) emoji: text emoji to add at the start of the quick-embed
+    :param (int) color: color of the embed, you can pass this in hex format 0xFFFFFF
+    :param (bool) logging: whether to log the message or not
+    :param (discord.Message or None) reply_to: parent message to reply to
+    :param (bool) bold: whether to apply bold formatting to the message
+    :param (str or None) thumbnail_url: URL of a thumbnail to add to the embed
+    :param (dict or None) fields_values: mapping of field-value to add to the embed
+    :param (int or None) delete_after: seconds to wait before deleting the sent message
+    :param (discord.ui.View or None) view: discord UI views to go with the message
+    :return: (discord.Message or None) sent message
+    """
     asterisks = '**' if bold else ''
     if emoji is None:
         description = f"{asterisks}{message}{asterisks}"
@@ -120,22 +149,15 @@ async def send_embed(message, channel, emoji='💬', color=BOT_COLOR, logging=Tr
 
 
 async def get_dm_channel(user):
+    """
+    Gets DM channel with a user, and creates one if it didn't exist
+    :param (discord.Member or discord.User) user: user to get DM channel for
+    :return: (discord.DMChannel)
+    """
     dm_channel = user.dm_channel
     if not dm_channel:
         dm_channel = await user.create_dm()
     return dm_channel
-
-
-async def send_dm(message, user, embed=None, log_to_discord=True, view=None):
-    dm_channel = await get_dm_channel(user=user)
-    try:
-        sent_message = await dm_channel.send(message, embed=embed, view=view)
-    except:
-        await log(f"Failed at sending DM to {user}/{user.id}. Content: \"{message}\". Embed: {embed is None}.",
-                  level=constants.BotLogType.BOT_WARNING_IGNORE, log_to_discord=log_to_discord)
-        return None
-    await log(f"'{message}'. Channel: {user}.", level=constants.BotLogType.MESSAGE_SENT, log_to_discord=log_to_discord)
-    return sent_message
 
 
 async def delete_message_from_guild(message, reason="Not provided."):
@@ -163,10 +185,10 @@ async def delete_message_from_guild(message, reason="Not provided."):
         return False
 
 
-async def edit_message(message: discord.Message, content, embed=None, reason="not provided",
+async def edit_message(message, content, embed=None, reason="not provided",
                        log_enable=True, embed_feedback_message=False, view=None):
     contains_embed = embed is not None
-    is_dm = True if isinstance(message.channel, discord.channel.DMChannel) else False
+    is_dm = True if isinstance(message.channel, discord.DMChannel) else False
     if not is_dm and not bot_has_permission_to_send_embed_in_channel(message.channel) and contains_embed:
         if embed_feedback_message:
             if log_enable:
@@ -399,7 +421,7 @@ async def remove_reactions(message: discord.Message):
     try:
         await message.clear_reactions()
     except:
-        if isinstance(message.channel, discord.channel.DMChannel):
+        if isinstance(message.channel, discord.DMChannel):
             bot_member = message.channel.me
         else:
             bot_member = message.guild.me

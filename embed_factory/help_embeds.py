@@ -22,6 +22,12 @@ def make_main_music_help_embed(guild_prefs):
 
 
 def make_main_help_embed_for(guild_prefs, command_type):
+    """
+    Makes the main help embed for any of the command types (user, admin, music).
+    :param (models.guild.GuildPrefs) guild_prefs:
+    :param (str) command_type: type of commands
+    :return: discord.Embed
+    """
     prefix = guild_prefs.prefix
     admin_prefix = guild_prefs.admin_prefix
     music_prefix = guild_prefs.music_prefix
@@ -92,6 +98,13 @@ def make_section_music_help_embed(section, guild_prefs):
 
 
 def make_section_help_embed_for(section, guild_prefs, command_type):
+    """
+    Makes the section help embed, listing available commands in that section with a short description
+    :param (str) section: section/module of a command type (e.g. Queue commands of type Music)
+    :param (models.guild.GuildPrefs) guild_prefs:
+    :param (str) command_type: type of commands
+    :return: discord.Embed or None
+    """
     context_prefix = guild_prefs.prefix if command_type == CommandType.USER \
         else guild_prefs.admin_prefix if command_type == CommandType.ADMIN \
         else guild_prefs.music_prefix if command_type == CommandType.MUSIC \
@@ -134,6 +147,14 @@ def make_command_music_help_embed(message, guild_prefs, assumed_command=None):
 
 
 def make_command_help_embed_for(message, guild_prefs, command_type, assumed_command=None):
+    """
+    Makes help embed for a particular command
+    :param (discord.Message) message: message requesting the help embed, used for obtaining the requested command
+    :param (models.guild.GuildPrefs) guild_prefs:
+    :param (str) command_type: type of commands
+    :param (str) assumed_command: if not passed, then the assumed command is taken from the message
+    :return: discord.Embed or None
+    """
     prefix = guild_prefs.prefix
     admin_prefix = guild_prefs.admin_prefix
     music_prefix = guild_prefs.music_prefix

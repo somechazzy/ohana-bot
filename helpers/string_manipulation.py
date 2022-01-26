@@ -43,6 +43,11 @@ def convert_minutes_to_time_string(minutes: int):
 
 # idk why this function is like this or when i wrote it, and i dont wanna know
 def get_uwufied_text(src: str):
+    """
+    Uwufies a text, I guess. Rewritten from a Stackoverflow answer from a different language.
+    :param (str) src:
+    :return: str
+    """
     output_text = ""
     previous_char = ""
     for current_char in src:
@@ -97,6 +102,11 @@ def shorten_text_if_above_x_characters(text: str, limit):
 
 
 def get_encrypted_string(text: str):
+    """
+    Encrypts a string in a roundabout way to avoid using special characters for Firebase Database keys
+    :param (str) text:
+    :return: str
+    """
     for symbol in ENCRYPTED_CHARACTERS.keys():
         text = text.replace(symbol, ENCRYPTED_CHARACTERS[symbol])
     return text
@@ -135,6 +145,11 @@ def encrypt_guild_prefs_keys(guild_prefs):
 
 
 def stringify_xp_settings_values(xp_settings: dict):
+    """
+    Stringifies non-strings like discord IDs since they get shortened in integer format on Firebase DB
+    :param (dict) xp_settings:
+    :return: dict
+    """
     xp_settings[XPSettingsKey.LEVELUP_CHANNEL] = str(xp_settings[XPSettingsKey.LEVELUP_CHANNEL])
 
     str_ignored_channels = [str(i) for i in xp_settings[XPSettingsKey.IGNORED_CHANNELS]]

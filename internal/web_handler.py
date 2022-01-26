@@ -20,6 +20,19 @@ class WebResponse:
 
 async def request(method, url: str, type_of_request: CachingType, json=None, headers=None, params=None, data=None,
                   ignore_status_for_caching=False, no_caching=False):
+    """
+    Custom request method that uses cached pages if available, otherwise makes the request and caches the response
+    :param (str) method: GET, POST, etc..
+    :param (str) url: URL requested
+    :param (str) type_of_request: see CachingType. Used mainly to determine how long the response is to be cached
+    :param (dict or None) json: request json
+    :param (dict or None) headers: request headers
+    :param (dict or None) params: request params
+    :param (dict or None) data: request data
+    :param (bool) ignore_status_for_caching: whether or not to cache the response despite the status code (being non-2xx)
+    :param (bool) no_caching: if set to True then the response will not be cached
+    :return: WebResponse
+    """
     url_key = url
     if json is not None:
         url_key += str(json)

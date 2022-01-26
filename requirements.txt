@@ -9,7 +9,6 @@ beautifulsoup4
 lxml
 pytz
 greenlet
-asyncpraw==7.5
 Pillow
 yt-dlp
 youtube-search-python==1.5.1

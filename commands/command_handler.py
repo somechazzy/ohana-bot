@@ -14,7 +14,7 @@ from . import admin_commands
 
 class CommandHandler:
     def __init__(self, message: discord.Message, guild_prefs: GuildPrefs = None):
-        self.is_dm = isinstance(message.channel, discord.channel.DMChannel)
+        self.is_dm = isinstance(message.channel, discord.DMChannel)
         if not guild_prefs and not self.is_dm:
             raise AssertionError("Non-dm command handlers must be initiated with GuildPrefs object")
         self.message = message
@@ -28,6 +28,10 @@ class CommandHandler:
         self.music_prefix = self.guild_prefs.music_prefix
 
     def is_author_command_rate_limited(self):
+        """
+        Checks whether or not the user is command rate-limited.
+        :return:
+        """
         if self.author.id == constants.BOT_OWNER_ID:
             return
         if self.author.id in variables.user_command_use:
@@ -64,6 +68,12 @@ class UserCommandHandler(CommandHandler):
         return False
 
     async def handle_command(self):
+        """
+        Finds the command that the user might have used in the message being scanned.
+        If found, the command handler is called.
+        If not found, checks for the closest command with a high-enough similarity distance.
+        :return:
+        """
         if not self.assumed_command or self.assumed_command.startswith(self.prefix):
             return
         if self.assumed_command in variables.normal_commands_names:

@@ -14,7 +14,7 @@ class CommandExecutor:
         self.message_string_lowered = str(self.message_content).lower()
         self.author = message.author
         self.channel = message.channel
-        self.is_dm = isinstance(message.channel, discord.channel.DMChannel)
+        self.is_dm = isinstance(message.channel, discord.DMChannel)
         if not guild_prefs and not self.is_dm:
             raise AssertionError("Non-dm command handlers must be initiated with GuildPrefs object")
         self.guild = message.guild if not self.is_dm else None

@@ -7,6 +7,7 @@ from models.anilist_list import Status, AnilistList
 
 
 async def get_anilist_profile(username):
+    # graphql is very cool
     query = '''
     query ($name: String) {
 

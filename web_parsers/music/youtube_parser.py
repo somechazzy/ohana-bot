@@ -1,5 +1,4 @@
 from youtubesearchpython.__future__ import VideosSearch
-from urllib.parse import quote
 import json
 import os
 from pathlib import Path
@@ -104,7 +103,6 @@ def extract_info(url_, process=True, download=False, file_name=None):
 
 
 async def search_on_youtube(search_term, limit=5):
-    search_term = quote(search_term, safe='')
     search_term = search_term.lower()
     search_results = variables.cached_youtube_search_results.get(search_term)
     if search_results and len(search_results) >= limit:

@@ -1,3 +1,4 @@
+import disnake as discord
 from internal.bot_logging import log
 from globals_.clients import discord_client
 from globals_ import constants, variables
@@ -38,7 +39,7 @@ async def on_guild_remove(guild):
 
 
 @discord_client.event
-async def on_voice_state_update(member, _, after):
+async def on_voice_state_update(member, before: discord.VoiceState, after: discord.VoiceState):
     if member.id == discord_client.user.id:
         if not after.channel:
             guild_prefs = variables.guilds_prefs[member.guild.id]

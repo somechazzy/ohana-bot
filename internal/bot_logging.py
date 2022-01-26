@@ -26,10 +26,19 @@ def initiate_logging_directory():
     Path(build_path(["logs", directory])).mkdir(parents=True, exist_ok=True)
 
 
-# Your bot will log to 4 different outputs, as seen below. When ping_me is True,
-# then your bot will ping you in the log message (usually used for errors/warnings)
 async def log(message, level=constants.BotLogType.GENERAL, print_to_console=True, log_to_discord=True,
               ping_me=False, log_to_db=True, guild_id=None):
+    """
+    Logs to console, Discord, Firebase DB and/or a local log file.
+    :param (str) message: log message
+    :param (str) level: level/type of log
+    :param (bool) print_to_console: whether or not to print log to console
+    :param (bool) log_to_discord: whether or not to log to discord
+    :param (bool) ping_me: whether or not to ping the bot owner for this log
+    :param (bool) log_to_db: whether or not to log to database
+    :param (int or None) guild_id: guild ID this log is related to (appears on discord log message as a separate field)
+    :return:
+    """
     now = datetime.now(pytz.timezone(constants.MY_TIMEZONE))
     time_string = now.strftime('%Y-%m-%d, %H:%M:%S')
     time_numeral = now.strftime("%Y%m%d%H%M%S")
@@ -125,6 +134,21 @@ class Colors:
 # This logs events related to your bot to the server's logs channel, if set
 async def log_to_server(guild: discord.Guild, event_type: constants.GuildLogType, event=None, member=None,
                         message=None, role=None, roles=None, roles_removed=None, fields=None, values=None):
+    """
+    Logs events related to your bot in a server if the server had set an update channel
+    :param (discord.Guild) guild: guild this log is related to and will be logged to
+    :param (str) event_type: type of event (GuildLogType)
+    :param (str or None) event: text to add to log message
+    :param (discord.Member or None) member: member this log is related to
+    :param (discord.Message or None) message: message this log is related to
+    :param (discord.Role or None) role: role this log is related to
+    :param (list of discord.Role or None) roles: roles (added) this log is related to
+    :param (list of discord.Role or None) roles_removed: roles (removed) this log is related to
+    :param (list of str or None) fields: iterable of fields to appear in the log embed
+    :param (list of str or None) values: values of fields passed, must be the same number of fields passed
+    (fields are mapped to values in order)
+    :return:
+    """
     if guild.id not in variables.guilds_prefs:
         return
     guilds_prefs: GuildPrefs = variables.guilds_prefs[guild.id]

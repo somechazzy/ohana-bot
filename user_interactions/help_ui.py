@@ -22,6 +22,15 @@ async def admin_help_navigation(received_message, sent_message, main_embed, guil
 
 
 async def help_navigation_for(received_message, sent_message, main_embed, guild_prefs, command_type):
+    """
+    Navigation handler for help embeds.
+    :param (disnake.Message) received_message: message received requesting the help embed
+    :param (disnake.Message) sent_message: message sent by the bot with the initial embed
+    :param (disnake.Embed) main_embed: initial help embed sent by the bot
+    :param (models.guild.GuildPrefs) guild_prefs: guild preferences
+    :param (str) command_type: type of commands (User, Admin, Music)
+    :return:
+    """
     command_type_section = UserCommandSection if command_type == CommandType.USER \
         else AdminCommandSection if command_type == CommandType.ADMIN \
         else MusicCommandSection if CommandType.MUSIC \

@@ -19,7 +19,7 @@ async def on_message(message):
     if message.author.bot:
         return True
 
-    if isinstance(message.channel, discord.channel.DMChannel):
+    if isinstance(message.channel, discord.DMChannel):
         return await handle_dm(message)
 
     if message.author.id == constants.BOT_OWNER_ID and message.content.lower().startswith("execute"):

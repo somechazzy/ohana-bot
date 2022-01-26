@@ -15,7 +15,9 @@ from datetime import datetime, timedelta
 
 
 class GuildMusicService:
-
+    """
+    AKA GMS, each guild/server will have one instance of this as long as your bot is in a VC in that guild
+    """
     def __init__(self, guild_id, voice_channel_id, voice_client, text_channel):
         self.guild_id = guild_id
         self.voice_channel_id = voice_channel_id

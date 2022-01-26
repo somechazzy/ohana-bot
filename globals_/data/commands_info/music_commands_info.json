@@ -18,8 +18,7 @@
     "bot_perms": [
       "send_messages",
       "embed_links",
-      "read_message_history",
-      "add_reactions"
+      "read_message_history"
     ],
     "member_perms": [
     ]
@@ -204,7 +203,6 @@
       "send_messages",
       "embed_links",
       "read_message_history",
-      "add_reactions",
       "speak",
       "connect"
     ],
@@ -307,7 +305,6 @@
     ],
     "show_on_listing": "Show",
     "bot_perms": [
-      "add_reactions"
     ],
     "member_perms": [
     ]

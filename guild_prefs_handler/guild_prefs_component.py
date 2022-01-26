@@ -10,6 +10,10 @@ from .guild_prefs_repo import GuildPrefsRepo
 
 
 class GuildPrefsComponent:
+    """
+    Component for handling any and all changes to a guild's GuildPrefs object.
+    It is very important to use this in order to ensure that the changes are synced with the database.
+    """
 
     def __init__(self):
         self.repo = GuildPrefsRepo()

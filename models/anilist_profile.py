@@ -252,7 +252,7 @@ class AnilistProfile:
         if anime_dropped_stats.count > 30:
             anime_dropped_analysis = f"Might be picky but at least willing to give things a chance " \
                                      f"(**{anime_dropped_stats.count}** dropped)."
-        elif anime_dropped_stats.count + anime_paused_stats.count == 0:
+        elif completed_days and anime_dropped_stats.count + anime_paused_stats.count == 0:
             anime_dropped_analysis = f"Fully commits to finishing any show they start " \
                                      f"(no dropped or paused anime)."
 
@@ -327,7 +327,7 @@ class AnilistProfile:
                                            if anime_current_stats.count > 5 else ".")
             elif self.anime_stats.lengths[0].length in ["29-55", "56-100"]:
                 anime_length_analysis = "Watches a lot of long-running anime (30-100 episodes)."
-        elif self.anime_stats.lengths[0].length == "101+":
+        elif self.anime_stats.lengths and self.anime_stats.lengths[0].length == "101+":
             anime_length_analysis = "Believes that if an anime doesn't run for over 100 " \
                                     "episodes then it's not worth watching."
 

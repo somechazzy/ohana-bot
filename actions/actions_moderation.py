@@ -1,12 +1,23 @@
 import disnake as discord
 import helpers
-from actions.actions_basic import send_dm, send_embed
+from actions.actions_basic import send_embed, send_message
 from internal.bot_logging import log, log_to_server
 from globals_ import constants
 
 
 async def mute_member(member: discord.Member, guild: discord.Guild, time_in_minutes, send_on_channel=False,
                       channel=None, reason="Not provided", moderator=None):
+    """
+    Used for muting a member.
+    :param (discord.Member or discord.User) member: member to mute
+    :param (discord.Guild) guild: guild the member belongs to
+    :param (int) time_in_minutes: duration in minutes
+    :param (bool) send_on_channel: whether or not to send feedback message on the passed channel
+    :param (discord.TextChannel) channel: passed when send_on_channel is True
+    :param (str) reason: reason for muting, appears in the logs and the audit log
+    :param (discord.Member or discord.User) moderator: member that triggered this mute (usually through a command)
+    :return: None
+    """
     if not guild.me.guild_permissions.moderate_members or not helpers.bot_can_moderate_target_member(member):
         if send_on_channel and channel is not None:
             await send_embed(f"I do not have the necessary permission or role"
@@ -35,6 +46,16 @@ async def mute_member(member: discord.Member, guild: discord.Guild, time_in_minu
 
 
 async def unmute_member(member, guild, send_on_channel=False, channel=None, reason="None", moderator=None):
+    """
+    Used for muting a member.
+    :param (discord.Member or discord.User) member: member to unmute
+    :param (discord.Guild) guild: guild the member belongs to
+    :param (bool) send_on_channel: whether or not to send feedback message on the passed channel
+    :param (discord.TextChannel) channel: passed when send_on_channel is True
+    :param (str) reason: reason for un-muting, appears in the logs and the audit log
+    :param (discord.Member or discord.User) moderator: member that triggered this un-mute (usually through a command)
+    :return: None
+    """
     if not guild.me.guild_permissions.moderate_members or not helpers.bot_can_moderate_target_member(member):
         if send_on_channel and channel is not None:
             await send_embed(f"I do not have the necessary permission or role"
@@ -63,7 +84,7 @@ async def kick_member(member, guild, dm_user=True, reason="not provided", modera
         return
     if dm_user:
         try:
-            await send_dm(f"You have been kicked from {guild.name}. Reason: {reason}", member)
+            await send_message(f"You have been kicked from {guild.name}. Reason: {reason}", member)
         except:
             pass
     try:
@@ -84,7 +105,7 @@ async def ban_member(member, guild, delete_messages=False, dm_user=True, reason=
         return
     if dm_user:
         try:
-            await send_dm(f"You have been banned from {guild.name}. Reason: {reason}", member)
+            await send_message(f"You have been banned from {guild.name}. Reason: {reason}", member)
         except:
             pass
     try:

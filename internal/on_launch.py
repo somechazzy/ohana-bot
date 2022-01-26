@@ -2,10 +2,10 @@ import asyncio
 import gc
 import time
 import traceback
-from actions import send_dm, edit_message
+from actions import edit_message, send_message
 from globals_ import variables
 from globals_.clients import firebase_client, discord_client
-from globals_.constants import DEFAULT_PREFIX, BotLogType, cache_timeout_minutes, \
+from globals_.constants import BotLogType, cache_timeout_minutes, \
     CACHE_CLEANUP_FREQUENCY_SECONDS
 from globals_.variables import cached_pages
 from guild_prefs_handler.guild_prefs_component import GuildPrefsComponent
@@ -31,9 +31,6 @@ async def perform_on_launch_tasks():
     await import_guilds_prefs()
     await import_guilds_xp()
     await GuildPrefsComponent().refresh_guilds_info()
-
-    await discord_client.\
-        change_presence(activity=discord.Game(f'{DEFAULT_PREFIX}help'))
 
     asyncio.get_event_loop().create_task(handle_interrupted_timers())
     asyncio.get_event_loop().create_task(cache_cleanup())
@@ -149,15 +146,15 @@ async def handle_recovered_reminder(time_of_duration_end_seconds, reason, user_i
     current_time_seconds = int(time.time()) + time.altzone
     if current_time_seconds >= time_of_duration_end_seconds:
         time_late_string = convert_minutes_to_time_string(int((current_time_seconds - time_of_duration_end_seconds)/60))
-        await send_dm(f"⏱ Belated Reminder: {reason}\nI was offline "
-                      f"{time_late_string} ago so I missed the reminder. Sorry!",
-                      user=user, log_to_discord=False)
+        await send_message(f"⏱ Belated Reminder: {reason}\nI was offline "
+                           f"{time_late_string} ago so I missed the reminder. Sorry!",
+                           channel=user, log_message=False)
         await firebase_client.remove_reminder(db_key)
         return
 
     seconds_left = time_of_duration_end_seconds - current_time_seconds
     await asyncio.sleep(seconds_left if seconds_left > 2 else 1)
-    await send_dm(f"⏱ Reminder: {reason}", user, log_to_discord=False)
+    await send_message(f"⏱ Reminder: {reason}", channel=user, log_message=False)
     await firebase_client.remove_reminder(db_key)
 
 

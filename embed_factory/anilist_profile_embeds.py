@@ -5,6 +5,12 @@ from models.anilist_profile import AnilistProfile
 
 
 def make_anilist_profile_embed(profile_info: AnilistProfile, reacting_unlocked=False):
+    """
+    Makes the main page of an Anilist profile.
+    :param (AnilistProfile) profile_info:
+    :param (bool) reacting_unlocked: whether or not navigation was unlocked for everyone
+    :return: discord.Embed
+    """
     if profile_info is None:
         embed = discord.Embed(title=f"Error getting profile", colour=discord.Colour(0xe3cfaf),
                               description="There was an error while requesting your profile from the Anilist API. "
