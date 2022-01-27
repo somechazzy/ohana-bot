@@ -11,7 +11,8 @@ BOT_TOKEN = ""
 
 """
 This one is a bit tricky. 
-If you know what to do here, then go ahead. Otherwise follow this guide <LINK THE GUIDE HERE>
+If you know what to do here, then go ahead. Otherwise follow step 3 in this guide 
+ https://github.com/somechazzy/ohana-bot/blob/master/README.md
 """
 FIREBASE_CONFIG = {
     "apiKey": "",
