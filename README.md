@@ -1,5 +1,4 @@
-# Introduction
-
+Introduction
 ---
 Development of Ohana started back in August 2020 with the purpose of improving on existing bots' features and functionalities. Some bots that Ohana was inspired by are MAL, Dyno, Tatsu, Nadeko, Arcane and Hydra.
 
