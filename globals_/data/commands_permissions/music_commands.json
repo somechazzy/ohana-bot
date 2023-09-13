@@ -1,0 +1,53 @@
+{
+  "channel-create": {
+    "member": [
+      "manage_guild"
+    ],
+    "bot": [
+      "manage_channels"
+    ]
+  },
+  "dj": {
+    "member": [
+      "manage_guild"
+    ],
+    "bot": [
+    ]
+  },
+  "search": {
+    "member": [
+    ],
+    "bot": [
+      "speak",
+      "connect"
+    ]
+  },
+  "play": {
+    "member": [
+    ],
+    "bot": [
+      "speak",
+      "connect"
+    ]
+  },
+  "play-now": {
+    "member": [
+    ],
+    "bot": [
+      "speak",
+      "connect"
+    ]
+  },
+  "lyrics": {
+    "member": [
+    ],
+    "bot": [
+    ]
+  },
+  "logs": {
+    "member": [
+    ],
+    "bot": [
+    ]
+  }
+}

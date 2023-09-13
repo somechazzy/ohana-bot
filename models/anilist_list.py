@@ -26,8 +26,9 @@ def from_union(fs, x):
     for f in fs:
         try:
             return f(x)
-        except:
+        except Exception:
             pass
+    # assert False
 
 
 def to_class(c: Type[T], x: Any) -> dict:
@@ -40,7 +41,7 @@ def from_int(x: Any) -> int:
     return x
 
 
-def to_enum(c: Type[EnumT], x: Any) -> EnumT:
+def to_enum(c, x: Any) -> EnumT:
     assert isinstance(x, c)
     return x.value
 

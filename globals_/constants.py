@@ -1,145 +1,111 @@
-import settings
+from enum import Enum
+from globals_.settings import settings
 
-BOT_NAME = settings.BOT_NAME
+if settings.ENVIRONMENT == 'prod':
+    # noinspection PyProtectedMember
+    from globals_._config.prod import *
 
-DEFAULT_PREFIX = settings.DEFAULT_PREFIX
-DEFAULT_MUSIC_PREFIX = settings.DEFAULT_MUSIC_PREFIX
-DEFAULT_ADMIN_PREFIX = settings.DEFAULT_ADMIN_PREFIX
+OWNER_COMMAND_PREFIX = OWNER_COMMAND_PREFIX
 
-BOT_OWNER_ID = settings.BOT_OWNER_ID
-DISCORD_LOGGING_CHANNEL_ID = settings.DISCORD_LOGGING_CHANNEL_ID
-MY_TIMEZONE = settings.MY_TIMEZONE
+BOT_OWNER_ID = BOT_OWNER_ID
+SUPPORT_SERVER_ID = SUPPORT_SERVER_ID
+DISCORD_LOGGING_CHANNEL_ID = DISCORD_LOGGING_CHANNEL_ID
 
-CACHE_CLEANUP_FREQUENCY_SECONDS = settings.CACHE_CLEANUP_FREQUENCY_SECONDS
-GUILDS_XP_SYNC_FREQUENCY_SECONDS = settings.GUILDS_XP_SYNC_FREQUENCY_SECONDS
+SUPPORT_SERVER_INVITE = SUPPORT_SERVER_INVITE
 
-AR_LIMIT_SECONDS = settings.AR_LIMIT_SECONDS
-COMMAND_LIMIT_X_SECONDS = settings.COMMAND_LIMIT_X_SECONDS
-COMMAND_LIMIT_PER_X_SECONDS = settings.COMMAND_LIMIT_PER_X_SECONDS
+DEFAULT_LEVELUP_MESSAGE = DEFAULT_LEVELUP_MESSAGE
+DEFAULT_LEVEL_ROLE_EARN_MESSAGE = DEFAULT_LEVEL_ROLE_EARN_MESSAGE
+DEFAULT_TIMEFRAME_FOR_XP = DEFAULT_TIMEFRAME_FOR_XP
+DEFAULT_MIN_XP_GIVEN = DEFAULT_MIN_XP_GIVEN
+DEFAULT_MAX_XP_GIVEN = DEFAULT_MAX_XP_GIVEN
+DEFAULT_XP_DECAY_PERCENTAGE = DEFAULT_XP_DECAY_PERCENTAGE
+DEFAULT_XP_DECAY_DAYS = DEFAULT_XP_DECAY_DAYS
 
-BOT_INVITE = settings.BOT_INVITE
+DEFAULT_PLAYER_MESSAGE_CONTENT = DEFAULT_PLAYER_MESSAGE_CONTENT
+PLAYER_HEADER_IMAGE = PLAYER_HEADER_IMAGE
+PLAYER_IDLE_IMAGE = PLAYER_IDLE_IMAGE
+DEFAULT_STREAM_IMAGE = DEFAULT_STREAM_IMAGE
+DEFAULT_RADIO_MESSAGE_CONTENT = DEFAULT_RADIO_MESSAGE_CONTENT
 
-DEFAULT_LEVELUP_MESSAGE = settings.DEFAULT_LEVELUP_MESSAGE
-DEFAULT_LEVEL_ROLE_EARN_MESSAGE = settings.DEFAULT_LEVEL_ROLE_EARN_MESSAGE
-DEFAULT_TIMEFRAME_FOR_XP = settings.DEFAULT_TIMEFRAME_FOR_XP
-DEFAULT_MIN_XP_GIVEN = settings.DEFAULT_MIN_XP_GIVEN
-DEFAULT_MAX_XP_GIVEN = settings.DEFAULT_MAX_XP_GIVEN
-DEFAULT_XP_DECAY_PERCENTAGE = settings.DEFAULT_XP_DECAY_PERCENTAGE
-DEFAULT_XP_DECAY_DAYS = settings.DEFAULT_XP_DECAY_DAYS
+AVATAR_PLACEHOLDER = AVATAR_PLACEHOLDER
 
-DEFAULT_PLAYER_CHANNEL_EMBED_MESSAGE_CONTENT = settings.DEFAULT_PLAYER_CHANNEL_EMBED_MESSAGE_CONTENT
-PLAYER_HEADER_IMAGE = settings.PLAYER_HEADER_IMAGE
-PLAYER_IDLE_IMAGE = settings.PLAYER_IDLE_IMAGE
-
-HELP_EMBED_THUMBNAIL = settings.HELP_EMBED_THUMBNAIL
-BOT_COLOR = settings.BOT_COLOR
+HELP_EMBED_THUMBNAIL = HELP_EMBED_THUMBNAIL
 
 
-class OhanaEnum:
+class CustomEnum:
     @classmethod
     def as_list(cls):
-        return [value for key, value in cls.__dict__.items() if not key.startswith('_')]
+        return [value for key, value in cls.__dict__.items() if not key.startswith('_') and not key.endswith('__')]
 
     @classmethod
-    def __iter__(cls):
-        return cls.as_list().__iter__()
+    def values_as_enum(cls):
+        return Enum(cls.__name__, {value: value for value in cls.as_list()})
+
+    @classmethod
+    def as_map(cls):
+        return {key: value for key, value in cls.__dict__.items() if not key.startswith('_') and not key.endswith('__')}
 
 
-class BotLogType(OhanaEnum):
-    BOT_INFO = "Bot Info"
+class BotLogLevel(CustomEnum):
+    BOT_INFO = "Info"
+    GENERAL = "General"
     RECEIVED_DM = "Received DM"
     MEMBER_INFO = "Member Info"
-    GUILD_CHANGE = "Guild Change"
-    GUILD_ERROR = "Guild Error"
     GUILD_JOIN = "Guild Join"
     GUILD_LEAVE = "Guild Leave"
-    BOT_ERROR = "Bot Error"
-    BOT_WARNING = "Bot Warning"
-    BOT_WARNING_IGNORE = "Minor Bot Warning"
+    ERROR = "Error"
+    WARNING = "Warning"
+    MINOR_WARNING = "Minor Warning"
     MESSAGE_SENT = "Message Sent"
     REPLY_SENT = "Reply Sent"
     MESSAGE_DELETED = "Message Deleted"
     MESSAGE_EDITED = "Message Edited"
-    AUTO_RESPOND = "Auto Respond"
-    USER_COMMAND_RECEIVED = "User Command Received"
-    MUSIC_COMMAND_RECEIVED = "Music Command Received"
-    ADMIN_COMMAND_RECEIVED = "Admin Command Received"
-    UNRECOGNIZED_COMMAND_RECEIVED = "Unrecognized Command Received"
-    GENERAL = "General"
-    PERM_ERROR = "Permission Error"
+    LEGACY_MUSIC_ENQUEUE = "Legacy Music Enqueue"
+    SLASH_COMMAND_RECEIVED = "Slash Command Received"
+    INTERACTION_CALLBACK = "Interaction Callback"
+    USER_SLASH_COMMAND_RECEIVED = "User Slash Command Received"
+    MUSIC_SLASH_COMMAND_RECEIVED = "Music Slash Command Received"
+    ADMIN_SLASH_COMMAND_RECEIVED = "Admin Slash Command Received"
 
 
-class GuildLogType(OhanaEnum):
+class GuildLogType(CustomEnum):
     MEMBER_JOINED = "Member Joined"
     MEMBER_LEFT = "Member Left"
     ASSIGNED_ROLE = "Assigned Role"
     UNASSIGNED_ROLE = "Unassigned Role"
     ASSIGNED_ROLES = "Assigned Roles"
+    UNASSIGNED_ROLES = "Assigned Roles"
     EDITED_ROLES = "Edited Roles"
     CREATED_ROLE = "Created Role"
     KICKED_MEMBER = "Kicked Member"
     BANNED_MEMBER = "Banned Member"
+    UNBANNED_MEMBER = "Unbanned Member"
+    WARNED_MEMBER = "Warned Member"
     MUTED_MEMBER = "Muted Member"
     UNMUTED_MEMBER = "Unmuted Member"
     DELETED_MESSAGE = "Deleted Message"
     PERM_ERROR = "Permission Error"
     ACTION_ERROR = "Action Error"
-    SETTING_CHANGE = f"{BOT_NAME} Setting Change"
+    SETTING_CHANGE = "Bot Setting Change"
     GENERAL = "General"
 
 
-class CommandType(OhanaEnum):
-    ADMIN = 'ADMIN'
-    USER = 'USER'
-    MUSIC = 'MUSIC'
-
-
-class UserCommandSection(OhanaEnum):
-    FUN = "Fun"
-    UTILITY = "Utility"
-    ANIME_AND_MANGA = "Anime and Manga"
-    XP = 'XP and Levels'
-    MODERATION = "Moderation"
-    OTHER = "Other"
-
-
-class AdminCommandSection(OhanaEnum):
-    GENERAL = "General"
-    PREFIX = "Prefix"
-    CHANNELS = "Channels"
-    MODULES = "Modules"
-    AUTOMOD = "Automod"
-    XP = "XP and Levels"
-
-
-class MusicCommandSection(OhanaEnum):
-    GENERAL = "General"
-    PLAYBACK = "Playback"
-    QUEUE = "Queue"
-
-
-class HelpListingVisibility(OhanaEnum):
-    HIDE = "Hide"
-    SHOW = "Show"
-    PARTIAL = "Only section specific"
-
-
-class CachingType(OhanaEnum):
-    MAL_INFO_ANIME = "MAL_INFO_ANIME"
-    MAL_INFO_MANGA = "MAL_INFO_MANGA"
-    MAL_SEARCH_ANIME = "MAL_SEARCH_ANIME"
-    MAL_SEARCH_MANGA = "MAL_SEARCH_MANGA"
-    MAL_PROFILE = "MAL_PROFILE"
-    MAL_LIST_ANIME = "MAL_LIST_ANIME"
-    MAL_LIST_MANGA = "MAL_LIST_MANGA"
-    AL_PROFILE = "AL_PROFILE"
-    AL_LISTS = "AL_LISTS"
-    URBAN_DICTIONARY = "URBAN_DICTIONARY"
-    MERRIAM_DICTIONARY = "MERRIAM_DICTIONARY"
-    STEAM_GAME_SEARCH = "STEAM_GAME_SEARCH"
-    DISCORD_AVATAR = "DISCORD_AVATAR"
-    SPOTIFY_INFO = "SPOTIFY_INFO"
-    SPOTIFY_PLAYLIST = "SPOTIFY_PLAYLIST"
+class CachingType(CustomEnum):
+    MAL_INFO_ANIME = "mal_info_anime"
+    MAL_INFO_MANGA = "mal_info_manga"
+    MAL_SEARCH_ANIME = "mal_search_anime"
+    MAL_SEARCH_MANGA = "mal_search_manga"
+    MAL_PROFILE = "mal_profile"
+    MAL_LIST_ANIME = "mal_list_anime"
+    MAL_LIST_MANGA = "mal_list_manga"
+    AL_PROFILE = "al_profile"
+    AL_LISTS = "al_lists"
+    URBAN_DICTIONARY = "urban_dictionary"
+    MERRIAM_DICTIONARY = "merriam_dictionary"
+    DISCORD_AVATAR = "discord_avatar"
+    SPOTIFY_INFO = "spotify_info"
+    SPOTIFY_PLAYLIST = "spotify_playlist"
+    NO_CACHE = "no_cache"
 
 
 cache_timeout_minutes = {
@@ -154,59 +120,12 @@ cache_timeout_minutes = {
     CachingType.AL_LISTS: 15,
     CachingType.URBAN_DICTIONARY: 600,
     CachingType.MERRIAM_DICTIONARY: 1440,
-    CachingType.STEAM_GAME_SEARCH: 600,
     CachingType.DISCORD_AVATAR: 20,
     CachingType.SPOTIFY_INFO: 1440,
-    CachingType.SPOTIFY_PLAYLIST: 5
+    CachingType.SPOTIFY_PLAYLIST: 5,
+    CachingType.NO_CACHE: 0
 }
 
-LETTER_EMOTES_COMMANDS = {
-    "f": "🎈",
-    "u": "🧰",
-    "a": "👀",
-    "x": "🏅",
-    "m": "🚓",
-    "o": "📄",
-}
-
-LETTER_EMOTES_ADMIN_COMMANDS = {
-    "g": "🤖",
-    "p": "🚀",
-    "c": "💬",
-    "m": "🖇",
-    "a": "👮",
-    "x": "🏅"
-}
-
-LETTER_EMOTES_MUSIC_COMMANDS = {
-    "g": "🤖",
-    "p": "🎵",
-    "q": "📜"
-}
-
-USER_COMMAND_SECTION_TOP_COMMANDS = {
-    UserCommandSection.UTILITY: ["avatar", "remindMe", "serverInfo"],
-    UserCommandSection.ANIME_AND_MANGA: ["anime", "manga", "mal", "anilist"],
-    UserCommandSection.FUN: ["snipe", "uwufy"],
-    UserCommandSection.XP: ["level", "leaderboard", "roles"],
-    UserCommandSection.MODERATION: ["mute", "kick", "ban"],
-    UserCommandSection.OTHER: ["invite", "feedback"],
-}
-
-ADMIN_COMMAND_SECTION_TOP_COMMANDS = {
-    AdminCommandSection.GENERAL: ["overview", "help"],
-    AdminCommandSection.PREFIX: ["prefix", "musicPrefix", "adminPrefix"],
-    AdminCommandSection.AUTOMOD: ["autoroles", "rolePersistence", "autoResponses"],
-    AdminCommandSection.CHANNELS: ["logsChannel", "spamChannel"],
-    AdminCommandSection.MODULES: ["enable", "disable"],
-    AdminCommandSection.XP: ["LevelUpMessage", "LevelUpRoles", "xpDecay"],
-}
-
-MUSIC_COMMAND_SECTION_TOP_COMMANDS = {
-    MusicCommandSection.GENERAL: ["setup", "dj", "history", "leave"],
-    MusicCommandSection.PLAYBACK: ["play", "search", "now", "pause", "seek", "lyrics"],
-    MusicCommandSection.QUEUE: ["queue", "move", "shuffle", "loop", "skip", "skipTo", "remove"]
-}
 
 NUMBERS_EMOJI_CODES = [
     ":one:",
@@ -221,17 +140,17 @@ NUMBERS_EMOJI_CODES = [
     ":keycap_ten:"
 ]
 
-EMOJI_NUMBER_MAP = {
-    "1️⃣": 0,
-    "2️⃣": 1,
-    "3️⃣": 2,
-    "4️⃣": 3,
-    "5️⃣": 4,
-    "6️⃣": 5,
-    "7️⃣": 6,
-    "8️⃣": 7,
-    "9️⃣": 8,
-    "🔟": 9
+NUMBER_EMOJI_MAP = {
+    1: "1️⃣",
+    2: "2️⃣",
+    3: "3️⃣",
+    4: "4️⃣",
+    5: "5️⃣",
+    6: "6️⃣",
+    7: "7️⃣",
+    8: "8️⃣",
+    9: "9️⃣",
+    10: "🔟"
 }
 
 MAL_ANIME_STATUS_MAPPING = {
@@ -250,36 +169,13 @@ MAL_MANGA_STATUS_MAPPING = {
     "6": "Plan to"
 }
 
-# yeah sorry you're gonna have to fill these on your own
-# partial means they can be a word on their own or part of a word, full means they must be a word on their own
-BLACKLISTED_WORDS_PARTIAL = [
-]
-
-BLACKLISTED_WORDS_FULL = [
-]
-
-UWUFY_FACES = [
-    '(*^ω^)',
-    '(◕ᴥ◕)',
-    'ʕ￫ᴥ￩ʔ',
-    '>////<',
-    'uwu',
-    'UwU',
-    '(*￣з￣)',
-    '>w<',
-    '^w^',
-    '(つ✧ω✧)つ',
-    '(/ =ω=)/',
-    '(⁄ ⁄•⁄ω⁄•⁄ ⁄)'
-]
-
-ANILIST_SCORING_SYSTEM = {
+ANILIST_SCORING_SYSTEM_MAP: dict[str, str] = {
     "POINT_100": "0-100",
     "POINT_10_DECIMAL": "0-10",
     "POINT_10": "0-10",
     "POINT_5": "0-5",
     "POINT_3": "0-3",
-    "-": "Unknown"
+    "-": "unknown"
 }
 
 ENCRYPTED_CHARACTERS = {
@@ -287,104 +183,71 @@ ENCRYPTED_CHARACTERS = {
     "#": "%hash_sign%",
     "[": "%opening_square_bracket%",
     "]": "%closing_square_bracket%",
-    ".": "%dot_sign%"
+    ".": "%dot_sign%",
+    "?": "%question_mark%"
 }
 
-IGNORED_UNRECOGNIZED_COMMANDS = [
-    'claim',
-    'daily',
-    'eval',
-    'meme',
-    'mar',
-    'fde',
-    'he',
-    'hourly',
-    'lottery',
-    'play',
-    'queue',
-    'shuffle',
-    'next',
-    'google',
-    'music',
-    'rep',
-    'dice',
-    'lootbox',
-    'chop',
-    'fish',
-    'colisee',
-    'remove',
-    'boat',
-    'skip',
-    'crew',
-    'profile',
-    'battle',
-    'chap',
-    'train'
-]
 
-
-class MerriamDictionaryResponseType(OhanaEnum):
+class MerriamDictionaryResponseType(CustomEnum):
     SUCCESS = "Success"
     NOT_FOUND = "Not Found"
     OTHER = "Other"
 
 
-class XPSettingsKey(OhanaEnum):
-    IGNORED_CHANNELS = "IGNORED_CHANNELS"
-    IGNORED_ROLES = "IGNORED_ROLES"
+class XPSettingsKey(CustomEnum):
+    IGNORED_CHANNELS = "ignored_channels"
+    IGNORED_ROLES = "ignored_roles"
 
-    XP_GAIN_ENABLED = "XP_GAIN_ENABLED"
-    XP_GAIN_TIMEFRAME = "XP_GAIN_TIME_FRAME"
-    XP_GAIN_MIN = "XP_GAIN_MIN"
-    XP_GAIN_MAX = "XP_GAIN_MAX"
-    MESSAGE_COUNT_MODE = "MESSAGE_COUNT_MODE"
+    XP_GAIN_ENABLED = "xp_gain_enabled"
+    XP_GAIN_TIMEFRAME = "xp_gain_time_frame"
+    XP_GAIN_MIN = "xp_gain_min"
+    XP_GAIN_MAX = "xp_gain_max"
+    MESSAGE_COUNT_MODE = "message_count_mode"
 
-    LEVELUP_ENABLED = "LEVELUP_ENABLED"
-    LEVELUP_CHANNEL = "LEVELUP_CHANNEL"
-    LEVELUP_MESSAGE = "LEVELUP_MESSAGE"
-    LEVEL_ROLES = "LEVEL_ROLES"
-    LEVEL_ROLE_EARN_MESSAGE = "LEVEL_ROLE_EARN_MESSAGE"
-    STACK_ROLES = "STACK_ROLES"
-    LEVEL_MAX = "LEVEL_MAX"
+    LEVELUP_ENABLED = "levelup_enabled"
+    LEVELUP_CHANNEL = "levelup_channel"
+    LEVELUP_MESSAGE = "levelup_message"
+    LEVEL_ROLES = "level_roles"
+    LEVEL_ROLE_EARN_MESSAGE = "level_role_earn_message"
+    STACK_ROLES = "stack_roles"
+    LEVEL_MAX = "level_max"
 
-    XP_DECAY_ENABLED = "XP_DECAY_ENABLED"
-    PERCENTAGE_OF_XP_DECAY_PER_DAY = "PERCENTAGE_OF_XP_DECAY_PER_DAY"
-    DAYS_BEFORE_XP_DECAY = "DAYS_BEFORE_XP_DECAY"
+    XP_DECAY_ENABLED = "xp_decay_enabled"
+    PERCENTAGE_OF_XP_DECAY_PER_DAY = "percentage_of_xp_decay_per_day"
+    DAYS_BEFORE_XP_DECAY = "days_before_xp_decay"
 
-    BOOST_EXTRA_GAIN = "BOOST_EXTRA_GAIN"
-    ROLES_EXTRA_GAIN = "ROLES_EXTRA_GAIN"
-
-
-class AdminSettingsAction(OhanaEnum):
-    ADD = "add"
-    REMOVE = "remove"
-    CLEAR = "clear"
+    BOOST_EXTRA_GAIN = "boost_extra_gain"
+    ROLES_EXTRA_GAIN = "roles_extra_gain"
 
 
-class MessageCountMode(OhanaEnum):
+LEVEL_XP_MAP = {}
+XP_LEVEL_MAP = {}
+
+
+class MessageCountMode(CustomEnum):
     PER_TIMEFRAME = 0
     PER_MESSAGE = 1
 
 
-class OSType(OhanaEnum):
+class OSType(CustomEnum):
     LINUX = 'Linux'
     WINDOWS = 'Windows'
     OTHER = 'Other'
 
 
-class MusicVCState(OhanaEnum):
+class MusicVCState(CustomEnum):
     DISCONNECTED = "disconnected"
     CONNECTED = "connected"
     PLAYING = "playing"
 
 
-class MusicVCLoopMode(OhanaEnum):
+class MusicVCLoopMode(CustomEnum):
     NONE = "none"
     ALL = "all"
     ONE = "one"
 
 
-NEXT_MUSIC_VC_LOOP_MODE = {
+next_music_vc_loop_mode = {
     MusicVCLoopMode.NONE: MusicVCLoopMode.ALL,
     MusicVCLoopMode.ALL: MusicVCLoopMode.ONE,
     MusicVCLoopMode.ONE: MusicVCLoopMode.NONE
@@ -403,12 +266,12 @@ VOICE_PERMISSIONS = [
 ]
 
 
-class MusicTrackSource(OhanaEnum):
+class MusicTrackSource(CustomEnum):
     SPOTIFY = "spotify"
     YOUTUBE = "youtube"
 
 
-GENERIC_YOUTUBE_TITLE_WORDS = [
+generic_youtube_title_words = [
     'official lyric video',
     'official lyrics video',
     'lyric video',
@@ -424,7 +287,7 @@ GENERIC_YOUTUBE_TITLE_WORDS = [
     'explicit'
 ]
 
-GENERIC_YOUTUBE_TITLE_WORDS_TO_REMOVE = [
+generic_youtube_title_words_to_remove = [
     'official lyric video',
     'official lyrics video',
     'lyric video',
@@ -438,49 +301,260 @@ GENERIC_YOUTUBE_TITLE_WORDS_TO_REMOVE = [
 ]
 
 
-class PlayerAction(OhanaEnum):
+class PlayerAction(CustomEnum):
     JOIN = "JOIN"
-    RESUME_PAUSE = "RESUME_PAUSE"
     REFRESH = "REFRESH"
     LEAVE = "LEAVE"
     SKIP = "SKIP"
     SHUFFLE = "SHUFFLE"
     LOOP = "LOOP"
     FAVORITE = "FAVORITE"
-    PREVIOUS = "PREVIOUS"
-    NEXT = "NEXT"
+    PAUSE = "PAUSE"
+    RESUME = "RESUME"
+    LIBRARY = "LIBRARY"
+    HISTORY = "HISTORY"
+    RADIO = "RADIO"
+    PLAYER = "PLAYER"
 
 
-CUSTOM_EMOJI_PLAYER_ACTION_MAP = {
-    settings.PLAYER_JOIN_EMOJI_ID: PlayerAction.JOIN,
-    settings.PLAYER_RESUME_PAUSE_EMOJI_ID: PlayerAction.RESUME_PAUSE,
-    settings.PLAYER_REFRESH_EMOJI_ID: PlayerAction.REFRESH,
-    settings.PLAYER_LEAVE_EMOJI_ID: PlayerAction.LEAVE,
-    settings.PLAYER_SKIP_EMOJI_ID: PlayerAction.SKIP,
-    settings.PLAYER_SHUFFLE_EMOJI_ID: PlayerAction.SHUFFLE,
-    settings.PLAYER_LOOP_EMOJI_ID: PlayerAction.LOOP,
-    settings.PLAYER_FAVORITE_EMOJI_ID: PlayerAction.FAVORITE,
-    settings.PLAYER_PREVIOUS_EMOJI_ID: PlayerAction.PREVIOUS,
-    settings.PLAYER_NEXT_EMOJI_ID: PlayerAction.NEXT
+# todo
+"""
+Upload images in this folder as emojis to your server (where your bot is)
+https://drive.google.com/file/d/1C-0uTm1flOzt0unSwuh6jSyQSiPhy_F-/view?usp=sharing
+"""
+PLAYER_ACTION_CUSTOM_EMOJI_MAP = {
+    PlayerAction.JOIN: 0,  # replace with the emoji ID related to Join.png
+    PlayerAction.REFRESH: 0,  # replace with the emoji ID related to Refresh_v2.png
+    PlayerAction.LEAVE: 0,  # replace with the emoji ID related to Leave.png
+    PlayerAction.SKIP: 0,  # replace with the emoji ID related to Skip.png
+    PlayerAction.SHUFFLE: 0,  # replace with the emoji ID related to Shuffle.png
+    PlayerAction.LOOP: 0,  # replace with the emoji ID related to Loop.png
+    PlayerAction.FAVORITE: 0,  # replace with the emoji ID related to Favorite.png
+    PlayerAction.PAUSE: 0,  # replace with the emoji ID related to Pause.png
+    PlayerAction.RESUME: 0,  # replace with the emoji ID related to Resume.png
+    PlayerAction.LIBRARY: 0,  # replace with the emoji ID related to Library.png
+    PlayerAction.HISTORY: 0,  # replace with the emoji ID related to History.png
+    PlayerAction.RADIO: 0,  # replace with the emoji ID related to Radio.png
+    PlayerAction.PLAYER: 0  # replace with the emoji ID related to Player.png
 }
 
-DEFAULT_EMOJI_PLAYER_ACTION_MAP = {
-    "▶️": PlayerAction.JOIN,
-    "⏯️": PlayerAction.RESUME_PAUSE,
-    "♻️": PlayerAction.REFRESH,
-    "⏹️": PlayerAction.LEAVE,
-    "⏭️": PlayerAction.SKIP,
-    "🔀": PlayerAction.SHUFFLE,
-    "🔁": PlayerAction.LOOP,
-    "🌟": PlayerAction.FAVORITE,
-    "⬅️": PlayerAction.PREVIOUS,
-    "➡️": PlayerAction.NEXT
-}
 
-
-class AnilistStatus(OhanaEnum):
+class AnilistStatus(CustomEnum):
     COMPLETED = "COMPLETED"
     CURRENT = "CURRENT"
     DROPPED = "DROPPED"
     PAUSED = "PAUSED"
     PLANNING = "PLANNING"
+
+
+class RoleMenuType(CustomEnum):
+    SELECT = "select"
+    BUTTON = "button"
+
+
+class RoleMenuMode(CustomEnum):
+    SINGLE = "single"
+    MULTIPLE = "multiple"
+
+
+class EmojiType(CustomEnum):
+    CUSTOM = "custom"
+    DEFAULT = "default"
+
+
+class RoleMenuImagePlacement:
+    THUMBNAIL = "thumbnail"
+    IMAGE = "image"
+
+
+SUPPORTED_PLAYER_ACTION_IDS = {
+    'resume', 'pause', 'skip',
+    'disconnect', 'connect',
+    'previous_page', 'next_page',
+    'shuffle', 'loop', 'favorite',
+    'add_track', 'refresh', 'report',
+    'library', 'history', 'switch_to_radio'
+}
+
+
+SUPPORTED_RADIO_ACTION_IDS = {
+    'disconnect', 'select_stream', 'switch_to_player', 'report', 'show_currently_playing', 'stop'
+}
+
+
+class Colour(CustomEnum):
+    PRIMARY_ACCENT = 0xE4CAA0  # accent from pfp
+    SECONDARY_ACCENT = 0xFFEA9D  # brighter
+
+    RED = 0xB94D35
+    GREEN = 0x8ADE87
+    BLACK = 0x000000
+    BROWN = 0xAC7731
+    WARM_GOLD = 0xFFBF52
+    HOT_ORANGE = 0xD6581A
+    SILVER = 0xA8A8A8
+    DEEP_BLUE = 0x364B92
+    SKY_BLUE = 0x6AC8FD
+    CLOUDY_PURPLE = 0x2B2D42
+    BLURPLE = 0x5539CC
+    WHITE = 0xFFFFFF
+
+    # ALIASES
+    ERROR = RED
+    SUCCESS = GREEN
+    SYSTEM = BLACK
+    WARNING = BROWN
+    INFO = SECONDARY_ACCENT
+    UNFORTUNATE = HOT_ORANGE
+    ROLE_CHANGE = BROWN
+
+    EXT_STEAM = DEEP_BLUE
+    EXT_MAL = DEEP_BLUE
+    EXT_ANILIST = CLOUDY_PURPLE
+    EXT_URBAN = SKY_BLUE
+    EXT_MERRIAM = SKY_BLUE
+
+
+class GenericColour(CustomEnum):
+    RED = Colour.RED
+    GREEN = Colour.GREEN
+    BLACK = Colour.BLACK
+    BROWN = Colour.BROWN
+    WARM_GOLD = Colour.WARM_GOLD
+    HOT_ORANGE = Colour.HOT_ORANGE
+    SILVER = Colour.SILVER
+    DEEP_BLUE = Colour.DEEP_BLUE
+    SKY_BLUE = Colour.SKY_BLUE
+    CLOUDY_PURPLE = Colour.CLOUDY_PURPLE
+    BLURPLE = Colour.BLURPLE
+    WHITE = Colour.WHITE
+
+
+class XPTransferAction(Enum):
+    AWARD = "award"
+    TAKE_AWAY = "take away"
+    RESET = "reset"
+
+
+class XPTransferActionTarget(Enum):
+    MEMBER = "member"
+    ROLE = "role"
+    EVERYONE = "everyone"
+
+
+class HelpMenuType(CustomEnum):
+    USER = "User"
+    MUSIC = "Music"
+    ADMIN = "Admin"
+
+
+class GeneralButtonEmoji:
+    # todo
+    """
+    Same as PLAYER_ACTION_CUSTOM_EMOJI_MAP - if you haven't uploaded images in this folder as emojis yet, do it now:
+    https://drive.google.com/file/d/1C-0uTm1flOzt0unSwuh6jSyQSiPhy_F-/view?usp=sharing
+    """
+    GO_BACK = 0  # replace with the emoji ID related to Back.png
+    RENAME = 0  # replace with the emoji ID related to Rename.png
+    COPY = 0  # replace with the emoji ID related to Copy.png
+    CLEAR = 0  # replace with the emoji ID related to Clear.png
+    DELETE = 0  # replace with the emoji ID related to Delete.png
+    MERGE = 0  # replace with the emoji ID related to Merge.png
+    MOVE = 0  # replace with the emoji ID related to Move.png
+    PREVIOUS = 0  # replace with the emoji ID related to Previous.png
+    NEXT = 0  # replace with the emoji ID related to Next.png
+    ADD = 0  # replace with the emoji ID related to Add.png
+    REMOVE = 0  # replace with the emoji ID related to Remove.png
+    SWITCH = 0  # replace with the emoji ID related to Switch.png
+    SETTINGS = 0  # replace with the emoji ID related to Settings.png
+
+
+PING_WORTHY_LOG_LEVELS = [
+    BotLogLevel.ERROR,
+    BotLogLevel.WARNING,
+    BotLogLevel.GUILD_JOIN,
+    BotLogLevel.GUILD_LEAVE,
+    BotLogLevel.RECEIVED_DM
+]
+
+
+class BackgroundWorker(CustomEnum):
+    # PERIODIC WORKERS (run every specified interval)
+    # worker for sending reminders
+    REMINDER_SERVICE = "Reminder Service"
+    # worker for cleaning cache (web requests, yt info)
+    CACHE_CLEANUP = "Cache Cleanup"
+    # worker for syncing xp with the database
+    XP_SYNC = "XP Sync"
+    # worker for enqueuing members pending xp decay
+    XP_DECAY_ENQUEUE = "XP Decay Enqueue"
+    # worker for decaying members XP
+    XP_DECAY = "XP Decay"
+    # worker for processing messages for xp gain
+    XP_GAIN = "XP Gain"
+    # worker for adjusting members XP (e.g. for xp decay, commands)
+    XP_ADJUSTMENT = "XP Adjustment"
+    # worker for loading recently queued music locally
+    MUSIC_DOWNLOADER = "Music Downloader"
+
+    # SELF-SCHEDULING WORKERS (worker decides when to run again)
+    # none yet
+
+
+PERIODIC_WORKER_FREQUENCY = {
+    BackgroundWorker.REMINDER_SERVICE: 5,
+    BackgroundWorker.CACHE_CLEANUP: 60,
+    BackgroundWorker.XP_SYNC: 45,
+    BackgroundWorker.XP_DECAY_ENQUEUE: 3600,
+    BackgroundWorker.XP_DECAY: 300,
+    BackgroundWorker.MUSIC_DOWNLOADER: 5,
+    BackgroundWorker.XP_ADJUSTMENT: 3,
+    BackgroundWorker.XP_GAIN: 0.1,
+}
+
+WORKER_RETRY_ON_ERROR_DELAY = {
+    BackgroundWorker.REMINDER_SERVICE: 5,
+    BackgroundWorker.CACHE_CLEANUP: 60,
+    BackgroundWorker.XP_SYNC: 45,
+    BackgroundWorker.XP_DECAY_ENQUEUE: 7200,
+    BackgroundWorker.XP_DECAY: 600,
+    BackgroundWorker.MUSIC_DOWNLOADER: 30,
+    BackgroundWorker.XP_ADJUSTMENT: 3,
+    BackgroundWorker.XP_GAIN: 0.1,
+}
+
+
+class MusicServiceMode(CustomEnum):
+    PLAYER = "player"
+    RADIO = "radio"
+
+
+class MusicLogAction(CustomEnum):
+    CONNECTED_BOT = "connect_bot"
+    SWITCHED_TO_RADIO = "switched_to_radio"
+    SWITCHED_TO_PLAYER = "switched_to_player"
+    DISCONNECTED_BOT = "disconnect_bot"
+    ADDED_TRACK = "add_track"
+    REMOVED_TRACK = "remove_track"
+    SKIPPED_TRACK = "skipped_track"
+    MOVED_TRACK = "moved_track"
+    TRACK_SEEK = "track_seek"
+    REPLAYED_TRACK = "replayed_track"
+    CLEARED_QUEUE = "cleared_queue"
+    CHANGED_LOOP_MODE = "changed_loop_mode"
+    SHUFFLED_QUEUE = "shuffled_queue"
+    CHANGED_RADIO_STREAM = "changed_radio_stream"
+    FORCE_PLAYED_TRACK = "force_played_track"
+    PAUSED_PLAYBACK = "paused_playback"
+    RESUMED_PLAYBACK = "resumed_playback"
+
+
+COUNTABLE_MUSIC_LOG_ACTIONS = [
+    MusicLogAction.ADDED_TRACK,
+    MusicLogAction.REMOVED_TRACK,
+    MusicLogAction.SKIPPED_TRACK,
+    MusicLogAction.MOVED_TRACK,
+    MusicLogAction.REPLAYED_TRACK,
+    MusicLogAction.SHUFFLED_QUEUE,
+    MusicLogAction.FORCE_PLAYED_TRACK
+]

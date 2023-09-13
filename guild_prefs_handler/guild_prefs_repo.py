@@ -1,5 +1,5 @@
 from globals_.clients import firebase_client
-from helpers import get_encrypted_string
+from utils.helpers import get_encrypted_string
 
 
 class GuildPrefsRepo:
@@ -23,7 +23,7 @@ class GuildPrefsRepo:
 
         attribute_name = get_encrypted_string(str(attribute_name))
 
-        if (isinstance(attribute_value, int) or isinstance(attribute_value, float)) \
+        if (isinstance(attribute_value, int) or isinstance(attribute_value, float))\
                 and not isinstance(attribute_value, bool):
             attribute_value = str(attribute_value)
 

@@ -1,0 +1,193 @@
+[
+  {
+    "code": "PLAZA",
+    "name": "Nightwave Plaza",
+    "description": "A plaza in the heart of the city, where the Nightwave is held.",
+    "icon_url": "https://cdn.discordapp.com/attachments/794891724345442316/1097306374884577390/plaza.png",
+    "icon_emoji_id": 1097741526022488104,
+    "genres": [
+      "Vaporwave",
+      "Electronic",
+      "Future Funk"
+    ],
+    "website_url": "https://plaza.one/",
+    "stream": {
+      "url": "https://radio.plaza.one/opus",
+      "format": "opus"
+    },
+    "images": {
+      "dynamic": {
+        "base_url": "https://gif.plaza.one/{number:02}.gif",
+        "parameter": {
+          "name": "number",
+          "substitution_type": "numeric_range",
+          "values": [
+            2,
+            83
+          ]
+        }
+      },
+      "static": {
+      }
+    },
+    "image_refresh_rate": 60,
+    "status_check": {
+      "api": "https://api-beta2.plaza.one/status",
+      "currently_playing_path": {
+        "title": [
+          "song",
+          "title"
+        ],
+        "artist": [
+          "song",
+          "artist"
+        ]
+      },
+      "progress_path": [
+        "song",
+        "position"
+      ],
+      "duration_path": [
+        "song",
+        "length"
+      ],
+      "artwork_path": [
+        "song",
+        "artwork_src"
+      ]
+    }
+  },
+  {
+    "code": "YGGDRASIL",
+    "name": "Yggdrasil Radio",
+    "description": "J-Pop from anime and games. You can request songs through the website.",
+    "icon_url": "https://cdn.discordapp.com/attachments/794891724345442316/1097339283678953522/yggdrasil_.png",
+    "icon_emoji_id": 1097742057642135643,
+    "genres": [
+      "Anime",
+      "J-Pop",
+      "J-Rock"
+    ],
+    "website_url": "https://yggdrasilradio.net/",
+    "stream": {
+      "url": "http://radio.shirayuki.org:9200/stream",
+      "format": "mpeg"
+    },
+    "images": {
+      "dynamic": {
+      },
+      "static": {
+        "urls": [
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330077412380682/anime_01.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330242357567658/anime_02.png",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330395768434800/anime_04.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330493017575515/anime_05.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330576622620692/anime_06.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330650266218576/anime_07.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097331235791048795/anime_08.png"
+        ]
+      }
+    },
+    "image_refresh_rate": 300,
+    "status_check": {
+      "api": "https://yggdrasilradio.net/api/playing/",
+      "currently_playing_path": {
+        "title": [
+          "current",
+          "title"
+        ],
+        "artist": [
+          "current",
+          "artist"
+        ],
+        "extra": [
+          "current",
+          "anime"
+        ]
+      },
+      "artwork_path": [
+        "current",
+        "images",
+        "medium"
+      ]
+    }
+  },
+  {
+    "code": "RM_FM_STUDY",
+    "name": "rm.fm/study",
+    "description": "A little motivation boost for your studies.",
+    "icon_url": "https://cdn-profiles.tunein.com/s297751/images/logod.jpg",
+    "icon_emoji_id": 1085721689737941102,
+    "genres": [
+      "Lo-Fi",
+      "Chill"
+    ],
+    "website_url": "https://www.rm.fm/study",
+    "stream": {
+      "url": "https://rautemusik-de-hz-fal-stream14.radiohost.de/study",
+      "format": "mpeg"
+    },
+    "images": {
+      "dynamic": {
+      },
+      "static": {
+        "urls": [
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097796154361643058/lofi_001.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795764064882791/lofi_002.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795764597555293/lofi_003.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795764987641876/lofi_004.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795765444808774/lofi_005.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795765826486474/lofi_006.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795766157852763/lofi_007.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795766635986994/lofi_008.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795767181250600/lofi_009.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097795767575527434/lofi_010.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097796969600139354/lofi_011.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097796969939869747/lofi_012.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097797813930295296/lofi_013.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097796970690658374/lofi_014.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097796971055554560/lofi_015.gif"
+        ]
+      }
+    },
+    "image_refresh_rate": 300,
+    "status_check": {
+      "api": "https://feed.tunein.com/profiles/s297751/nowPlaying",
+      "currently_playing_path": {
+        "full": [
+          "Header",
+          "Subtitle"
+        ]
+      }
+    }
+  },
+  {
+    "code": "FAYROUZ",
+    "name": "[Arabic] Fairuzyat FM",
+    "description": "24/7 stream of Fairouz classics from Palestinian radio \"Sawtelghad\". Fairuz is considered the musical icon of Lebanon and is popularly known as the soul of Lebanon.",
+    "icon_url": "https://cdn.discordapp.com/attachments/794891724345442316/1099473442014769162/firuz.jpg",
+    "icon_emoji_id": 1099473700295823370,
+    "genres": [
+      "Arabic Classics",
+      "Fairouz"
+    ],
+    "website_url": "https://sawtelghad.net/fairuz",
+    "stream": {
+      "url": "http://sawtelghad.org:8008/;",
+      "format": "mpeg"
+    },
+    "images": {
+      "dynamic": {
+      },
+      "static": {
+        "urls": [
+          "https://cdn.discordapp.com/attachments/794891724345442316/1099475660101124146/firuz_2.jpg",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1099473442014769162/firuz.jpg"
+        ]
+      }
+    },
+    "image_refresh_rate": 600,
+    "status_check": {
+    }
+  }
+]
