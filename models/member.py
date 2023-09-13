@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 
 
 class MemberXP:
@@ -12,7 +12,7 @@ class MemberXP:
         self._timeframe_ts = -1
 
         self._xp_decayed = 0
-        self._last_message_ts = int(time.time()) - time.altzone
+        self._last_message_ts = int(datetime.utcnow().timestamp())
         self._ts_of_last_decay = -1
 
         self._level = 0
@@ -43,16 +43,28 @@ class MemberXP:
         self._messages += 1
         self.is_synced = False
 
+    def increment_messages_by(self, amount):
+        self._messages += amount
+        self.is_synced = False
+
     @property
     def xp(self):
         return self._xp
 
     def set_xp(self, xp):
         self._xp = int(float(xp))
+        if self._xp > 10**14:
+            self._xp = 10**14
+        if self._xp < 0:
+            self._xp = 0
         self.is_synced = False
 
     def add_xp(self, xp):
         self._xp += xp
+        if self._xp > 10**14:
+            self._xp = 10**14
+        if self._xp < 0:
+            self._xp = 0
         self.is_synced = False
 
     @property
@@ -72,6 +84,8 @@ class MemberXP:
         self.is_synced = False
 
     def decay_xp(self, xp, only_add_to_decayed_variable=False):
+        if self._xp < xp:
+            xp = self._xp
         if not only_add_to_decayed_variable:
             self._xp -= xp
         self._xp_decayed += xp
@@ -83,7 +97,7 @@ class MemberXP:
 
     def set_last_message_ts(self, last_message_ts):
         if int(last_message_ts) == -1:
-            last_message_ts = int(time.time()) - time.altzone - 24*60*60
+            last_message_ts = int(datetime.utcnow().timestamp())
         self._last_message_ts = int(last_message_ts)
         self.is_synced = False
         
@@ -112,16 +126,17 @@ class MemberXP:
         self.is_synced = False
 
     def stringify_values(self):
-        self._member_id = str(self._member_id)
-        self._messages = str(self._messages)
-        self._xp = str(self._xp)
-        self._timeframe_ts = str(self._timeframe_ts)
-        self._xp_decayed = str(self._xp_decayed)
-        self._last_message_ts = str(self._last_message_ts)
-        self._ts_of_last_decay = str(self._ts_of_last_decay)
-        self._level = str(self._level)
-        self._last_sent_level = str(self._last_sent_level)
-        return self
+        member_xp = self.__class__(member_id=self._member_id)
+        member_xp._member_id = str(self._member_id)
+        member_xp._messages = str(self._messages)
+        member_xp._xp = str(self._xp)
+        member_xp._timeframe_ts = str(self._timeframe_ts)
+        member_xp._xp_decayed = str(self._xp_decayed)
+        member_xp._last_message_ts = str(self._last_message_ts)
+        member_xp._ts_of_last_decay = str(self._ts_of_last_decay)
+        member_xp._level = str(self._level)
+        member_xp._last_sent_level = str(self._last_sent_level)
+        return member_xp
 
     def destringify_values(self):
         self._member_id = int(self._member_id)

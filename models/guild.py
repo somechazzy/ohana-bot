@@ -1,7 +1,6 @@
-from globals_.constants import XPSettingsKey, DEFAULT_PREFIX, DEFAULT_ADMIN_PREFIX, \
-    ENCRYPTED_CHARACTERS, DEFAULT_LEVELUP_MESSAGE, DEFAULT_LEVEL_ROLE_EARN_MESSAGE, DEFAULT_MIN_XP_GIVEN, \
-    DEFAULT_TIMEFRAME_FOR_XP, DEFAULT_MAX_XP_GIVEN, DEFAULT_XP_DECAY_PERCENTAGE, DEFAULT_XP_DECAY_DAYS, \
-    MessageCountMode, DEFAULT_MUSIC_PREFIX
+from globals_.constants import XPSettingsKey, ENCRYPTED_CHARACTERS, DEFAULT_LEVELUP_MESSAGE, \
+    DEFAULT_LEVEL_ROLE_EARN_MESSAGE, DEFAULT_MIN_XP_GIVEN, DEFAULT_TIMEFRAME_FOR_XP, DEFAULT_MAX_XP_GIVEN, \
+    DEFAULT_XP_DECAY_PERCENTAGE, DEFAULT_XP_DECAY_DAYS, MessageCountMode
 from .member import MemberXP
 
 
@@ -10,35 +9,21 @@ class GuildPrefs:
 
         self._guild_id = guild_id
         self._guild_name = guild_name
-        self._currently_in_guild = True
 
-        self._prefix = DEFAULT_PREFIX
-        self._admin_prefix = DEFAULT_ADMIN_PREFIX
-        self._music_prefix = DEFAULT_MUSIC_PREFIX
         self._autoroles = []
-        self._auto_responses = {}
         self._dj_roles = []
 
-        self._spam_channel = 0
         self._logs_channel = 0
         self._music_channel = 0
         self._music_header_message = 0
         self._music_player_message = 0
-
-        self._fun_commands_enabled = True
-        self._utility_commands_enabled = True
-        self._mal_al_commands_enabled = True
-        self._xp_commands_enabled = True
-        self._moderation_commands_enabled = True
+        self._music_player_message_timestamp = 0
 
         self._role_persistence_enabled = False
         self._default_banned_words_enabled = False
-        self._whitelisted_role = 0
-        self._banned_words = {}
         self._single_message_channels = {}
         self._gallery_channels = []
-        self._react_roles = {}
-        self._anime_channels = []
+        self._role_menus = {}
 
         self._xp_settings = {
             XPSettingsKey.XP_GAIN_ENABLED: True,
@@ -78,47 +63,11 @@ class GuildPrefs:
         self._guild_name = guild_name
 
     @property
-    def currently_in_guild(self):
-        return self._currently_in_guild
-
-    def set_currently_in_guild(self, currently_in_guild: bool):
-        if not currently_in_guild:
-            currently_in_guild = False
-        self._currently_in_guild = currently_in_guild
-
-    @property
-    def prefix(self):
-        return self._prefix
-
-    def set_prefix(self, prefix: str):
-        if not prefix:
-            prefix = DEFAULT_PREFIX
-        self._prefix = prefix
-
-    @property
-    def admin_prefix(self):
-        return self._admin_prefix
-
-    def set_admin_prefix(self, admin_prefix: str):
-        if not admin_prefix:
-            admin_prefix = DEFAULT_ADMIN_PREFIX
-        self._admin_prefix = admin_prefix
-
-    @property
-    def music_prefix(self):
-        return self._music_prefix
-
-    def set_music_prefix(self, music_prefix: str):
-        if not music_prefix:
-            music_prefix = DEFAULT_MUSIC_PREFIX
-        self._music_prefix = music_prefix
-
-    @property
     def autoroles(self):
         return self._autoroles
 
-    def set_autoroles(self, autoroles: []):
-        if not autoroles:
+    def set_autoroles(self, autoroles):
+        if isinstance(autoroles, type(None)):
             autoroles = []
         for autorole in autoroles:
             self._autoroles.append(int(autorole))
@@ -133,30 +82,11 @@ class GuildPrefs:
             self._autoroles.remove(autorole)
 
     @property
-    def auto_responses(self):
-        return self._auto_responses
-
-    def set_auto_responses(self, auto_responses: dict):
-        if not auto_responses:
-            auto_responses = {}
-        for key in auto_responses.keys():
-            self._auto_responses[get_decrypted_string(key)] = auto_responses[key]
-
-    def add_auto_response(self, trigger: str, auto_response: dict):
-        if trigger in self._auto_responses.keys():
-            return
-        self._auto_responses[trigger] = auto_response
-
-    def remove_auto_response(self, trigger: str):
-        while trigger in self._auto_responses.keys():
-            self._auto_responses.pop(trigger)
-
-    @property
     def dj_roles(self):
         return self._dj_roles
 
-    def set_dj_roles(self, dj_roles: []):
-        if not dj_roles:
+    def set_dj_roles(self, dj_roles):
+        if isinstance(dj_roles, type(None)):
             dj_roles = []
         for dj_role in dj_roles:
             self._dj_roles.append(int(dj_role))
@@ -171,20 +101,11 @@ class GuildPrefs:
             self._dj_roles.remove(dj_role)
 
     @property
-    def spam_channel(self):
-        return self._spam_channel
-
-    def set_spam_channel(self, spam_channel: int):
-        if not spam_channel:
-            spam_channel = 0
-        self._spam_channel = int(spam_channel)
-
-    @property
     def logs_channel(self):
         return self._logs_channel
 
     def set_logs_channel(self, logs_channel: int):
-        if not logs_channel:
+        if isinstance(logs_channel, type(None)):
             logs_channel = 0
         self._logs_channel = int(logs_channel)
 
@@ -193,7 +114,7 @@ class GuildPrefs:
         return self._music_channel
 
     def set_music_channel(self, music_channel: int):
-        if not music_channel:
+        if isinstance(music_channel, type(None)):
             music_channel = 0
         self._music_channel = int(music_channel)
 
@@ -202,7 +123,7 @@ class GuildPrefs:
         return self._music_header_message
 
     def set_music_header_message(self, music_header_message: int):
-        if not music_header_message:
+        if isinstance(music_header_message, type(None)):
             music_header_message = 0
         self._music_header_message = int(music_header_message)
 
@@ -211,61 +132,25 @@ class GuildPrefs:
         return self._music_player_message
 
     def set_music_player_message(self, music_player_message: int):
-        if not music_player_message:
+        if isinstance(music_player_message, type(None)):
             music_player_message = 0
         self._music_player_message = int(music_player_message)
 
     @property
-    def fun_commands_enabled(self):
-        return self._fun_commands_enabled
+    def music_player_message_timestamp(self):
+        return self._music_player_message_timestamp
 
-    def set_fun_commands_enabled(self, fun_commands_enabled: bool):
-        if fun_commands_enabled is None:
-            fun_commands_enabled = True
-        self._fun_commands_enabled = fun_commands_enabled
-
-    @property
-    def utility_commands_enabled(self):
-        return self._utility_commands_enabled
-
-    def set_utility_commands_enabled(self, utility_commands_enabled: bool):
-        if utility_commands_enabled is None:
-            utility_commands_enabled = True
-        self._utility_commands_enabled = utility_commands_enabled
-
-    @property
-    def mal_al_commands_enabled(self):
-        return self._mal_al_commands_enabled
-
-    def set_mal_al_commands_enabled(self, mal_al_commands_enabled: bool):
-        if mal_al_commands_enabled is None:
-            mal_al_commands_enabled = True
-        self._mal_al_commands_enabled = mal_al_commands_enabled
-
-    @property
-    def xp_commands_enabled(self):
-        return self._xp_commands_enabled
-
-    def set_xp_commands_enabled(self, xp_commands_enabled: bool):
-        if xp_commands_enabled is None:
-            xp_commands_enabled = True
-        self._xp_commands_enabled = xp_commands_enabled
-
-    @property
-    def moderation_commands_enabled(self):
-        return self._moderation_commands_enabled
-
-    def set_moderation_commands_enabled(self, moderation_commands_enabled: bool):
-        if moderation_commands_enabled is None:
-            moderation_commands_enabled = True
-        self._moderation_commands_enabled = moderation_commands_enabled
+    def set_music_player_message_timestamp(self, music_player_message_timestamp):
+        if isinstance(music_player_message_timestamp, type(None)):
+            music_player_message_timestamp = 0
+        self._music_player_message_timestamp = int(music_player_message_timestamp)
 
     @property
     def default_banned_words_enabled(self):
         return self._default_banned_words_enabled
 
     def set_default_banned_words_enabled(self, default_banned_words_enabled: bool):
-        if default_banned_words_enabled is None:
+        if isinstance(default_banned_words_enabled, type(None)):
             default_banned_words_enabled = False
         self._default_banned_words_enabled = default_banned_words_enabled
 
@@ -274,35 +159,16 @@ class GuildPrefs:
         return self._role_persistence_enabled
 
     def set_role_persistence_enabled(self, role_persistence_enabled: bool):
-        if role_persistence_enabled is None:
+        if isinstance(role_persistence_enabled, type(None)):
             role_persistence_enabled = False
         self._role_persistence_enabled = role_persistence_enabled
-
-    @property
-    def banned_words(self):
-        return self._banned_words
-
-    def set_banned_words(self, banned_words: {}):
-        if not banned_words:
-            banned_words = {}
-        for key in banned_words.keys():
-            self._banned_words[get_decrypted_string(key)] = banned_words[key]
-
-    def add_banned_word(self, banned_word: str, banned_word_dict: dict):
-        if banned_word in self.banned_words.keys():
-            return
-        self._banned_words[banned_word] = banned_word_dict
-
-    def remove_banned_word(self, banned_word: str):
-        while banned_word in self.banned_words.keys():
-            self._banned_words.pop(banned_word)
 
     @property
     def single_message_channels(self):
         return self._single_message_channels
 
-    def set_single_message_channels(self, single_message_channels: {}):
-        if not single_message_channels:
+    def set_single_message_channels(self, single_message_channels):
+        if isinstance(single_message_channels, type(None)):
             single_message_channels = {}
         for key in single_message_channels.keys():
             self._single_message_channels[int(get_decrypted_string(key))] = single_message_channels[key]
@@ -320,8 +186,8 @@ class GuildPrefs:
     def gallery_channels(self):
         return self._gallery_channels
 
-    def set_gallery_channels(self, gallery_channels: []):
-        if not gallery_channels:
+    def set_gallery_channels(self, gallery_channels):
+        if isinstance(gallery_channels, type(None)):
             gallery_channels = []
         for channel in gallery_channels:
             self._gallery_channels.append(int(channel))
@@ -336,60 +202,38 @@ class GuildPrefs:
             self._gallery_channels.remove(gallery_channel)
 
     @property
-    def react_roles(self):
-        return self._react_roles
+    def role_menus(self):
+        return self._role_menus
 
-    def set_react_roles(self, react_roles: {}):
-        if not react_roles:
-            react_roles = {}
-        self._integerify_react_roles_data(react_roles)
+    def set_role_menus(self, role_menus):
+        if not role_menus:
+            role_menus = {}
+        for message_id, role_menu_details in role_menus.items():
+            self._role_menus[int(message_id)] = {
+                "restricted_to_roles": {int(role_id) for role_id in role_menu_details.get("restricted_to_roles", [])},
+                "mode": role_menu_details["mode"],
+                "type": role_menu_details["type"],
+                "restricted_description": role_menu_details.get("restricted_description", "")
+            }
 
-    def add_react_role(self, channel_id: int, message_id: int, emoji_id: int, role_id: int):
-        if channel_id not in self._react_roles:
-            self._react_roles[channel_id] = {}
-        if message_id not in self._react_roles[channel_id]:
-            self._react_roles[channel_id][message_id] = {}
-        if emoji_id not in self._react_roles[channel_id][message_id]:
-            self._react_roles[channel_id][message_id][emoji_id] = role_id
+    def add_role_menu(self, message_id, role_menu_type, role_menu_mode, restricted_to_roles, restricted_description):
+        self._role_menus[int(message_id)] = {
+            "type": role_menu_type,
+            "mode": role_menu_mode,
+            "restricted_to_roles": set(restricted_to_roles),
+            "restricted_description": restricted_description
+        }
 
-    def remove_react_role(self, channel_id: int, message_id: int, emoji_id: int, ):
-        if self._react_roles.get(channel_id, {}).get(message_id, {}).get(emoji_id, None):
-            del self._react_roles[channel_id][message_id][emoji_id]
-
-    @property
-    def whitelisted_role(self):
-        return self._whitelisted_role
-
-    def set_whitelisted_role(self, whitelisted_role: int):
-        if not whitelisted_role:
-            whitelisted_role = 0
-        self._whitelisted_role = int(whitelisted_role)
-
-    @property
-    def anime_channels(self):
-        return self._anime_channels
-
-    def set_anime_channels(self, anime_channels: []):
-        if not anime_channels:
-            anime_channels = []
-        for channel in anime_channels:
-            self._anime_channels.append(int(channel))
-
-    def add_anime_channel(self, anime_channel: int):
-        if anime_channel in self.anime_channels:
-            return
-        self._anime_channels.append(int(anime_channel))
-
-    def remove_anime_channel(self, anime_channel: int):
-        while anime_channel in self.anime_channels:
-            self._anime_channels.remove(anime_channel)
+    def remove_role_menu(self, message_id):
+        if message_id in self._role_menus:
+            del self._role_menus[message_id]
 
     @property
     def xp_settings(self):
         return self._xp_settings
 
-    def set_xp_settings(self, xp_settings: {}):
-        if not xp_settings:
+    def set_xp_settings(self, xp_settings):
+        if isinstance(xp_settings, type(None)):
             return
         for key, value in xp_settings.items():
             self._xp_settings[key] = value
@@ -402,12 +246,10 @@ class GuildPrefs:
             str_autoroles.append(str(autorole))
         self._autoroles = str_autoroles
 
-        self._spam_channel = str(self._spam_channel)
         self._logs_channel = str(self._logs_channel)
         self._music_channel = str(self._music_channel)
         self._music_header_message = str(self._music_header_message)
         self._music_player_message = str(self._music_player_message)
-        self._whitelisted_role = str(self._whitelisted_role)
 
         str_gallery = []
         for gallery_channel in self._gallery_channels:
@@ -418,11 +260,6 @@ class GuildPrefs:
             self._single_message_channels[key]['channel_id'] =\
                 str(self._single_message_channels[key].get('channel_id', 0))
             self._single_message_channels[key]['role_id'] = str(self._single_message_channels[key].get('role_id', 0))
-
-        str_anime = []
-        for anime_channel in self._anime_channels:
-            str_anime.append(str(anime_channel))
-        self._anime_channels = str_anime
 
         self._xp_settings = self.stringify_xp_settings_values(self._xp_settings)
 
@@ -436,12 +273,10 @@ class GuildPrefs:
             int_autoroles.append(int(autorole))
         self._autoroles = int_autoroles
 
-        self._spam_channel = int(self._spam_channel)
         self._logs_channel = int(self._logs_channel)
         self._music_channel = int(self._music_channel)
         self._music_header_message = int(self._music_header_message)
         self._music_player_message = int(self._music_player_message)
-        self._whitelisted_role = int(self._whitelisted_role)
 
         int_gallery = []
         for gallery_channel in self._gallery_channels:
@@ -452,11 +287,6 @@ class GuildPrefs:
             self._single_message_channels[key]['channel_id'] = \
                 int(self._single_message_channels[key].get('channel_id', 0))
             self._single_message_channels[key]['role_id'] = int(self._single_message_channels[key].get('role_id', 0))
-
-        int_anime = []
-        for anime_channel in self._anime_channels:
-            int_anime.append(int(anime_channel))
-        self._anime_channels = int_anime
 
         self._xp_settings = self.destringify_xp_settings_values(self._xp_settings)
 
@@ -488,21 +318,16 @@ class GuildPrefs:
         xp_settings[XPSettingsKey.IGNORED_ROLES] = str_ignored_roles
 
         new_level_roles_dict = {}
-        for key, value in xp_settings[XPSettingsKey.LEVEL_ROLES].items():
-            new_level_roles_dict[int(key)] = int(value)
+        if isinstance(xp_settings[XPSettingsKey.LEVEL_ROLES], list):
+            for i in range(len(xp_settings[XPSettingsKey.LEVEL_ROLES])):
+                if xp_settings[XPSettingsKey.LEVEL_ROLES][i]:
+                    new_level_roles_dict[i] = int(xp_settings[XPSettingsKey.LEVEL_ROLES][i])
+        else:
+            for key, value in xp_settings[XPSettingsKey.LEVEL_ROLES].items():
+                new_level_roles_dict[int(key)] = int(value)
         xp_settings[XPSettingsKey.LEVEL_ROLES] = new_level_roles_dict
 
         return xp_settings
-
-    def _integerify_react_roles_data(self, react_roles):
-        if not react_roles:
-            return {}
-        for channel_id_str, message_dicts in react_roles.items():
-            self._react_roles[int(channel_id_str)] = {}
-            for message_id_str, emoji_role_dict in message_dicts.items():
-                self._react_roles[int(channel_id_str)][int(message_id_str)] = {}
-                for emoji_id_str, role_id in emoji_role_dict.items():
-                    self._react_roles[int(channel_id_str)][int(message_id_str)][int(emoji_id_str)] = int(role_id)
 
 
 class GuildXP:

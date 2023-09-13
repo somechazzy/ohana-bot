@@ -252,7 +252,7 @@ class AnilistProfile:
         if anime_dropped_stats.count > 30:
             anime_dropped_analysis = f"Might be picky but at least willing to give things a chance " \
                                      f"(**{anime_dropped_stats.count}** dropped)."
-        elif completed_days and anime_dropped_stats.count + anime_paused_stats.count == 0:
+        elif anime_dropped_stats.count + anime_paused_stats.count == 0 and completed_days:
             anime_dropped_analysis = f"Fully commits to finishing any show they start " \
                                      f"(no dropped or paused anime)."
 

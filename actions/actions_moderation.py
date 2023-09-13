@@ -1,123 +1,128 @@
-import disnake as discord
-import helpers
-from actions.actions_basic import send_embed, send_message
-from internal.bot_logging import log, log_to_server
-from globals_ import constants
+import datetime
+import discord
+from actions.actions_basic import send_message
+from globals_.constants import GuildLogType
+from utils.helpers import convert_minutes_to_time_string
+from internal.guild_logging import log_to_server
+from utils.exceptions import ModerationHierarchyError
 
 
-async def mute_member(member: discord.Member, guild: discord.Guild, time_in_minutes, send_on_channel=False,
-                      channel=None, reason="Not provided", moderator=None):
-    """
-    Used for muting a member.
-    :param (discord.Member or discord.User) member: member to mute
-    :param (discord.Guild) guild: guild the member belongs to
-    :param (int) time_in_minutes: duration in minutes
-    :param (bool) send_on_channel: whether or not to send feedback message on the passed channel
-    :param (discord.TextChannel) channel: passed when send_on_channel is True
-    :param (str) reason: reason for muting, appears in the logs and the audit log
-    :param (discord.Member or discord.User) moderator: member that triggered this mute (usually through a command)
-    :return: None
-    """
-    if not guild.me.guild_permissions.moderate_members or not helpers.bot_can_moderate_target_member(member):
-        if send_on_channel and channel is not None:
-            await send_embed(f"I do not have the necessary permission or role"
-                             f" hierarchy position to mute/timeout this person.",
-                             channel, emoji='❌', color=0xFF522D)
-        return
-    if guild.me.top_role <= member.top_role:
-        if send_on_channel and channel is not None:
-            await send_embed(f"The user is on equal level or higher than my highest role.",
-                             channel, emoji='❌', color=0xFF522D)
-        return
-    time_string = helpers.convert_minutes_to_time_string(time_in_minutes)
-    await member.timeout(duration=time_in_minutes * 60.0, reason=reason)
-    if send_on_channel and channel is not None:
-        await send_embed(f"{member} is now on timeout for {time_string}.", channel, emoji='✅', color=0x0AAC00)
-        await log(f"User {member} with ID \"{member.id}\" timed-out for {time_in_minutes} minutes. Reason:"
-                  f" \"{reason}\". Guild: {guild.name}",
-                  level=constants.BotLogType.MEMBER_INFO, log_to_db=False, log_to_discord=False,
-                  guild_id=member.guild.id)
-
-        fields = ["Moderator"] if moderator is not None else []
-        values = [str(moderator)] if moderator is not None else []
-        await log_to_server(member.guild, constants.GuildLogType.MUTED_MEMBER, member=member,
-                            fields=["Reason", "Duration"] + fields,
-                            values=[reason, time_string] + values)
-
-
-async def unmute_member(member, guild, send_on_channel=False, channel=None, reason="None", moderator=None):
-    """
-    Used for muting a member.
-    :param (discord.Member or discord.User) member: member to unmute
-    :param (discord.Guild) guild: guild the member belongs to
-    :param (bool) send_on_channel: whether or not to send feedback message on the passed channel
-    :param (discord.TextChannel) channel: passed when send_on_channel is True
-    :param (str) reason: reason for un-muting, appears in the logs and the audit log
-    :param (discord.Member or discord.User) moderator: member that triggered this un-mute (usually through a command)
-    :return: None
-    """
-    if not guild.me.guild_permissions.moderate_members or not helpers.bot_can_moderate_target_member(member):
-        if send_on_channel and channel is not None:
-            await send_embed(f"I do not have the necessary permission or role"
-                             f" hierarchy position to unmute/un-timeout this person.",
-                             channel, emoji='❌', color=0xFF522D)
-        return
-    if guild.me.top_role <= member.top_role:
-        if send_on_channel and channel is not None:
-            await send_embed(f"The user is on equal level or higher than my highest role.",
-                             channel, emoji='❌', color=0xFF522D)
-        return
-    await member.timeout(duration=None, reason=reason)
-    if send_on_channel and channel is not None:
-        await send_embed(f"{member}'s timeout has been lifted.", channel, emoji='✅', color=0x0AAC00)
-    await log(f"User {member} with ID \"{str(member.id)}\" has been un-timed-out. Reason:"
-              f" \"{reason}\". Guild: {guild.name}",
-              level=constants.BotLogType.MEMBER_INFO, log_to_db=False, log_to_discord=False, guild_id=member.guild.id)
-    fields = ["Moderator"] if moderator is not None else []
-    values = [str(moderator)] if moderator is not None else []
-    await log_to_server(member.guild, constants.GuildLogType.UNMUTED_MEMBER,
-                        member=member, fields=fields, values=values)
-
-
-async def kick_member(member, guild, dm_user=True, reason="not provided", moderator=None):
-    if not guild.me.guild_permissions.kick_members or not helpers.bot_can_moderate_target_member(member):
-        return
-    if dm_user:
+async def mute_member(member: discord.Member, duration_in_minutes: int, actor: discord.Member,
+                      reason: str = "Not provided"):
+    if isinstance(member, discord.User):
         try:
-            await send_message(f"You have been kicked from {guild.name}. Reason: {reason}", member)
-        except:
-            pass
-    try:
-        await member.kick(reason=reason)
-        fields = ["Moderator"] if moderator is not None else []
-        values = [str(moderator)] if moderator is not None else []
-        await log_to_server(member.guild, constants.GuildLogType.KICKED_MEMBER, member=member,
-                            fields=["Reason"] + fields,
-                            values=[reason] + values)
-    except:
-        pass
-    await log(f"User {member} with ID \"{str(member.id)}\" has been kicked. Reason: \"{reason}\". Guild: {guild.name}",
-              level=constants.BotLogType.MEMBER_INFO, log_to_db=False, log_to_discord=False, guild_id=member.guild.id)
+            member = await actor.guild.fetch_member(member.id)
+        except discord.NotFound:
+            raise ModerationHierarchyError("Member not found in this server")
+    assert_hierarchy(actor=actor, target=member)
+    await member.timeout(datetime.timedelta(minutes=duration_in_minutes),
+                         reason=reason or "Not provided" + f" - Moderator: {actor}")
+
+    log_fields = ["Reason", "Duration", "Moderator"]
+    log_values = [reason or "Not provided", convert_minutes_to_time_string(duration_in_minutes), actor.mention]
+    await log_to_server(guild=member.guild,
+                        event_type=GuildLogType.MUTED_MEMBER,
+                        member=member,
+                        fields=log_fields,
+                        values=log_values)
 
 
-async def ban_member(member, guild, delete_messages=False, dm_user=True, reason="not provided", moderator=None):
-    if not guild.me.guild_permissions.ban_members or not helpers.bot_can_moderate_target_member(member):
-        return
-    if dm_user:
+async def unmute_member(member: discord.Member, actor: discord.Member, reason: str = "Not provided"):
+    if isinstance(member, discord.User):
         try:
-            await send_message(f"You have been banned from {guild.name}. Reason: {reason}", member)
-        except:
-            pass
+            member = await actor.guild.fetch_member(member.id)
+        except discord.NotFound:
+            raise ModerationHierarchyError("Member not found in this server")
+    assert_hierarchy(actor=actor, target=member)
+    await member.timeout(None, reason=reason or "Not provided" + f" - Moderator: {actor}")
+
+    log_fields = ["Reason", "Moderator"]
+    log_values = [reason or "Not provided", actor.mention]
+    await log_to_server(guild=member.guild,
+                        event_type=GuildLogType.UNMUTED_MEMBER,
+                        member=member,
+                        fields=log_fields,
+                        values=log_values)
+
+
+async def kick_member(member: discord.Member, actor: discord.Member, reason: str = "Not provided"):
+    if isinstance(member, discord.User):
+        try:
+            member = await actor.guild.fetch_member(member.id)
+        except discord.NotFound:
+            raise ModerationHierarchyError("Member not found in this server")
+    assert_hierarchy(actor=actor, target=member)
     try:
-        await member.ban(reason=reason, delete_message_days=(1 if delete_messages else 0))
-        fields = ["Moderator"] if moderator is not None else []
-        values = [str(moderator)] if moderator is not None else []
-        await log_to_server(member.guild, constants.GuildLogType.BANNED_MEMBER, member=member,
-                            fields=["Reason"] + fields,
-                            values=[reason] + values)
-        await log(f"User {member} with ID \"{str(member.id)}\" has been banned."
-                  f" Reason: \"{reason}\". Guild: {guild.name}",
-                  level=constants.BotLogType.MEMBER_INFO, log_to_db=False, log_to_discord=False,
-                  guild_id=guild.id)
-    except:
+        await send_message(f"You have been kicked from {member.guild.name}. Reason: {reason}", channel=member)
+    except Exception:
         pass
+    await member.kick(reason=reason or "Not provided" + f" - Moderator: {actor}")
+
+    log_fields = ["Reason", "Moderator"]
+    log_values = [reason or "Not provided", actor.mention]
+    await log_to_server(guild=actor.guild,
+                        event_type=GuildLogType.UNMUTED_MEMBER,
+                        member=member,
+                        fields=log_fields,
+                        values=log_values)
+
+
+async def ban_member(member: discord.Member, actor: discord.Member, delete_hours: int, reason: str = "Not provided"):
+    if isinstance(member, discord.User):
+        try:
+            member = await actor.guild.fetch_member(member.id)
+        except discord.NotFound:
+            raise ModerationHierarchyError("Member not found in this server")
+    assert_hierarchy(actor=actor, target=member)
+    try:
+        await send_message(f"You have been banned from {member.guild.name}. Reason: {reason}", channel=member)
+    except Exception:
+        pass
+    await member.ban(reason=reason or "Not provided" + f" - Moderator: {actor}",
+                     delete_message_seconds=delete_hours * 3600)
+
+    log_fields = ["Reason", "Moderator"]
+    log_values = [reason or "Not provided", actor.mention]
+    await log_to_server(guild=actor.guild,
+                        event_type=GuildLogType.BANNED_MEMBER,
+                        member=member,
+                        fields=log_fields,
+                        values=log_values)
+
+
+async def unban_member(user: discord.User, actor: discord.Member, reason: str = "Not provided"):
+    try:
+        await actor.guild.unban(user, reason=reason or "Not provided" + f" - Moderator: {actor}")
+    except discord.NotFound:
+        raise ModerationHierarchyError("User does not seem to be banned.")
+
+    log_fields = ["Reason", "Moderator"]
+    log_values = [reason or "Not provided", actor.mention]
+    await log_to_server(guild=actor.guild,
+                        event_type=GuildLogType.UNBANNED_MEMBER,
+                        member=user,
+                        fields=log_fields,
+                        values=log_values)
+
+
+def assert_hierarchy(actor, target):
+    if not actor_can_moderate_target_member(actor, target):
+        raise ModerationHierarchyError("You do not have the necessary permission or role hierarchy order to do this.")
+    if not bot_can_moderate_target_member(target):
+        raise ModerationHierarchyError("I do not have the necessary permission or role hierarchy order to do this.")
+
+
+def bot_can_moderate_target_member(target):
+    if target == target.guild.owner:
+        return False
+    return target.guild.me.roles[-1] > target.roles[-1]
+
+
+def actor_can_moderate_target_member(actor, target):
+    if not actor:
+        return True
+    if target == target.guild.owner:
+        return False
+    if actor == actor.guild.owner:
+        return True
+    return actor.roles[-1] > target.roles[-1]

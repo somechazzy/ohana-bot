@@ -1,0 +1,81 @@
+[
+  {
+    "code": "24_7_ONLINE_RADIO",
+    "name": "24/7 Online Radio",
+    "description": "A diverse range of unique music tracks from independent artists and producers.",
+    "icon_url": "https://cdn.discordapp.com/attachments/794891724345442316/1097325451329929287/24_7_online_radio.png",
+    "icon_emoji_id": 1097742640788803685,
+    "genres": [
+      "Lounge",
+      "Jazz",
+      "Chillout"
+    ],
+    "website_url": "https://www.247onlineradio.com/",
+    "stream": {
+      "url": "https://ec3.yesstreaming.net:3585/stream",
+      "format": "mpeg"
+    },
+    "images": {
+      "dynamic": {
+      },
+      "static": {
+        "urls": [
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097313276322398288/lounge_01.png",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097313344907653160/lounge_02.png",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097313717693186089/lounge_04.png",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097314523288965291/lounge_05.png"
+        ]
+      }
+    },
+    "image_refresh_rate": 600,
+    "status_check": {},
+    "cycle_out_reason": "Too repetitive"
+  },
+  {
+    "code": "BAKARADIO",
+    "name": "BaKaRadio",
+    "description": "Anime music, J-Pop, J-Rock, Vocaloid, etc.. (music is a bit outdated)",
+    "icon_url": "https://cdn.discordapp.com/attachments/794891724345442316/1097326496990900225/bakaradio.png",
+    "icon_emoji_id": 1097742837040304129,
+    "genres": [
+      "Anime",
+      "J-Pop",
+      "J-Rock"
+    ],
+    "website_url": "https://www.bakaradio.net/",
+    "stream": {
+      "url": "http://144.217.203.184:8398/stream",
+      "format": "mpeg"
+    },
+    "images": {
+      "dynamic": {
+      },
+      "static": {
+        "urls": [
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330077412380682/anime_01.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330242357567658/anime_02.png",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330395768434800/anime_04.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330493017575515/anime_05.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330576622620692/anime_06.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097330650266218576/anime_07.gif",
+          "https://cdn.discordapp.com/attachments/794891724345442316/1097331235791048795/anime_08.png"
+        ]
+      }
+    },
+    "image_refresh_rate": 300,
+    "status_check": {
+      "api": "https://feed.tunein.com/profiles/s191619/nowPlaying",
+      "currently_playing_path": {
+        "full": [
+          "Header",
+          "Subtitle"
+        ]
+      },
+      "artwork_path": [
+        "Secondary",
+        "Image"
+      ]
+    },
+    "cycle_out_reason": "Offline"
+  }
+]
