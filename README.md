@@ -97,4 +97,5 @@ In this guide we'll go over the steps necessary for you to get your bot up and r
   * Go to `globals_/_config/prod.py` file and read through it. Make all the changes that you deem necessary.
   * Go to `globals_/_config/base.py` file as well and read through it. Make all the changes that you deem necessary.
   * Go to `globals_/constants.py` file also and read through it. Make all the changes that you deem necessary.
-* Everything is now ready. Run `ohana.py` and give your bot a try ✌️
+* Everything is now ready. Run `ohana.py` and sync your slash commands by sending `..sync slashes` in a channel your bot can read. Now give your bot a try ✌️
+  * If you've changed `OWNER_COMMAND_PREFIX` to something other than `..`, then use the `sync slashes` command with the prefix you set.
