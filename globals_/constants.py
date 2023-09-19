@@ -320,7 +320,7 @@ class PlayerAction(CustomEnum):
 # todo
 """
 Upload images in this folder as emojis to your server (where your bot is)
-https://drive.google.com/file/d/1C-0uTm1flOzt0unSwuh6jSyQSiPhy_F-/view?usp=sharing
+https://drive.google.com/drive/folders/1mQgvzT45KcSR3Fcs6AQkcRgCotY79uO-?usp=sharing
 """
 PLAYER_ACTION_CUSTOM_EMOJI_MAP = {
     PlayerAction.JOIN: 0,  # replace with the emoji ID related to Join.png
@@ -452,7 +452,7 @@ class GeneralButtonEmoji:
     # todo
     """
     Same as PLAYER_ACTION_CUSTOM_EMOJI_MAP - if you haven't uploaded images in this folder as emojis yet, do it now:
-    https://drive.google.com/file/d/1C-0uTm1flOzt0unSwuh6jSyQSiPhy_F-/view?usp=sharing
+    https://drive.google.com/drive/folders/1mQgvzT45KcSR3Fcs6AQkcRgCotY79uO-?usp=sharing
     """
     GO_BACK = 0  # replace with the emoji ID related to Back.png
     RENAME = 0  # replace with the emoji ID related to Rename.png
