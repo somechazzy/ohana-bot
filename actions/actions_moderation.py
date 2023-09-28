@@ -61,7 +61,7 @@ async def kick_member(member: discord.Member, actor: discord.Member, reason: str
     log_fields = ["Reason", "Moderator"]
     log_values = [reason or "Not provided", actor.mention]
     await log_to_server(guild=actor.guild,
-                        event_type=GuildLogType.UNMUTED_MEMBER,
+                        event_type=GuildLogType.KICKED_MEMBER,
                         member=member,
                         fields=log_fields,
                         values=log_values)

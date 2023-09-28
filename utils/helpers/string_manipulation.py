@@ -52,17 +52,7 @@ def get_decrypted_string(text: str):
 
 
 def encrypt_guild_prefs_keys(guild_prefs):
-    keys_ar = []
-    new_dicts_ar = {}
-    for key in guild_prefs.auto_responses.keys():
-        new_key = get_encrypted_string(key)
-        new_dicts_ar[new_key] = copy.deepcopy(guild_prefs.auto_responses[key])
-        keys_ar.append(key)
-    for key in keys_ar:
-        guild_prefs.auto_responses.pop(key)
-    for key in new_dicts_ar.keys():
-        guild_prefs.auto_responses[key] = new_dicts_ar[key]
-
+    pass
     return guild_prefs
 
 
