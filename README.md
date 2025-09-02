@@ -49,12 +49,14 @@ It's difficult to narrow down the bot into one or two categories, so here's a li
 
 You can get your own Ohana up and running in a few minutes. You can either download this repo directly, add the necessary env vars and run `main.py` (requires a MariaDB-compatible database running), or use the docker compose provided below.
 
->**Prerequisite**: a Discord bot application with both "Guild Members" and "Message Content" intents enabled.
+> [!IMPORTANT]
+> **Prerequisite**: a Discord bot application with both "Guild Members" and "Message Content" intents enabled.
 
 ### Docker
 You can use the following docker-compose to get Ohana up and running quickly. Make sure to carefully read the environment section of both `ohana` and `ohana_db` services, and to set the environment variables with your own values as necessary (look for `# SET ME` comments).
 
-> **Note**: First run might take a minute or two to set up the database and upload the bot's emojis. 
+> [!NOTE]
+> First run might take a minute or two to set up the database and upload the bot's emojis. 
 
 ```yaml
 services:
