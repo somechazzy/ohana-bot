@@ -1,120 +1,132 @@
 import asyncio
-import inspect
-import traceback
 from datetime import datetime
+from types import coroutine
 
-from globals_.constants import PERIODIC_WORKER_FREQUENCY, BotLogLevel, WORKER_RETRY_ON_ERROR_DELAY
-from globals_.settings import settings
-from internal.bot_logger import InfoLogger, ErrorLogger
+from constants import PERIODIC_WORKER_FREQUENCY, AppLogCategory, WORKER_RETRY_ON_ERROR_DELAY
+from common.app_logger import AppLogger
+from utils.helpers.context_helpers import create_isolated_task
 
 
 class WorkerManagerService:
     """
-    My solution to avoid having a forever-running async thread(?) for each worker.
+    This class will be responsible for knowing when each periodic or scheduled task should run using an
+    asyncio.PriorityQueue.
 
-    This class (which is treated as a singleton) will be responsible for knowing when each periodic or scheduled task
-        should run using an asyncio.PriorityQueue.
+    Workers can be of two types: periodic or scheduled.
 
-    Workers can be of two types: periodic or scheduled, often referred to here as "keep_running" and "wait_and_rerun",
-        respectively.
     Periodic workers will have a predefined interval/frequency at which they should run (countdown to next run will
-        start after the previous run is finished).
-    Scheduled workers on the other hand are self-scheduling - meaning they will specify how long they should wait
-        before running again by returning a wait time (in seconds).
+    start after the previous run is finished).
+
+    Scheduled workers however are self-scheduling, meaning they will specify how long they should wait before running
+    again by returning a wait time (in seconds).
     """
     def __init__(self):
-        self._worker_queue = None
-        self._is_running = False
-        self.info_logger = InfoLogger(component=self.__class__.__name__)
-        self.error_logger = ErrorLogger(component=self.__class__.__name__)
+        self._worker_queue: asyncio.PriorityQueue = None  # type: ignore
+        self._is_running: bool = False
+        self.logger = AppLogger(component=self.__class__.__name__)
 
     async def run(self):
-        print("WorkerManagerService is running...")
+        self.logger.debug("WorkerManagerService is running...")
         self._is_running = True
-        # ironically this is a periodic worker - can it queue itself...
         while True:
             last_handled_worker_item = None
-            while (worker_item := await self._worker_queue.get()).next_run <= datetime.utcnow().timestamp():
-                asyncio.get_event_loop().create_task(self.start_worker(worker_item=worker_item))
+            while (worker_item := await self._worker_queue.get()).next_run <= datetime.now().timestamp():
+                create_isolated_task(self.start_worker(worker_item=worker_item))
                 self._worker_queue.task_done()
                 last_handled_worker_item = worker_item
             if worker_item and worker_item != last_handled_worker_item:
                 await self._worker_queue.put(worker_item)
             await asyncio.sleep(0.1)
 
-    async def add_worker(self, worker_callback, worker_name, next_run=datetime.utcnow().timestamp(),
+    async def add_worker(self,
+                         worker_callable: coroutine,
+                         worker_name: str,
+                         next_run: float = datetime.now().timestamp(),
                          **kwargs):
+        """
+        Add a worker to the queue.
+        Args:
+            worker_callable (coroutine): The coroutine function that represents the worker to be added.
+            worker_name (str): The name of the worker.
+            next_run (float): The timestamp (in seconds) when the worker should run next.
+        """
         if not next_run:
-            self.info_logger.log(f"Worker {worker_name} will not be added to "
-                                 f"the queue as it is not scheduled to run again.",
-                                 level=BotLogLevel.BOT_INFO)
+            self.logger.info(f"Worker {worker_name} will not be added to "
+                             f"the queue as it is not scheduled to run again.",
+                             category=AppLogCategory.APP_GENERAL)
             return
         await self._worker_queue.put(WorkerItem(next_run=next_run,
-                                                worker_callback=worker_callback,
+                                                worker_callable=worker_callable,
                                                 worker_name=worker_name,
                                                 **kwargs))
 
-    async def start_worker(self, worker_item):
+    async def start_worker(self, worker_item: 'WorkerItem'):
+        """
+        Start a worker by executing its callback and rescheduling it based on its return value or predefined frequency.
+        Args:
+            worker_item (WorkerItem): The worker item containing the callback and scheduling information.
+        """
         try:
-            if inspect.iscoroutinefunction(worker_item.worker_callback):
-                wait_time = await worker_item.worker_callback(**worker_item.kwargs)
-            else:
-                wait_time = worker_item.worker_callback(**worker_item.kwargs)
+            wait_time = await worker_item.worker_callable(**worker_item.kwargs)
         except Exception as e:
             wait_time = WORKER_RETRY_ON_ERROR_DELAY.get(worker_item.worker_name, 300)
-            self.error_logger.log(f"Error while running worker {worker_item.worker_name}.\n"
-                                  f"Retrying in {wait_time} seconds: {e}\n"
-                                  f"{traceback.format_exc()}")
+            self.logger.error(f"Error while running worker {worker_item.worker_name}.\n"
+                              f"Retrying in {wait_time} seconds: {e}\n")
         else:
             if worker_item.worker_name in PERIODIC_WORKER_FREQUENCY:
                 wait_time = PERIODIC_WORKER_FREQUENCY[worker_item.worker_name]
 
         if wait_time:
-            next_run = datetime.utcnow().timestamp() + wait_time
+            next_run = datetime.now().timestamp() + wait_time
         else:
             next_run = None
 
-        await self.add_worker(worker_callback=worker_item.worker_callback,
+        await self.add_worker(worker_callable=worker_item.worker_callable,
                               worker_name=worker_item.worker_name,
                               next_run=next_run,
                               **worker_item.kwargs)
 
     async def register_workers(self):
         """
-        This function will be called on startup to register all workers with worker decorators.
+        This method will be called on startup to register all workers with worker decorators.
         """
         self._worker_queue = asyncio.PriorityQueue()
-        # ugly imports here to avoid circular imports
-        from .custom_tasks import CustomTasks
-        from components.music_components.youtube_music_component import YoutubeMusicComponent
-        from globals_.clients import reminder_service, xp_service
-        custom_tasks = CustomTasks()
+        from .app_workers import AppWorkers
+        from clients import reminder_service, xp_service
 
-        worker_callbacks = [YoutubeMusicComponent().music_download_worker,
-                            xp_service.xp_gain,
-                            xp_service.xp_adjustment,
-                            xp_service.queue_members_for_xp_decay,
-                            xp_service.xp_decay,
-                            xp_service.xp_sync,
-                            reminder_service.run,
-                            custom_tasks.cache_cleanup]
+        worker_callables = []
+        app_workers = AppWorkers()
 
-        for worker_callback in worker_callbacks:
-            await self.add_worker(worker_callback=worker_callback,
-                                  worker_name=worker_callback.worker_data['name'],
-                                  next_run=datetime.utcnow().timestamp() + worker_callback.worker_data['initial_delay'],
-                                  **worker_callback.worker_data['kwargs'])
-        worker_list_str = "\n• ".join([worker_callback.worker_data['name'] for worker_callback in worker_callbacks])
-        self.info_logger.log(f"Registered workers:\n• {worker_list_str}",
-                             level=BotLogLevel.BOT_INFO)
+        worker_callables.append(app_workers.cache_cleanup)
+        worker_callables.append(app_workers.log_ingestion)
+
+        worker_callables.append(reminder_service.reminder_producer)
+        worker_callables.append(reminder_service.reminder_consumer)
+
+        worker_callables.append(xp_service.message_consumer)
+        worker_callables.append(xp_service.xp_action_consumer)
+        worker_callables.append(xp_service.decay_producer)
+        worker_callables.append(xp_service.decay_consumer)
+        worker_callables.append(xp_service.xp_sync_to_database)
+
+        for worker_callable in worker_callables:
+            await self.add_worker(
+                worker_callable=worker_callable,
+                worker_name=worker_callable.worker_data['name'],
+                next_run=datetime.now().timestamp() + worker_callable.worker_data['initial_delay'],
+                **worker_callable.worker_data['kwargs']
+            )
+        worker_list_str = "\n• ".join([worker_callable.worker_data['name'] for worker_callable in worker_callables])
+        self.logger.info(f"Registered workers:\n• {worker_list_str}", category=AppLogCategory.APP_GENERAL,
+                         log_to_discord=True)
 
 
 class WorkerItem:
-    def __init__(self, next_run, worker_callback, worker_name, **kwargs):
-        self.next_run = next_run
-        self.worker_callback = worker_callback
-        self.worker_name = worker_name
-        self.kwargs = kwargs or {}
+    def __init__(self, next_run, worker_callable, worker_name, **kwargs):
+        self.next_run: float = next_run
+        self.worker_callable: coroutine = worker_callable
+        self.worker_name: str = worker_name
+        self.kwargs: dict = kwargs or {}
 
     def __lt__(self, other):
         return self.next_run < other.next_run

@@ -1,0 +1,55 @@
+services:
+  ohana:
+    image: ghcr.io/somechazzy/ohana_24:latest
+    restart: unless-stopped
+    container_name: ohana
+    environment:
+      # ↓ Required ↓
+        BOT_OWNER_ID: # SET ME  # Your Discord user ID (https://support.discord.com/hc/en-us/articles/206346498)
+        DISCORD_BOT_TOKEN: # SET ME  # Discord bot token from the Discord Developer Portal (https://discord.com/developers/applications)
+        API_AUTH_TOKEN: # SET ME  # Random string to serve as an auth token for internal management API (https://it-tools.tech/token-generator)
+        DB_USER: ohana_app  # Must be the same as MYSQL_USER in db service
+        DB_PASSWORD: # SET ME  # Must be the same as MYSQL_PASSWORD in db service
+        DB_HOST: ohana_db  # Must be the same as the db service name
+        DB_PORT: 3306  # Must be the same as the port exposed by the db service
+        DB_NAME: ohana  # Must be the same as MYSQL_DATABASE in db service
+      # ↓ Recommended for full functionality ↓
+        LOGTAIL_TOKEN: # SET ME OR REMOVE ME  # Token from Logtail/BetterStack for external logging (https://betterstack.com/docs/logs/api/getting-started/#get-an-telemetry-api-token)
+        LOGGING_CHANNEL_WEBHOOK_URL: # SET ME OR REMOVE ME  # For logging important things to a Discord channel (https://support.discord.com/hc/en-us/articles/228383668)
+        MYANIMELIST_CLIENT_ID: # SET ME OR REMOVE ME  # For MyAnimeList integration (/mal, /anime, /manga) (https://help.myanimelist.net/hc/en-us/articles/900003108823-API)
+        RAPID_API_KEY: # SET ME OR REMOVE ME  # For UrbanDictionary integration (/urban) (https://it-tools.tech/token-generator)
+        MERRIAM_API_KEY: # SET ME OR REMOVE ME  # For dictionary integration (/define) (https://dictionaryapi.com/register/index - Intermediate Dictionary)
+      # ↓ Logging config ↓
+        EXTERNAL_LOGGING_ENABLED: true  # Set to "true" to enable external logging, has no effect if neither LOGTAIL_TOKEN nor LOGGING_CHANNEL_WEBHOOK_URL is set
+        DEBUG_ENABLED: false  # Set to "true" to enable debug logging, by default only to console and log files
+        DEBUG_EXTERNALLY: false  # Set to "true" to send debug logs to LOGTAIL (very spammy). Only has effect if DEBUG_ENABLED is also true
+        SQL_ECHO: false  # Set to "true" to log all SQL queries to console (also spammy but doesn't log externally)
+        LOGGING_DIRECTORY: logs  # Directory to store log files - relative to /app in the container
+      # ↓ App config ↓
+        SYNC_COMMANDS_ON_STARTUP: true  # Set to "true" to sync Discord slash commands on startup, otherwise you will need to use the owner command or API to sync
+        SYNC_EMOJIS_ON_STARTUP: true  # Set to "true" to sync custom emojis on startup, otherwise you will need to use the API to sync. Either way, emojis must be synced at least once before the bot is usable
+        ENABLE_API_SERVICE: true  # Set to "true" to enable the internal management API service
+        OWNER_COMMAND_PREFIX: ..  # Prefix for owner-only commands
+        CHUNK_GUILDS_SETTING: LAZY  # Options: Can be one of 1. AT_STARTUP: Chunk all guild members at startup (delays bot startup by one minute per 100 guilds) 2. LAZY: Chunk members over time after starting (recommended) 3. ON_DEMAND: Only chunk members per guild when needed (e.g. certain commands)
+    depends_on:
+      - ohana_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+
+  ohana_db:
+    image: mariadb:12.0
+    container_name: ohana_db
+    environment:
+      MYSQL_ROOT_PASSWORD: # SET ME  # Enter a secure DB password here for the root user
+      MYSQL_DATABASE: ohana
+      MYSQL_USER: ohana_app
+      MYSQL_PASSWORD: # SET ME  # Enter a secure DB password here for the ohana_app user, must match DB_PASSWORD in ohana service
+    # ports:  # Uncomment to expose the database outside the container, if manual DB management is needed
+    #   - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+volumes:
+  db_data:
