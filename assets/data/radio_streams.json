@@ -1,0 +1,944 @@
+[
+    {
+        "code": "PLAZA",
+        "category": "DEFAULT",
+        "name": "Nightwave Plaza",
+        "description": "Driving into the sunset.",
+        "genres": [
+            "Vaporwave",
+            "Electronic",
+            "Future Funk"
+        ],
+        "website_url": "https://plaza.one/",
+        "stream": {
+            "url": "https://radio.plaza.one/mp3",
+            "format": "mpeg"
+        },
+        "images": {
+            "dynamic": {
+                "base_url": "https://gif.plaza.one/{number:02}.gif",
+                "parameter": {
+                    "name": "number",
+                    "substitution_type": "numeric_range",
+                    "values": [
+                        2,
+                        83
+                    ]
+                }
+            },
+            "static": {
+            }
+        },
+        "image_refresh_rate": 60,
+        "status_check": {
+            "api": "https://api-beta2.plaza.one/status",
+            "currently_playing_path": {
+                "title": [
+                    "song",
+                    "title"
+                ],
+                "artist": [
+                    "song",
+                    "artist"
+                ]
+            },
+            "progress_path": [
+                "song",
+                "position"
+            ],
+            "duration_path": [
+                "song",
+                "length"
+            ],
+            "artwork_path": [
+                "song",
+                "artwork_src"
+            ]
+        }
+    },
+    {
+        "code": "YGGDRASIL",
+        "category": "DEFAULT",
+        "name": "Yggdrasil Radio",
+        "description": "J-Pop from anime and games. You can request songs through the website.",
+        "genres": [
+            "Anime",
+            "J-Pop",
+            "J-Rock"
+        ],
+        "website_url": "https://yggdrasilradio.net/",
+        "stream": {
+            "url": "https://stream3.rcast.net/70702",
+            "format": "mpeg"
+        },
+        "images": {
+            "dynamic": {
+            },
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330077412380682/anime_01.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330493017575515/anime_05.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330576622620692/anime_06.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330650266218576/anime_07.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097331235791048795/anime_08.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 300,
+        "status_check": {
+            "api": "https://yggdrasilradio.net/api/playing/",
+            "currently_playing_path": {
+                "title": [
+                    "current",
+                    "title"
+                ],
+                "artist": [
+                    "current",
+                    "artist"
+                ],
+                "extra": [
+                    "current",
+                    "anime"
+                ]
+            },
+            "artwork_path": [
+                "current",
+                "images",
+                "medium"
+            ],
+            "duration_path": [
+                "current",
+                "length"
+            ],
+            "duration_time_format": "string"
+        }
+    },
+    {
+        "code": "RM_FM_STUDY",
+        "category": "DEFAULT",
+        "name": "rm.fm/study",
+        "description": "A little motivation boost for your studies.",
+        "genres": [
+            "Lo-Fi",
+            "Chill"
+        ],
+        "website_url": "https://www.rm.fm/study",
+        "stream": {
+            "url": "https://rautemusik-de-hz-fal-stream14.radiohost.de/study",
+            "format": "mpeg"
+        },
+        "images": {
+            "dynamic": {
+            },
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097796154361643058/lofi_001.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795764064882791/lofi_002.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795764597555293/lofi_003.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795764987641876/lofi_004.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795765444808774/lofi_005.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795765826486474/lofi_006.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795766157852763/lofi_007.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795766635986994/lofi_008.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795767181250600/lofi_009.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097795767575527434/lofi_010.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097796969600139354/lofi_011.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097796969939869747/lofi_012.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097797813930295296/lofi_013.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097796970690658374/lofi_014.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097796971055554560/lofi_015.gif"
+                ]
+            }
+        },
+        "image_refresh_rate": 300,
+        "status_check": {
+            "api": "https://feed.tunein.com/profiles/s297751/nowPlaying",
+            "currently_playing_path": {
+                "full": [
+                    "Header",
+                    "Subtitle"
+                ]
+            }
+        }
+    },
+    {
+        "code": "FAIROUZ",
+        "category": "ARABIC",
+        "name": "Fairuzyat FM",
+        "description": "24/7 stream of Fairouz classics from Palestinian radio \"Sawtelghad\". Fairuz is considered the musical icon of Lebanon and is popularly known as the soul of Lebanon.",
+        "genres": [
+            "Arabic Classics",
+            "Fairouz"
+        ],
+        "website_url": "https://sawtelghad.net/fairuz",
+        "stream": {
+            "url": "http://sawtelghad.org:8008/;",
+            "format": "mpeg"
+        },
+        "images": {
+            "dynamic": {
+            },
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1099475660101124146/firuz_2.jpg",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1099473442014769162/firuz.jpg"
+                ]
+            }
+        },
+        "image_refresh_rate": 600,
+        "status_check": {
+        }
+    },
+    {
+        "code": "UMM_KULTHUM",
+        "category": "ARABIC",
+        "name": "Umm Kulthum",
+        "description": "24/7 stream of Umm Kulthum classics from Palestinian radio \"Sawtelghad\". Umm Kulthum is considered an Egyptian national icon and has been dubbed the Star of the East in the Arab world.",
+        "genres": [
+            "Arabic Classics",
+            "Umm Kulthum"
+        ],
+        "website_url": "https://sawtelghad.net/",
+        "stream": {
+            "url": "http://sawtelghad.org:8006/;",
+            "format": "mpeg"
+        },
+        "images": {
+            "dynamic": {
+            },
+            "static": {
+                "urls": [
+                    "https://media.discordapp.net/attachments/794891724345442316/1152400794256162896/Umm_Kulthum.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+        }
+    },
+    {
+        "code": "HOT_21",
+        "category": "HIPHOP",
+        "name": "Hot 21 Radio",
+        "description": "Hot 21 Radio is a live radio station from New York City.",
+        "genres": [
+            "Hip-hop",
+            "R&B"
+        ],
+        "website_url": "https://www.hot21radio.com/",
+        "stream": {
+            "url": "https://azh.webradiomanager.fr/listen/hot_21_radio/radio.mp3",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410583884038410413/cassette_001.gif"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://www.hot21radio.com/ajax/current-song.php?timeout=4000",
+            "currently_playing_path": {
+                "title": [
+                    "azuracast",
+                    "now_playing",
+                    "song",
+                    "title"
+                ],
+                "artist": [
+                    "azuracast",
+                    "now_playing",
+                    "song",
+                    "artist"
+                ]
+            },
+            "artwork_path": [
+                "azuracast",
+                "now_playing",
+                "song",
+                "art"
+            ],
+            "progress_path": [
+                "azuracast",
+                "now_playing",
+                "elapsed"
+            ],
+            "duration_path": [
+                "azuracast",
+                "now_playing",
+                "duration"
+            ],
+            "duration_time_format": "seconds"
+        }
+    },
+    {
+        "code": "HOT_108",
+        "category": "HIPHOP",
+        "name": "Hot 108 Jamz",
+        "description": "Hot 108 Jamz is part of the Powerhitz Network.",
+        "genres": [
+            "Hip-hop",
+            "R&B",
+            "Soul"
+        ],
+        "website_url": "http://hot108.com/",
+        "stream": {
+            "url": "https://live.powerhitz.com/hot108",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410584443818737744/cassette_002.gif"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://player.powerhitz.com/streamdata.php?h=ais-edge16-jbmedia-nyc04.cdnstream.com&p=7080&i=hot108",
+            "currently_playing_path": {
+                "title": [
+                    "title"
+                ],
+                "artist": [
+                    "artist"
+                ]
+            }
+        }
+    },
+    {
+        "code": "CLASSIC_FM",
+        "category": "CLASSIC",
+        "name": "Classic FM",
+        "description": "Classic FM is the largest national commercial radio station in the UK.",
+        "genres": [
+            "Classical"
+        ],
+        "website_url": "https://www.classicfm.com/",
+        "stream": {
+            "url": "https://media-ssl.musicradio.com/ClassicFM",
+            "format": "aac"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410586427959283814/vinyl_player_001.gif"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/uk.classicfm",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "WJZD",
+        "category": "CLASSIC",
+        "name": "WJZD Radio",
+        "description": "WJZD Radio is a live radio station from Detroit.",
+        "genres": [
+            "Jazz",
+            "Classical"
+        ],
+        "website_url": "https://www.wjzdradiodetroit.com",
+        "stream": {
+            "url": "https://s4.radio.co/s0dc1ef80a/listen",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410587374404112434/vinyl_player_003.gif"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper.onlineradiobox.com/us.wjzd",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            }
+        }
+    },
+    {
+        "code": "MEGATON_CAFE",
+        "category": "CLASSIC",
+        "name": "Megaton Cafe Radio (20s-50s)",
+        "description": "Megaton Cafe Radio is playing original recordings from their original eras, which means all the original artists, commercials, PSAs, Radio Theaters and their original sound, as close as possible to the core of the songs and the way they were originally recorded back then. All songs mostly captured from vinyl records with few or no electric instruments used.",
+        "genres": [
+            "Classical",
+            "20s",
+            "30s"
+        ],
+        "website_url": "https://www.megatoncaferadio.com",
+        "stream": {
+            "url": "https://us2.internet-radio.com/proxy/megatoncafe?mp=/stream;",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410587373988741222/vinyl_player_002.gif"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/us.megatoncafe",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "SF70S",
+        "category": "ROCK",
+        "name": "San Francisco's 70s HITS",
+        "description": "70s hits.",
+        "genres": [
+            "Classic Rock",
+            "70s",
+            "Disco"
+        ],
+        "website_url": "https://www.sf70s.com/",
+        "stream": {
+            "url": "https://sky.doscast.com/proxy/sf70s/stream",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410591096907632712/citypop_001.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410591097624854581/citypop_002.gif"
+                ]
+            }
+        },
+        "image_refresh_rate": 60,
+        "status_check": {
+            "api": "https://scraper.onlineradiobox.com/us.sanfranciscos70shits",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "181_FM_BUZZ",
+        "category": "ROCK",
+        "name": "181.FM - The Buzz",
+        "description": "Part of 181.FM stream network.",
+        "genres": [
+            "Alt Rock"
+        ],
+        "website_url": "https://www.181.fm/stations/Rock",
+        "stream": {
+            "url": "https://listen.181fm.com/181-buzz_128k.mp3",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410584865451282495/music_bg_001.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://player.181fm.com/streamdata.php?h=listen.181fm.com&p=7080&i=181-buzz_128k.mp3",
+            "currently_playing_path": {
+                "title": [
+                    "title"
+                ],
+                "artist": [
+                    "artist"
+                ]
+            }
+        }
+    },
+    {
+        "code": "947_THE_BEAST",
+        "category": "ROCK",
+        "name": "94.7/102.9 The Beast",
+        "description": "WOZZ (94.7 FM, \"94.7/102.9 The Beast\") is a mainstream rock radio station licensed to Mosinee, Wisconsin.",
+        "genres": [
+            "Rock",
+            "Metal"
+        ],
+        "website_url": "https://947thebeast.com/",
+        "stream": {
+            "url": "https://24083.live.streamtheworld.com/WOZZFMAAC_SC",
+            "format": "aac"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410584865451282495/music_bg_001.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {}
+    },
+    {
+        "code": "HEAR_ME_00S_ROCK",
+        "category": "ROCK",
+        "name": "HearMe.fm - 00s Rock",
+        "description": "Part of HearMe.fm radio network.",
+        "genres": [
+            "Rock",
+            "Alt Rock",
+            "00s"
+        ],
+        "website_url": "https://hearme.fm/radio/00s-rock/",
+        "stream": {
+            "url": "https://radio.hearme.fm:8130/stream",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410584865451282495/music_bg_001.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/uk.00srock",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            }
+        }
+    },
+    {
+        "code": "MEGAROCK",
+        "category": "ROCK",
+        "name": "Megarock Radio",
+        "description": "You can make requests [here](https://megarockradio.net/requests/web/playlist.php).",
+        "genres": [
+            "Rock",
+            "Metal",
+            "Classic Rock"
+        ],
+        "website_url": "https://megarockradio.net",
+        "stream": {
+            "url": "https://stream6.megarockradio.net:80/",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410584865451282495/music_bg_001.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/us.megarock",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "ONLY_HITS_POP",
+        "category": "Pop",
+        "name": "Only Hits",
+        "description": "Part of Only Hits Radio network.",
+        "genres": [
+            "Pop"
+        ],
+        "website_url": "https://onlyhitsradio.net/",
+        "stream": {
+            "url": "https://cdn.onlyhitsradio.net/onlyhits",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {}
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://cdn.onlyhitsradio.net/currentsong/onlyhits",
+            "currently_playing_path": {}
+        }
+    },
+    {
+        "code": "977_TODAYS_HITS",
+        "category": "POP",
+        "name": ".977 Today's Hits",
+        "description": "From the Black Eyed Peas to Usher, the Hitz Channel plays Todays Best Music, not just some of it. You'll also get a taste of the old skool mixed in for flava. The hottest music from today's hottest stars can be found right here on .977 The Hits Channel.",
+        "genres": [
+            "Pop"
+        ],
+        "website_url": "https://hitsradio.com/",
+        "stream": {
+            "url": "https://26343.live.streamtheworld.com/977_HITSAAC_SC",
+            "format": "aac"
+        },
+        "images": {
+            "static": {}
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/us.977todayshits",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "THAT_70S_CHANNEL",
+        "category": "POP",
+        "name": "That 70's Channel",
+        "description": "That 70's Channel is an internet radio station from Sacramento, California, United States, providing Classic Rock, Pop and R&B from the 1970s.",
+        "genres": [
+            "Pop",
+            "R&B",
+            "70s"
+        ],
+        "website_url": "http://www.that70schannel.com/",
+        "stream": {
+            "url": "https://ais-sa5.cdnstream1.com/b68000_128mp3",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {}
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/us.that70schannel",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "BIG_B_RADIO_KPOP",
+        "category": "KOREAN",
+        "name": "Big B Radio - KPOP",
+        "description": "Part of the Big B Radio group.",
+        "genres": [
+            "K-Pop"
+        ],
+        "website_url": "https://bigbradio.net/kpop",
+        "stream": {
+            "url": "https://antares.dribbcast.com/proxy/kpop?mp=/s",
+            "format": "aac"
+        },
+        "images": {
+            "static": {}
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://bigbradio.net/stream/NowPlaying-Kpop.txt",
+            "currently_playing_path": {}
+        }
+    },
+    {
+        "code": "113_FM_KPOP",
+        "category": "KOREAN",
+        "name": "113.FM K-Pop",
+        "description": "Part of 113.FM radio network.",
+        "genres": [
+            "K-pop"
+        ],
+        "website_url": "https://www.113.fm/",
+        "stream": {
+            "url": "https://113fm-atunwadigital.streamguys1.com/1049",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {}
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/us.113kpopkoreanpop",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "ONLY_HITS_KPOP",
+        "category": "KOREAN",
+        "name": "Only Hits K-Pop",
+        "description": "Part of Only Hits Radio network.",
+        "genres": [
+            "K-Pop"
+        ],
+        "website_url": "https://onlyhitsradio.net/",
+        "stream": {
+            "url": "https://cdn.onlyhitsradio.net/kpop",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {}
+        },
+        "image_refresh_rate": 60,
+        "status_check": {
+            "api": "https://cdn.onlyhitsradio.net/currentsong/kpop",
+            "currently_playing_path": {}
+        }
+    },
+    {
+        "code": "ADR_JROCK",
+        "category": "JAPANESE",
+        "name": "J-Rock Powerplay",
+        "description": "Part of Asia Dream Radio network.",
+        "genres": [
+            "J-Rock"
+        ],
+        "website_url": "https://asiadreamradio.torontocast.stream",
+        "stream": {
+            "url": "https://kathy.torontocast.com:3340/;?type=http&nocache=1614591283",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330077412380682/anime_01.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330493017575515/anime_05.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330576622620692/anime_06.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330650266218576/anime_07.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097331235791048795/anime_08.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 60,
+        "status_check": {
+            "api": "https://kathy.torontocast.com:3310/api/v2/history/?limit=1&offset=0&server=4",
+            "currently_playing_path": {
+                "title": [
+                    "results",
+                    0,
+                    "title"
+                ],
+                "artist": [
+                    "results",
+                    0,
+                    "author"
+                ]
+            },
+            "artwork_path": [
+                "results",
+                0,
+                "img_medium_url"
+            ],
+            "duration_path": [
+                "results",
+                0,
+                "length / 1000"
+            ],
+            "duration_time_format": "milliseconds -> to implement"
+        }
+    },
+    {
+        "code": "BIG_B_RADIO_JPOP",
+        "category": "JAPANESE",
+        "name": "Big B Radio - JPOP",
+        "description": "Part of the Big B Radio group.",
+        "genres": [
+            "J-Pop"
+        ],
+        "website_url": "https://bigbradio.net/jpop",
+        "stream": {
+            "url": "https://antares.dribbcast.com/proxy/jpop?mp=/s",
+            "format": "aac"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330077412380682/anime_01.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330493017575515/anime_05.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330576622620692/anime_06.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330650266218576/anime_07.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097331235791048795/anime_08.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 60,
+        "status_check": {
+            "api": "https://bigbradio.net/stream/NowPlaying-Jpop.txt",
+            "currently_playing_path": {}
+        }
+    },
+    {
+        "code": "ONLY_HITS_JAPAN",
+        "category": "JAPANESE",
+        "name": "Only Hits Japan",
+        "description": "Part of Only Hits Radio network.",
+        "genres": [
+            "J-Pop"
+        ],
+        "website_url": "https://onlyhitsradio.net/",
+        "stream": {
+            "url": "https://cdn.onlyhitsradio.net/japan",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330077412380682/anime_01.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330493017575515/anime_05.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330576622620692/anime_06.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330650266218576/anime_07.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097331235791048795/anime_08.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 60,
+        "status_check": {
+            "api": "https://cdn.onlyhitsradio.net/currentsong/japan",
+            "currently_playing_path": {}
+        }
+    },
+    {
+        "code": "RUTA_CITYPOP",
+        "category": "JAPANESE",
+        "name": "Ruta Citypop",
+        "description": "Japanese citypop.",
+        "genres": [
+            "J-pop",
+            "Citypop"
+        ],
+        "website_url": "https://zeno.fm/radio/rutacitypop/",
+        "stream": {
+            "url": "https://stream.zeno.fm/uenn4pspky8uv",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330077412380682/anime_01.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330493017575515/anime_05.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330576622620692/anime_06.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097330650266218576/anime_07.gif",
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1097331235791048795/anime_08.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 60,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/pe.rutacitypop",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "NICHIJOU_SHUFFLE",
+        "category": "JAPANESE",
+        "name": "Nichijou Shuffle",
+        "description": "A fan made radio that streams everything nichijou from official soundtracks, remixes, character songs to special CD exclusives and radio digests.",
+        "genres": [
+            "Anime",
+            "OST"
+        ],
+        "website_url": "https://zeno.fm/radio/nichijou-shuffle/",
+        "stream": {
+            "url": "https://stream.zeno.fm/tncreqmcwnhvv",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410118159947534466/nichijou_background_001.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/mm.nichijoushuffle",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    },
+    {
+        "code": "FINAL_FANTASY_CO",
+        "category": "JAPANESE",
+        "name": "Final Fantasy Radio",
+        "description": "Music from the Final Fantasy OST as well as fan-made music and remixes.",
+        "genres": [
+            "Anime",
+            "OST",
+            "Videogame"
+        ],
+        "website_url": "http://finalfantasyradio.co/",
+        "stream": {
+            "url": "http://finalfantasystation.com:8000/stream",
+            "format": "mpeg"
+        },
+        "images": {
+            "static": {
+                "urls": [
+                    "https://cdn.discordapp.com/attachments/794891724345442316/1410119130081787904/final_fantasy_001.png"
+                ]
+            }
+        },
+        "image_refresh_rate": 0,
+        "status_check": {
+            "api": "https://scraper2.onlineradiobox.com/us.finalfantasyradio",
+            "currently_playing_path": {
+                "full": [
+                    "title"
+                ]
+            },
+            "artwork_path": [
+                "iImg"
+            ]
+        }
+    }
+]

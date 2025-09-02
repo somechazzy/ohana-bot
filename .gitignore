@@ -1,6 +1,12 @@
 /venv/
-/auth.py
-/.idea/
-/media/music/
+/.idea
+/.vscode
+.vscode
+/__pycache__/
 /logs/
-/test_runs.py
+/archived/
+*.env
+*.pyc
+*.pyo
+*.pyd
+/test.py
