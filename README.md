@@ -14,7 +14,7 @@
 
 ---
 
-Note: As of v3.0, the main Ohana bot runs directly on this repo. Music streaming from YT has been removed along with user libraries and playlists.
+Note: As of v3.1, the main Ohana bot runs directly on this repo. Music streaming from YT has been removed along with user libraries and playlists.
 
 ## Introduction
 
