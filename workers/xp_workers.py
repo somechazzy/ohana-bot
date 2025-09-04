@@ -144,7 +144,9 @@ class XPService:
         """
         await self.guild_user_xp_component.fetch_guild_xp_for_decay_eligible_guilds()
 
-        for guild_id, cached_guild_xp in cache.CACHED_GUILD_XP.items():
+        guild_ids = list(cache.CACHED_GUILD_XP.keys())
+        for guild_id in guild_ids:
+            cached_guild_xp = cache.CACHED_GUILD_XP[guild_id]
             guild_settings = await self.guild_settings_component.get_guild_settings(guild_id)
             if guild_settings.xp_settings.xp_decay_enabled:
                 decay_grace_days = guild_settings.xp_settings.xp_decay_grace_period_days

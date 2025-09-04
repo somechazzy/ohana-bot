@@ -5,7 +5,7 @@ import sys
 
 from api.api_service import APIService
 from bot import register_cogs
-from clients import discord_client, worker_manager_service
+from clients import discord_client, emojis, worker_manager_service
 from components.guild_user_xp_components.xp_model_component import XPModelComponent
 from components.music_component import MusicComponent
 from constants import ChunkGuildsSetting
@@ -32,8 +32,6 @@ async def on_connect():
 
     if ENABLE_API_SERVICE:
         create_isolated_task(APIService().start())
-    if SYNC_EMOJIS_ON_STARTUP:
-        await sync_up_application_emojis(refetch_and_set=True)
     verify_slashes_decorators()
 
 
@@ -52,6 +50,9 @@ async def on_ready():
     await XPModelComponent().load_xp_model()
     await MusicComponent().load_radio_streams()
     await register_cogs()
+    if SYNC_EMOJIS_ON_STARTUP:
+        await sync_up_application_emojis(refetch_and_set=False)
+    emojis.set_emojis(await discord_client.fetch_application_emojis())
 
     await worker_manager_service.register_workers()
     create_isolated_task(worker_manager_service.run())

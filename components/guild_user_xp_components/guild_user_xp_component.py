@@ -56,7 +56,9 @@ class GuildUserXPComponent(BaseGuildUserXPComponent):
         """
         self.logger.debug(f"Syncing up XP data.")
         upsert_data: dict[tuple[int, int], dict[str, Any]] = {}
-        for guild_id, cached_guild_xp in cache.CACHED_GUILD_XP.items():
+        guild_ids = list(cache.CACHED_GUILD_XP.keys())
+        for guild_id in guild_ids:
+            cached_guild_xp = cache.CACHED_GUILD_XP[guild_id]
             for member_xp in cached_guild_xp.get_unsynced_xps():
                 upsert_data[(cached_guild_xp.guild_settings_id, member_xp.user_id)] = {
                     "user_username": member_xp.user_username,
