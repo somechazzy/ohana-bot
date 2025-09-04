@@ -2,6 +2,7 @@ from datetime import datetime
 
 import discord
 
+import cache
 from bot.utils.embed_factory.general_embeds import get_info_embed, get_error_embed, get_success_embed
 from clients import discord_client
 from components.music_component import MusicComponent
@@ -119,6 +120,7 @@ class OwnerCommandsHandler:
             total_bots += len([member for member in guild.members if member.bot])
         human_percentage = round(total_humans * 100 / (total_humans + total_bots), 2) if total_members else 0
         bot_percentage = round(total_bots * 100 / (total_humans + total_bots), 2) if total_members else 0
+        current_radio_connections = len(cache.MUSIC_SERVICES)
         await self.channel.send(embed=get_info_embed(
             f"**Ohana stats**\n\n"
             f"**Total Guilds**: {total_guilds}\n"
@@ -127,6 +129,7 @@ class OwnerCommandsHandler:
             f"**Total Bots**: {total_bots} (as seen in {chunked_guilds} chunked guilds)\n"
             f"**Human Percentage**: {human_percentage}%\n"
             f"**Bot Percentage**: {bot_percentage}%\n"
+            f"**Radio streaming** in {current_radio_connections} servers\n"
         ))
 
     async def music_streams_reload(self):
