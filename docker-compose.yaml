@@ -1,6 +1,6 @@
 services:
   ohana:
-    image: ghcr.io/somechazzy/ohana_24:latest
+    image: ghcr.io/somechazzy/ohana-bot:latest
     restart: unless-stopped
     container_name: ohana
     environment:
@@ -8,11 +8,11 @@ services:
         BOT_OWNER_ID: # SET ME  # Your Discord user ID (https://support.discord.com/hc/en-us/articles/206346498)
         DISCORD_BOT_TOKEN: # SET ME  # Discord bot token from the Discord Developer Portal (https://discord.com/developers/applications)
         API_AUTH_TOKEN: # SET ME  # Random string to serve as an auth token for internal management API (https://it-tools.tech/token-generator)
-        DB_USER: ohana_app  # Must be the same as MYSQL_USER in db service
-        DB_PASSWORD: # SET ME  # Must be the same as MYSQL_PASSWORD in db service
-        DB_HOST: ohana_db  # Must be the same as the db service name
-        DB_PORT: 3306  # Must be the same as the port exposed by the db service
-        DB_NAME: ohana  # Must be the same as MYSQL_DATABASE in db service
+        DB_USER: ohana_app  # Must be the same as MYSQL_USER in ohana_db service
+        DB_PASSWORD: # SET ME  # Must be the same as MYSQL_PASSWORD in ohana_db service
+        DB_HOST: ohana_db  # Must be the same as the ohana_db service name
+        DB_PORT: 3306  # Must be the same as the port exposed by the ohana_db service
+        DB_NAME: ohana  # Must be the same as MYSQL_DATABASE in ohana_db service
       # ↓ Recommended for full functionality ↓
         LOGTAIL_TOKEN: # SET ME OR REMOVE ME  # Token from Logtail/BetterStack for external logging (https://betterstack.com/docs/logs/api/getting-started/#get-an-telemetry-api-token)
         LOGGING_CHANNEL_WEBHOOK_URL: # SET ME OR REMOVE ME  # For logging important things to a Discord channel (https://support.discord.com/hc/en-us/articles/228383668)
@@ -24,7 +24,6 @@ services:
         DEBUG_ENABLED: false  # Set to "true" to enable debug logging, by default only to console and log files
         DEBUG_EXTERNALLY: false  # Set to "true" to send debug logs to LOGTAIL (very spammy). Only has effect if DEBUG_ENABLED is also true
         SQL_ECHO: false  # Set to "true" to log all SQL queries to console (also spammy but doesn't log externally)
-        LOGGING_DIRECTORY: logs  # Directory to store log files - relative to /app in the container
       # ↓ App config ↓
         SYNC_COMMANDS_ON_STARTUP: true  # Set to "true" to sync Discord slash commands on startup, otherwise you will need to use the owner command or API to sync
         SYNC_EMOJIS_ON_STARTUP: true  # Set to "true" to sync custom emojis on startup, otherwise you will need to use the API to sync. Either way, emojis must be synced at least once before the bot is usable
@@ -41,6 +40,7 @@ services:
   ohana_db:
     image: mariadb:12.0
     container_name: ohana_db
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: # SET ME  # Enter a secure DB password here for the root user
       MYSQL_DATABASE: ohana

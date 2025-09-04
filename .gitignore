@@ -10,3 +10,4 @@
 *.pyo
 *.pyd
 /test.py
+/extensions/my_extensions
