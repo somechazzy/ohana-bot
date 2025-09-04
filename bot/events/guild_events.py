@@ -1,6 +1,8 @@
 """
 This module contains event handlers for guild-related events.
 """
+from datetime import UTC, datetime
+
 import discord
 
 from bot.utils.decorators import extensible_event
@@ -92,7 +94,7 @@ async def on_guild_remove(guild: discord.Guild):
     await GuildEventComponent().create_guild_event(guild_id=guild.id,
                                                    guild_settings_id=guild_settings.guild_settings_id,
                                                    event=GuildEventType.LEAVE,
-                                                   event_time=guild.me.joined_at,
+                                                   event_time=datetime.now(UTC),
                                                    event_metadata={"owner_id": guild.owner_id,
                                                                    "member_count": guild.member_count})
     await GuildSettingsComponent().update_guild_settings(guild_id=guild.id,

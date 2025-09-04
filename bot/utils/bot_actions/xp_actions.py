@@ -1,3 +1,5 @@
+import discord
+
 import cache
 from bot.utils.guild_logger import GuildLogger, GuildLogEventField
 from bot.utils.helpers.moderation_helpers import bot_can_assign_role
@@ -28,7 +30,10 @@ async def handle_roles_and_level_up_message_on_level_update(guild_id: int,
     if guild.chunked:
         member = guild.get_member(user_id)
     else:
-        member = await guild.fetch_member(user_id)
+        try:
+            member = await guild.fetch_member(user_id)
+        except (discord.NotFound, discord.Forbidden):
+            member = None
     if not member:
         return
     xp_settings = (await GuildSettingsComponent().get_guild_settings(guild_id)).xp_settings
