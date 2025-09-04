@@ -44,7 +44,7 @@ def apply_db_migrations():
             logger.warning(f"Skipping invalid migration file name: {file}")
             continue
         if version <= current_schema_version:
-            logger.info(f"Skipping already applied migration: {file}")
+            logger.debug(f"Skipping already applied migration: {file}")
             continue
         with open(os.path.join(sql_dir, file), "r", encoding="utf-8") as f:
             sql_text = f.read()
