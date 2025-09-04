@@ -90,6 +90,8 @@ async def on_guild_remove(guild: discord.Guild):
     Args:
         guild (discord.Guild): The guild that the bot has been removed from.
     """
+    if not guild.owner:
+        return  # a case that happens on startup likely when the guild is unavailable
     guild_settings = await GuildSettingsComponent().get_guild_settings(guild_id=guild.id)
     await GuildEventComponent().create_guild_event(guild_id=guild.id,
                                                    guild_settings_id=guild_settings.guild_settings_id,
