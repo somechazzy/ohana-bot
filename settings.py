@@ -18,7 +18,7 @@ DEBUG_EXTERNALLY = os.environ.get('DEBUG_EXTERNALLY', 'false').lower() == 'true'
 DEBUG_ENABLED = os.environ.get('DEBUG_ENABLED', 'false').lower() == 'true'
 SQL_ECHO = os.environ.get('SQL_ECHO', 'false').lower() == 'true'
 LOGGING_CHANNEL_WEBHOOK_URL = os.environ.get('LOGGING_CHANNEL_WEBHOOK_URL')
-LOGGING_DIRECTORY = os.environ.get('LOGGING_DIRECTORY')
+LOGGING_DIRECTORY = os.environ.get('LOGGING_DIRECTORY', 'logs')
 REDIRECT_STDOUT_TO_LOGGER = os.environ.get('REDIRECT_STDOUT_TO_LOGGER', 'false').lower() == 'true'
 
 # Database Configuration

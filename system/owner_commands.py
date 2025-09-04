@@ -7,6 +7,7 @@ from clients import discord_client
 from components.music_component import MusicComponent
 from settings import OWNER_COMMAND_PREFIX
 from constants import OhanaEnum, DiscordTimestamp
+from system.extensions_management import load_extensions
 
 
 class OwnerCommandsHandler:
@@ -16,6 +17,7 @@ class OwnerCommandsHandler:
         GUILD_INFO = 'guild info'
         STATS = 'stats'
         MUSIC_STREAMS_RELOAD = 'music streams reload'
+        EXTENSIONS_RELOAD = 'extensions reload'
         PING = 'ping'
         SYNC_SLASHES = 'sync slashes'
         SYNC_COMMANDS = 'sync commands'  # alias for sync slashes
@@ -48,6 +50,7 @@ class OwnerCommandsHandler:
             f"`{OWNER_COMMAND_PREFIX}guild info <guild_id>` - Get information about the specified guild\n"
             f"`{OWNER_COMMAND_PREFIX}stats` - Show bot statistics\n"
             f"`{OWNER_COMMAND_PREFIX}music streams reload` - Reload music streams from json file\n"
+            f"`{OWNER_COMMAND_PREFIX}extensions reload` - Reload all extensions\n"
             f"`{OWNER_COMMAND_PREFIX}ping` - Check bot latency\n"
             f"`{OWNER_COMMAND_PREFIX}sync slashes` - Sync slash commands with Discord\n"
             f"`{OWNER_COMMAND_PREFIX}sync commands` - Alias for sync slashes\n"
@@ -129,6 +132,11 @@ class OwnerCommandsHandler:
     async def music_streams_reload(self):
         await MusicComponent().load_radio_streams()
         await self.channel.send(embed=get_success_embed("Music streams reloaded successfully."))
+
+    async def extensions_reload(self):
+        message = await self.channel.send(embed=get_info_embed("Reloading extensions..."))
+        load_extensions()
+        await message.edit(content=None, embed=get_success_embed("Extensions reloaded. Check logs for any errors."))
 
     async def ping(self):
         latency = discord_client.latency * 1000

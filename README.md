@@ -14,7 +14,7 @@
 
 ---
 
-Note: As of v3.0, the main Ohana bot runs on a fork of this repo, with the only difference being a few extensions. Music streaming from YT has been removed along with user libraries and playlists.
+Note: As of v3.0, the main Ohana bot runs directly on this repo. Music streaming from YT has been removed along with user libraries and playlists.
 
 ## Introduction
 
@@ -170,11 +170,23 @@ You can clone or fork this repo to configure and extend the bot as you see fit. 
 
 ### Radio stations
 
-Your entry point here is [the radio streams json file](assets/data/radio_streams.json). There isn't currently any JSON schema file to validate against but you can deduce the structure by looking at the existing entries.
+Your entry point here is [the radio streams json file](assets/data/radio_streams.json). There isn't currently any JSON schema file to validate against, but you can deduce the structure by looking at the existing entries.
 
 ### Event extensions
 
 Any extensions placed within the `extensions` directory will be automatically loaded on bot startup. You can create your own extensions by inheriting from any of the base classes in the [templates directory](extensions/templates). See [here](extensions/extensions.md) for a quick guide to extensions.
+
+If you decide to use the docker solution, you can load your extensions by mounting a volume to the `/app/extensions/my_extensions` directory in the container. Example:
+
+```yaml
+services:
+  ohana:
+    #...
+    volumes:
+      - /home/user/my_ohana_extensions:/app/extensions/my_extensions:ro
+```
+
+Adjust the host path (`/home/user/my_ohana_extensions`) as necessary.
 
 ### Owner Commands
 
@@ -205,6 +217,7 @@ The following commands can be used by the bot owner, based on the `BOT_OWNER_ID`
 * `..guild leave <guild_id>` - Make the bot leave a guild by its ID.
 * `..guild info <guild_id>` - Get information about a guild by its ID.
 * `..music streams reload` - Reload radio streams from the JSON file.
+* `..extensions reload` - Reload all extensions.
 
 ### Management API
 

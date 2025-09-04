@@ -33,7 +33,7 @@ def get_reminder_delivery_embed(reminder: CachedReminder) -> discord.Embed:
     if minutes_late > 5:
         title = f"Belated {title}"
         embed.add_field(name="Delay", value=f"I was offline {get_human_readable_time(minutes=minutes_late)} "
-                                            f"minutes ago so I missed the reminder. Sorry!", inline=False)
+                                            f"ago so I missed the reminder. Sorry!", inline=False)
 
     embed.title = f"⏱ {title}"
 

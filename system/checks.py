@@ -195,16 +195,18 @@ def run_pre_startup_checks():
         err = validate_logging_channel_webhook_url(logging_channel_webhook_url)
         if err:
             errors.append(err)
-    logging_directory = os.environ.get('LOGGING_DIRECTORY')
-    if logging_directory:
-        try:
-            os.makedirs(logging_directory, exist_ok=True)
-            test_file_path = os.path.join(logging_directory, 'test_write_permissions.tmp')
-            with open(test_file_path, 'w') as test_file:
-                test_file.write('test')
-            os.remove(test_file_path)
-        except Exception as e:
-            errors.append(f"Logging directory '{logging_directory}' is not writable: {e}")
+    if 'LOGGING_DIRECTORY' in os.environ:
+        if not os.environ.get('LOGGING_DIRECTORY'):
+            errors.append("LOGGING_DIRECTORY is set but empty.")
+    logging_directory = os.environ.get('LOGGING_DIRECTORY', 'logs')
+    try:
+        os.makedirs(logging_directory, exist_ok=True)
+        test_file_path = os.path.join(logging_directory, 'test_write_permissions.tmp')
+        with open(test_file_path, 'w') as test_file:
+            test_file.write('test')
+        os.remove(test_file_path)
+    except Exception as e:
+        errors.append(f"Logging directory '{logging_directory}' is not writable: {e}")
 
     # App configs
     if os.environ.get('SYNC_COMMANDS_ON_STARTUP', 'true').lower() not in ['true', 'false']:
