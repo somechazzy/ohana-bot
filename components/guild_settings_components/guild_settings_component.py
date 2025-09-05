@@ -106,14 +106,14 @@ class GuildSettingsComponent(BaseGuildSettingsComponent):
             from components.guild_settings_components.guild_music_settings_component import GuildMusicSettingsComponent
             from components.guild_settings_components.guild_xp_settings_component import GuildXPSettingsComponent
             if not guild_settings.music_settings:
-                self.logger.warning(f"Guild settings for guild ID {guild_id} do not have music settings. "
+                self.logger.warning(f"Guild settings for guild ID {guild_id} does not have music settings. "
                                     f"Creating default music settings.",
                                     extras={"guild_id": guild_id})
                 guild_settings.music_settings = \
                     await GuildMusicSettingsComponent().create_guild_music_settings(guild_id=guild_id,
                                                                                     guild_settings_id=guild_settings.id)
             if not guild_settings.xp_settings:
-                self.logger.warning(f"Guild settings for guild ID {guild_id} do not have XP settings. "
+                self.logger.warning(f"Guild settings for guild ID {guild_id} does not have XP settings. "
                                     f"Creating default XP settings.",
                                     extras={"guild_id": guild_id})
                 guild_settings.xp_settings = \

@@ -46,10 +46,11 @@ class RemindUserSlashes(UserSlashes):
             )
         except Exception as e:
             self.logger.error(f"Failed at creating reminder for {self.user.id}. Error: {e}.")
-            return await self.interaction.response.send_message(
+            await self.interaction.response.send_message(
                 embed=get_generic_embed(UserSlashCommandsStrings.GENERIC_REMINDER_CREATION_ERROR_MESSAGE),
                 ephemeral=True
             )
+            return
 
         interactions_handler = ReminderSetupInteractionHandler(
             source_interaction=self.interaction,
@@ -87,10 +88,11 @@ class RemindUserSlashes(UserSlashes):
             )
         except Exception as e:
             self.logger.error(f"Failed at creating reminder for {self.user.id}. Error: {e}.")
-            return await self.interaction.response.send_message(
+            await self.interaction.response.send_message(
                 embed=get_generic_embed(UserSlashCommandsStrings.GENERIC_REMINDER_CREATION_ERROR_MESSAGE),
                 ephemeral=True
             )
+            return
 
         await self.interaction.response.send_message(
             embed=get_success_embed(

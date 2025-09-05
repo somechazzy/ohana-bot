@@ -109,8 +109,8 @@ class GeneralUserBlueprint(Cog):
         await GeneralUserSlashes(interaction=interaction).help(menu=menu, make_visible=make_visible)
 
     @MUSIC_FIX
-    @allowed_installs(users=True, guilds=True)
-    @allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @allowed_installs(users=False, guilds=True)
+    @allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def music_fix(self, interaction: discord.Interaction):
         """Fix Ohana player/radio by force resetting everything.
 
@@ -122,8 +122,8 @@ class GeneralUserBlueprint(Cog):
         await GeneralUserSlashes(interaction=interaction).music_fix()
 
     @MUSICFIX
-    @allowed_installs(users=True, guilds=True)
-    @allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @allowed_installs(users=False, guilds=True)
+    @allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def musicfix(self, interaction: discord.Interaction):
         """Fix Ohana player/radio by force resetting everything.
 

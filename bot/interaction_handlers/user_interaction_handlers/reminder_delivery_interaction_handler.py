@@ -12,7 +12,7 @@ from clients import discord_client
 from common.exceptions import UserInputException
 from components.user_settings_components.user_reminder_component import UserReminderComponent
 from components.user_settings_components.user_settings_component import UserSettingsComponent
-from constants import DiscordTimestamp, ReminderDeliveryAction
+from constants import DiscordTimestamp, ReminderDeliveryAction, AppLogCategory
 from models.user_settings_models import UserReminder, UserSettings
 from settings import BOT_OWNER_ID
 from utils.helpers.text_manipulation_helpers import get_human_readable_time
@@ -48,7 +48,7 @@ class ReminderDeliveryInteractionHandler(UserInteractionHandler):
         elif action == ReminderDeliveryAction.BLOCK_AUTHOR:
             await self.on_block_relayed_reminders_from_author(self.source_interaction)
         else:
-            self.logger.warning(f"Unknown reminder action: {action}")
+            self.logger.warning(f"Unknown reminder action: {action}", category=AppLogCategory.BOT_GENERAL)
             await self.source_interaction.response.send_message("There was an issue with your request."
                                                                 " We're already looking into it!")
 

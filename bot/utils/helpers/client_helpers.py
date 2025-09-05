@@ -5,6 +5,7 @@ import discord
 from clients import discord_client
 from common.app_logger import AppLogger
 from common.exceptions import UserInputException
+from constants import AppLogCategory
 
 
 async def force_fetch_member(user_id: int, guild: discord.Guild) -> discord.Member:
@@ -37,7 +38,8 @@ async def lazy_chunk_guilds():
         if not guild.chunked:
             await guild.chunk(cache=True)
             await asyncio.sleep(1)
-    AppLogger('lazy_chunk_guilds').info("Finished lazy chunking guilds")
+    AppLogger('lazy_chunk_guilds').info("Finished lazy chunking guilds",
+                                        category=AppLogCategory.BOT_GENERAL)
 
 
 async def sync_commands_on_discord(guild_id: int | None = None):
@@ -50,8 +52,10 @@ async def sync_commands_on_discord(guild_id: int | None = None):
         guild = discord_client.get_guild(guild_id)
         if not guild:
             raise UserInputException("Guild not found")
-        AppLogger('sync_commands_on_discord').info(f"Syncing commands on Discord for guild {guild.name} ({guild.id})")
+        AppLogger('sync_commands_on_discord').info(f"Syncing commands on Discord for guild {guild.name} ({guild.id})",
+                                                   category=AppLogCategory.BOT_GENERAL)
     else:
         guild = None
-        AppLogger('sync_commands_on_discord').info("Syncing commands on Discord globally")
+        AppLogger('sync_commands_on_discord').info("Syncing commands on Discord globally",
+                                                   category=AppLogCategory.BOT_GENERAL)
     await discord_client.tree.sync(guild=guild)

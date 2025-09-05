@@ -6,7 +6,7 @@ from bot.utils.helpers.moderation_helpers import bot_can_assign_role
 from clients import discord_client
 from common.app_logger import AppLogger
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
-from constants import GuildLogEvent, XPLevelUpMessageSubstitutable
+from constants import GuildLogEvent, XPLevelUpMessageSubstitutable, AppLogCategory
 
 logger = AppLogger(__name__)
 
@@ -92,4 +92,4 @@ async def handle_roles_and_level_up_message_on_level_update(guild_id: int,
                                          xp_settings.level_role_earn_message_text.format(role_name=highest_role.name)
         await channel.send(level_up_message_text)
         logger.info(f"Sent level-up message in guild {guild} for user {member_xp.user_username}"
-                    f" on reaching level {member_xp.level}")
+                    f" on reaching level {member_xp.level}", category=AppLogCategory.BOT_GENERAL)

@@ -14,7 +14,7 @@ from bot.utils.helpers.client_helpers import force_fetch_member
 from bot.utils.helpers.moderation_helpers import assert_hierarchy
 from common.app_logger import AppLogger
 from common.exceptions import UserInputException
-from constants import GuildLogEvent
+from constants import GuildLogEvent, AppLogCategory
 from utils.helpers.text_manipulation_helpers import get_human_readable_time
 from common.exceptions import ModerationHierarchyError
 
@@ -49,7 +49,8 @@ async def mute_member(member: discord.Member, duration_in_minutes: int, actor: d
                 GuildLogEventField("Moderator", actor.mention)]
     )
     logger.info(f"Muted {member} in guild {member.guild} for {duration_in_minutes} minutes.",
-                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id})
+                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id},
+                category=AppLogCategory.BOT_GENERAL)
 
 
 async def unmute_member(member: discord.Member, actor: discord.Member, reason: str | None):
@@ -76,7 +77,8 @@ async def unmute_member(member: discord.Member, actor: discord.Member, reason: s
         fields=[GuildLogEventField("Moderator", actor.mention)]
     )
     logger.info(f"Unmuted {member} in guild {member.guild}.",
-                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id})
+                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id},
+                category=AppLogCategory.BOT_GENERAL)
 
 
 async def kick_member(member: discord.Member, actor: discord.Member, reason: str | None):
@@ -106,7 +108,8 @@ async def kick_member(member: discord.Member, actor: discord.Member, reason: str
         fields=[GuildLogEventField("Moderator", actor.mention)]
     )
     logger.info(f"Kicked {member} from guild {member.guild}.",
-                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id})
+                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id},
+                category=AppLogCategory.BOT_GENERAL)
 
 
 async def ban_member(member: discord.Member, actor: discord.Member, delete_in_hours: int, reason: str):
@@ -148,7 +151,8 @@ async def ban_member(member: discord.Member, actor: discord.Member, delete_in_ho
         fields=[GuildLogEventField("Moderator", actor.mention)]
     )
     logger.info(f"Banned {member} in guild {member.guild} with message deletion for {delete_in_hours} hours.",
-                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id})
+                extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id},
+                category=AppLogCategory.BOT_GENERAL)
 
 
 async def unban_member(user: discord.User, actor: discord.Member, reason: str = "Not provided"):
@@ -174,7 +178,8 @@ async def unban_member(user: discord.User, actor: discord.Member, reason: str = 
         fields=[GuildLogEventField("Moderator", actor.mention)]
     )
     logger.info(f"Unbanned user {user} in guild {actor.guild}.",
-                extras={"user_id": user.id, "guild_id": actor.guild.id, "moderator_id": actor.id})
+                extras={"user_id": user.id, "guild_id": actor.guild.id, "moderator_id": actor.id},
+                category=AppLogCategory.BOT_GENERAL)
 
 
 async def scan_for_messages_and_assign_role(channel: discord.TextChannel,
@@ -231,4 +236,5 @@ async def scan_for_messages_and_assign_role(channel: discord.TextChannel,
     )
     logger.info(f"Assigned {role} to {success_count} members, {failed_count} failed in guild {channel.guild}"
                 f" while initializing limited-messages channel {channel}.",
-                extras={"role_id": role.id, "guild_id": channel.guild.id, "channel_id": channel.id})
+                extras={"role_id": role.id, "guild_id": channel.guild.id, "channel_id": channel.id},
+                category=AppLogCategory.BOT_GENERAL)

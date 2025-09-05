@@ -73,5 +73,6 @@ class ConfirmationModal(Modal, title="Confirm"):
 
     async def on_submit(self, interaction: discord.Interaction):
         if self.confirm_input.value.lower() != "confirm":
-            return await interaction.response.send_message("Action not confirmed.", ephemeral=True)
+            await interaction.response.send_message("Action not confirmed.", ephemeral=True)
+            return
         await self.callback(interaction, **self.callback_params)

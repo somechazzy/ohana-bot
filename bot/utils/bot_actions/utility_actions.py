@@ -1,5 +1,6 @@
 from datetime import UTC, datetime, timedelta
 
+import aiohttp
 import discord
 
 import cache
@@ -15,7 +16,7 @@ from common.decorators import with_retry, suppress_and_log
 from common.exceptions import UserReadableException
 from components.guild_settings_components.guild_music_settings_component import GuildMusicSettingsComponent
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
-from constants import MusicDefaults
+from constants import MusicDefaults, AppLogCategory
 from models.dto.cachables import CachedReminder
 
 logger = AppLogger(component=__name__)
@@ -35,7 +36,7 @@ async def send_reminder_to_user(reminder: CachedReminder):
     await send_message(channel=recipient, embed=embed, view=view)
     seconds_to_send = (datetime.now(UTC) - reminder.reminder_time).seconds
     logger.info(f"Sent reminder to user {recipient.display_name} within {seconds_to_send} seconds.",
-                extras={"user_id": reminder.recipient_user_id})
+                extras={"user_id": reminder.recipient_user_id}, category=AppLogCategory.BOT_GENERAL)
     if seconds_to_send > 60:
         logger.warning(f"Reminder delivery took more than 60 seconds ({seconds_to_send} seconds)"
                        f" for reminder {reminder.user_reminder_id}.",
@@ -83,7 +84,8 @@ async def refresh_music_header_message(guild: discord.Guild):
                                                                     music_header_message_id=message.id)
 
 
-@suppress_and_log()
+@suppress_and_log(ignore_exceptions=(discord.Forbidden, discord.HTTPException,
+                                     aiohttp.client_exceptions.ServerDisconnectedError))
 async def refresh_music_player_message(guild: discord.Guild) -> bool:
     """
     Sends or refreshes the music player message in the specified guild's music channel.

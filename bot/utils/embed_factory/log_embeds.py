@@ -36,7 +36,7 @@ def get_bot_log_embed(message: str, level: str, log_time: datetime, category: st
         embed_color = Colour.PRIMARY_ACCENT
 
     embed = discord.Embed(
-        title=f"{level.title()} - {get_human_readable_app_log_category(category)}",
+        title=f"[{level.title()}] {get_human_readable_app_log_category(category)}",
         description=message,
         color=embed_color,
         timestamp=log_time

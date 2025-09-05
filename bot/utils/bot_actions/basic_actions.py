@@ -44,7 +44,8 @@ async def send_message(
                 raise e
             if log_action:
                 logger.info(f"Failed to create DM channel with {channel}. Locals: {locals()}",
-                            extras={'guild_id': channel.guild.id, 'user_id': channel.id})
+                            extras={'guild_id': channel.guild.id, 'user_id': channel.id},
+                            category=AppLogCategory.BOT_GENERAL)
             return
     guild_id = channel.guild.id if getattr(channel, 'guild', None) else None
     try:
@@ -62,7 +63,7 @@ async def send_message(
         if log_action:
             logger.info(f"Failed to send message to {channel}: {e}. Locals: {locals()}",
                         extras={'guild_id': guild_id, 'channel_id': channel.id},
-                        category=AppLogCategory.BOT_MESSAGE_SENT)
+                        category=AppLogCategory.BOT_GENERAL)
             return
     if log_action:
         logger.info(f"Sent message to #{channel}.",
@@ -135,7 +136,8 @@ async def add_roles(member: discord.Member, roles: list[discord.Role], reason: s
             logger.warning(f"Failed to add roles {', '.join(str(role.id) for role in roles)} to "
                            f"{member.display_name} in guild {member.guild.name} due to: {e}. Locals: {locals()}",
                            extras={'guild_id': member.guild.id, 'user_id': member.id,
-                                   'role_ids': [role.id for role in roles]})
+                                   'role_ids': [role.id for role in roles]},
+                           category=AppLogCategory.BOT_GENERAL)
             failure_reason = f"internal error."
         if log_event_to_guild:
             await GuildLogger(guild=member.guild).log_event(
@@ -152,5 +154,6 @@ async def add_roles(member: discord.Member, roles: list[discord.Role], reason: s
                                                         roles=roles,
                                                         reason=reason)
     logger.info(f"Added {len(roles)} roles to {member.display_name} in guild {member.guild.name}",
-                extras={'guild_id': member.guild.id, 'user_id': member.id, 'role_ids': [role.id for role in roles]})
+                extras={'guild_id': member.guild.id, 'user_id': member.id, 'role_ids': [role.id for role in roles]},
+                category=AppLogCategory.BOT_GENERAL)
     return True
