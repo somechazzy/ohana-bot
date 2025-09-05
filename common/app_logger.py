@@ -49,6 +49,7 @@ class AppLogger:
              log_to_discord: bool = None,
              extras: dict | None = None):
         extras = extras or {}
+        original_category = category
         category = (category or AppLogCategory.APP_GENERAL).replace('_', ' ').title().replace(' ', '/', 1)
         level = level or AppLogLevel.INFO
         component = component or self.component
@@ -82,6 +83,7 @@ class AppLogger:
             message=message,
             level=level,
             category=category,
+            original_category=original_category,
             component=component,
             log_time=datetime.now(UTC),
             context_id=get_context_id(),
@@ -225,7 +227,6 @@ class DiscordLogHandler:
             return
         message = log_record_data.message
         level = log_record_data.level
-        category = log_record_data.category
         extras = {}
         for extra_key, extra_val in log_record_data.extras.items():
             if extra_key in ["category"]:
@@ -235,9 +236,9 @@ class DiscordLogHandler:
             extras[extra_key.replace('_', ' ').title()] = extra_val
         from bot.utils.embed_factory.log_embeds import get_bot_log_embed
         content = f"<@{BOT_OWNER_ID}>" if (
-                level == AppLogLevel.ERROR or category in [AppLogCategory.BOT_DM_RECEIVED,
-                                                           AppLogCategory.BOT_GUILD_JOINED,
-                                                           AppLogCategory.BOT_GUILD_LEFT]
+                level == AppLogLevel.ERROR or log_record_data.original_category in [AppLogCategory.BOT_DM_RECEIVED,
+                                                                                    AppLogCategory.BOT_GUILD_JOINED,
+                                                                                    AppLogCategory.BOT_GUILD_LEFT]
         ) else None
         session = await get_async_http_session(name=self.__class__.__name__)
         webhook = Webhook.from_url(self.webhook_url, session=session)
@@ -248,7 +249,7 @@ class DiscordLogHandler:
                                    filename=f"log_message_"
                                             f"{log_record_data.log_time.strftime("%Y-%m-%d_%H.%M.%S")}.txt")
             embed = get_bot_log_embed(message=shorten_text(message, 300),
-                                      category=category,
+                                      category=log_record_data.original_category,
                                       level=level,
                                       log_time=log_record_data.log_time,
                                       extras=extras)
@@ -256,7 +257,7 @@ class DiscordLogHandler:
                                files=[log_file])
         else:
             embed = get_bot_log_embed(message=message,
-                                      category=category,
+                                      category=log_record_data.original_category,
                                       level=level,
                                       log_time=log_record_data.log_time,
                                       extras=extras)
@@ -286,12 +287,13 @@ class ExternalLogHandler:
 
 
 class LogRecordData:
-    def __init__(self, message: str, level: str, category: str, component: str,
+    def __init__(self, message: str, level: str, category: str, original_category: str, component: str,
                  log_time: datetime, context_id: str, extras: dict, log_to_file: bool,
                  log_to_discord: bool, log_externally: bool):
         self.message = message
         self.level = level
         self.category = category
+        self.original_category = original_category
         self.component = component
         self.log_time = log_time
         self.context_id = context_id

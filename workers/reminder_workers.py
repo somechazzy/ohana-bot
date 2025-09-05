@@ -6,7 +6,7 @@ from common.app_logger import AppLogger
 from common.decorators import periodic_worker, require_db_session
 from common.exceptions import UserReadableException
 from components.user_settings_components.user_reminder_component import UserReminderComponent
-from constants import BackgroundWorker
+from constants import BackgroundWorker, AppLogCategory
 from models.dto.cachables import CachedReminder
 
 
@@ -107,7 +107,8 @@ class ReminderService:
             if not isinstance(e, UserReadableException):
                 self.logger.warning(f"Failed to send reminder {reminder.user_reminder_id} "
                                     f"to user {reminder.recipient_user_id}: {e}",
-                                    extras={"user_id": reminder.recipient_user_id})
+                                    extras={"user_id": reminder.recipient_user_id},
+                                    category=AppLogCategory.BOT_GENERAL)
             if reminder.is_relayed:
                 await handle_reminder_delivery_failure(reminder=reminder,
                                                        error=e)

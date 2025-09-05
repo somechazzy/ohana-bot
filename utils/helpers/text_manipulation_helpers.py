@@ -25,7 +25,9 @@ def get_human_readable_app_log_category(category: str) -> str:
     Returns:
         str: The human-readable app log category.
     """
-    category = category.replace("_", " ").replace("BOT ", "BOT - ")
+    category = category.replace("_", " ") \
+        .replace("BOT ", "BOT - ") \
+        .replace("APP ", "APP - ")
     return category.title()
 
 

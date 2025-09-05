@@ -11,6 +11,7 @@ from clients import discord_client
 from common.app_logger import AppLogger
 from common.exceptions import UserReadableException, ExternalServiceException
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
+from constants import AppLogCategory
 from models.dto.cachables import CachedGuildSettings
 from models.dto.radio_stream import RadioStream
 from utils.helpers.context_helpers import create_task
@@ -199,7 +200,8 @@ class GuildMusicService:
 
         def callback(error):
             if error:
-                self._logger.error(f"Error in playback finished callback: {error}")
+                self._logger.error(f"Error in playback finished callback: {error}",
+                                   category=AppLogCategory.BOT_GENERAL)
             asyncio.run(wait_and_stop())
 
         return callback

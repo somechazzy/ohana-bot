@@ -86,7 +86,7 @@ class UserReminderComponent(BaseUserSettingsComponent):
                               reminder_text: str | None = None,
                               reminder_time: datetime | None = None,
                               is_snoozed: bool | None = None,
-                              status: bool | None = None):
+                              status: str | None = None):
         """
         Update a reminder's details. Either `reminder_id` or `reminder` must be provided.
         Args:
@@ -95,7 +95,7 @@ class UserReminderComponent(BaseUserSettingsComponent):
             reminder_text (str | None): New text for the reminder.
             reminder_time (datetime | None): New delivery time for the reminder.
             is_snoozed (bool | None): Whether the reminder is snoozed or not.
-            status (bool | None): New status for the reminder - ReminderStatus.
+            status (str | None): New status for the reminder - ReminderStatus.
         """
         self.logger.debug(f"Updating reminder with ID {reminder_id or reminder.id}.")
         if not reminder_id and not reminder:
@@ -154,7 +154,7 @@ class UserReminderComponent(BaseUserSettingsComponent):
             self.logger.debug(f"Removing recurrence for reminder {reminder.id}.")
             await repo.delete_reminder_recurrence(reminder_recurrence_id=reminder.recurrence.id)
             reminder.recurrence = None
-            return
+            return None
         if reminder.recurrence:
             await self._update_reminder_recurrence(
                 reminder_recurrence=reminder.recurrence,

@@ -7,7 +7,6 @@ from types import coroutine
 import aiohttp_cors
 from aiohttp import web
 
-from api.views.base_view import BaseAPIView
 from api.views.v1.cache_view import InvalidateGuildCacheView
 from api.views.v1.emojis_view import EmojisSyncView
 from api.views.v1.healthcheck_view import HealthcheckView
@@ -95,6 +94,9 @@ class APIService:
         error = None
         async with session_context():
             try:
+                if not hasattr(handler, 'AUTH_REQUIRED'):
+                    response_status_code = 404
+                    return api_response(body="Not Found", status=404)
                 if handler.AUTH_REQUIRED:
                     if request.headers.get('Authorization') != API_AUTH_TOKEN:
                         raise APIUnauthorizedException("Unauthorized access")
@@ -103,6 +105,7 @@ class APIService:
                     handler.request_body = await request.json()
                 method = getattr(handler, request.method.lower(), None)
                 if not method:
+                    response_status_code = 405
                     return api_response(body="Method Not Allowed", status=405)
                 response = await method()
                 response_status_code = response.status
@@ -119,20 +122,22 @@ class APIService:
             finally:
                 await get_session().commit()
                 await execute_post_commit_actions()
-                self.logger.info(f"{request.method} {request.url} -> status {response_status_code}",
-                                 category=AppLogCategory.API_REQUEST_RECEIVED,
-                                 extras={
-                                     "method": request.method,
-                                     "url": str(request.url),
-                                     "headers": dict(request.headers),
-                                     "query_params": dict(request.query),
-                                     "body": await request.text() if request.can_read_body else None,
-                                     "response": {
-                                         "status_code": response_status_code,
-                                         "error": str(error) if error else None,
-                                     },
-                                     "remote": request.remote,
-                                 })
+                if getattr(handler, 'LOG_REQUEST', True) or error:
+                    logging_method = self.logger.error if error else self.logger.info
+                    logging_method(message=f"{request.method} {request.url} -> status {response_status_code}",  # noqa
+                                   category=AppLogCategory.API_REQUEST_RECEIVED,
+                                   extras={
+                                       "method": request.method,
+                                       "url": str(request.url),
+                                       "headers": dict(request.headers),
+                                       "query_params": dict(request.query),
+                                       "body": await request.text() if request.can_read_body else None,
+                                       "response": {
+                                           "status_code": response_status_code,
+                                           "error": str(error) if error else None,
+                                       },
+                                       "remote": request.remote,
+                                     })
                 reset_context_id(token)
 
 

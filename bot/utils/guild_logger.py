@@ -9,7 +9,7 @@ from bot.utils.embed_factory.log_embeds import get_guild_log_embed
 from clients import discord_client
 from common.app_logger import AppLogger
 from common.decorators import suppress_and_log
-from constants import GuildLogEvent, Colour
+from constants import GuildLogEvent, Colour, AppLogCategory
 
 
 class GuildLogger:
@@ -147,7 +147,8 @@ class GuildLogger:
                     embed_color = Colour.NEUTRAL
                     debug_info = f"ID: {author.id}" if author else None
                 else:
-                    self.logger.error(f"Unhandled event type: {event} in guild logger, locals: {locals()}")
+                    self.logger.error(f"Unhandled event type: {event} in guild logger, locals: {locals()}",
+                                      category=AppLogCategory.BOT_GENERAL)
                     return
 
         try:
@@ -163,7 +164,8 @@ class GuildLogger:
             )
         except Exception as e:
             self.logger.warning(f"Failed to log event {event} in guild {self.guild.id}: {e}",
-                                extras={"guild_id": self.guild.id})
+                                extras={"guild_id": self.guild.id},
+                                category=AppLogCategory.BOT_GENERAL)
             return
 
 

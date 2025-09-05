@@ -5,6 +5,7 @@ from bot.utils.bot_actions.utility_actions import refresh_music_header_message, 
 from bot.utils.decorators import slash_command
 from bot.utils.embed_factory.general_embeds import get_info_embed, get_success_embed
 from components.guild_settings_components.guild_music_settings_component import GuildMusicSettingsComponent
+from constants import AppLogCategory
 from strings.commands_strings import AdminSlashCommandsStrings
 
 
@@ -21,19 +22,21 @@ class MusicAdminSlashes(AdminSlashes):
         """
         if self.guild_settings.music_channel_id and \
                 (music_channel := self.guild.get_channel(self.guild_settings.music_channel_id)):
-            return await self.interaction.response.send_message(
+            await self.interaction.response.send_message(
                 embed=get_info_embed(AdminSlashCommandsStrings.MUSIC_CREATE_CHANNEL_ALREADY_EXISTS_ERROR_MESSAGE.format(
                     channel_mention=music_channel.mention
                 )),
                 ephemeral=True
             )
+            return
         if not self.guild.me.guild_permissions.manage_channels:
-            return await self.interaction.response.send_message(
+            await self.interaction.response.send_message(
                 embed=get_info_embed(
                     AdminSlashCommandsStrings.MUSIC_CREATE_CHANNEL_NO_MANAGE_CHANNELS_PERMISSION_ERROR_MESSAGE
                 ),
                 ephemeral=True
             )
+            return
         await self.interaction.response.send_message(
             embed=get_info_embed(AdminSlashCommandsStrings.MUSIC_CREATE_CHANNEL_STARTING_MESSAGE),
             ephemeral=True
@@ -64,7 +67,8 @@ class MusicAdminSlashes(AdminSlashes):
         )
         await refresh_music_header_message(guild=self.guild)
         if not await refresh_music_player_message(guild=self.guild):
-            self.logger.error(f"Failed to send music player message in guild {self.guild.name} ({self.guild.id})")
+            self.logger.error(f"Failed to send music player message in guild {self.guild.name} ({self.guild.id})",
+                              category=AppLogCategory.BOT_GENERAL)
 
         await self.interaction.edit_original_response(
             embed=get_success_embed(AdminSlashCommandsStrings.MUSIC_CREATE_CHANNEL_SUCCESS_MESSAGE.format(

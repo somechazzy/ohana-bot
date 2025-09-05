@@ -11,7 +11,7 @@ from common.decorators import require_db_session
 from components.guild_settings_components.guild_channel_settings_component import GuildChannelSettingsComponent
 from components.guild_settings_components.guild_user_roles_component import GuildUserRolesComponent
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
-from constants import GuildLogEvent, AutoResponseMatchType
+from constants import GuildLogEvent, AutoResponseMatchType, AppLogCategory
 
 logger = AppLogger('automod_actions')
 
@@ -62,7 +62,8 @@ async def apply_persistent_roles_to_member(member: discord.Member) -> bool:
                 event_message = (f"Failed to apply persistent roles to member {member.mention}"
                                  f" due to an unexpected error.")
                 logger.info(f"Failed to apply role persistence to member {member.id} in guild {member.guild.id}: {e}",
-                            extras={'guild_id': member.guild.id, 'user_id': member.id})
+                            extras={'guild_id': member.guild.id, 'user_id': member.id},
+                            category=AppLogCategory.BOT_GENERAL)
             await guild_logger.log_event(event=GuildLogEvent.ACTION_ERROR,
                                          event_message=event_message,
                                          reason="Role persistence", )
@@ -74,7 +75,8 @@ async def apply_persistent_roles_to_member(member: discord.Member) -> bool:
                                  reason="Role persistence")
     logger.info(f"Applied persistent roles to member {member.display_name} ({member.id})"
                 f" in guild {member.guild} ({member.guild.id})",
-                extras={'guild_id': member.guild.id, 'user_id': member.id})
+                extras={'guild_id': member.guild.id, 'user_id': member.id},
+                category=AppLogCategory.BOT_GENERAL)
 
     return True
 
@@ -92,7 +94,8 @@ async def assign_autoroles_to_member(member: discord.Member):
     await add_roles(member=member, roles=autoroles, reason="Autoroles")
     logger.info(f"Assign autoroles to member {member.display_name} ({member.id})"
                 f" in guild {member.guild} ({member.guild.id})",
-                extras={'guild_id': member.guild.id, 'user_id': member.id})
+                extras={'guild_id': member.guild.id, 'user_id': member.id},
+                category=AppLogCategory.BOT_GENERAL)
 
 
 async def perform_message_automoderation(message: discord.Message) -> bool:
@@ -148,7 +151,8 @@ async def perform_message_automoderation(message: discord.Message) -> bool:
                 fields=[GuildLogEventField(name="Message", value=f"[Jump to message]({message.jump_url})")]
             )
             logger.info(f"Auto responded to message {message.id} in guild {message.guild.id}."
-                        f" Auto response: {matching_auto_response.guild_auto_response_id}")
+                        f" Auto response: {matching_auto_response.guild_auto_response_id}",
+                        category=AppLogCategory.BOT_GENERAL)
             if matching_auto_response.delete_original:
                 if await delete_message(message,
                                         reason=f"Auto response to trigger `{matching_auto_response.trigger}`."):

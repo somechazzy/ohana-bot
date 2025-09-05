@@ -261,6 +261,7 @@ class CachedGuildSettings:
         for role_menu in self.role_menus:
             if role_menu.guild_role_menu_id == guild_role_menu_id:
                 return role_menu
+        return None
 
     @property
     def is_stale(self) -> bool:

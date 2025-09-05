@@ -8,7 +8,7 @@ from bot import register_cogs
 from clients import discord_client, emojis, worker_manager_service
 from components.guild_user_xp_components.xp_model_component import XPModelComponent
 from components.music_component import MusicComponent
-from constants import ChunkGuildsSetting
+from constants import ChunkGuildsSetting, AppLogCategory
 from settings import ENABLE_API_SERVICE, SYNC_COMMANDS_ON_STARTUP, SYNC_EMOJIS_ON_STARTUP, CHUNK_GUILDS_SETTING
 from system.checks import verify_slashes_decorators
 from utils.helpers.context_helpers import create_isolated_task
@@ -45,7 +45,7 @@ async def on_ready():
     if getattr(on_ready, 'already_run', False):
         return
     on_ready.already_run = True
-    logger.info("Performing on-ready event tasks.")
+    logger.info("Performing on-ready event tasks.", category=AppLogCategory.BOT_GENERAL)
 
     await XPModelComponent().load_xp_model()
     await MusicComponent().load_radio_streams()
@@ -63,7 +63,7 @@ async def on_ready():
     if SYNC_COMMANDS_ON_STARTUP:
         await sync_commands_on_discord()
 
-    logger.info("Bot is up and running (on-ready event).")
+    logger.info("Bot is up and running (on-ready event).", category=AppLogCategory.BOT_GENERAL)
 
 
 @discord_client.event
@@ -73,4 +73,4 @@ async def on_error(event, *args, **kwargs):
     This event is triggered when an error occurs within an event handler and isn't explicitly caught.
     """
     logger.error(f"Error occurred while handling event {event} with args {args} and kwargs {kwargs}.\n"
-                 f"Exception info: {sys.exc_info()}")
+                 f"Exception info: {sys.exc_info()}", category=AppLogCategory.BOT_GENERAL)

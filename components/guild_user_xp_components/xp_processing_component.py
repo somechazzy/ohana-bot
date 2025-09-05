@@ -82,7 +82,15 @@ class XPProcessingComponent(BaseGuildUserXPComponent):
 
         return level != level_before_action
 
-    async def process_user_xp_decay(self, decay_item: XPDecayItem):
+    async def process_user_xp_decay(self, decay_item: XPDecayItem) -> bool:
+        """
+        Process user XP decay.
+        Args:
+            decay_item (XPDecayItem): DTO containing decay details.
+
+        Returns:
+            bool: whether the user's level was updated during this flow.
+        """
         self.logger.debug("Processing user XP decay.")
         member_xp = await self._get_member_xp(guild_id=decay_item.guild_id, user_id=decay_item.member_id,
                                               user_username=decay_item.username)
@@ -91,7 +99,7 @@ class XPProcessingComponent(BaseGuildUserXPComponent):
         decay_grace_days = xp_settings.xp_decay_grace_period_days
         decay_cutoff = datetime.now(UTC) - timedelta(days=decay_grace_days)
         if member_xp.latest_message_time and member_xp.latest_message_time > decay_cutoff:
-            return  # no need to decay anymore
+            return False  # no need to decay anymore
 
         decay_amount = int(member_xp.xp * (xp_settings.xp_decay_per_day_percentage / 100))
         level = self.get_level_at_xp(xp=member_xp.xp - decay_amount, xp_settings=xp_settings)

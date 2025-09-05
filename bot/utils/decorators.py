@@ -88,7 +88,8 @@ def slash_command(guild_only: bool = False,
                     await get_session().commit()
                     await execute_post_commit_actions()
                     if not interaction.response.is_done() and not command_failed:
-                        logger.warning(f"Slash Handler {func.__qualname__} did not respond to interaction.")
+                        logger.warning(f"Slash Handler {func.__qualname__} did not respond to interaction.",
+                                       category=AppLogCategory.BOT_GENERAL)
                     reset_context_id(context_token)
 
         return wrapper
@@ -160,7 +161,8 @@ def interaction_handler():
                     await get_session().commit()
                     await execute_post_commit_actions()
                     if not interaction.response.is_done() and not command_failed:
-                        logger.warning(f"Interaction Handler {func.__qualname__} did not respond to interaction.")
+                        logger.warning(f"Interaction Handler {func.__qualname__} did not respond to interaction.",
+                                       category=AppLogCategory.BOT_GENERAL)
                     reset_context_id(context_token)
 
         return wrapper
@@ -231,7 +233,8 @@ def context_menu_command(guild_only: bool = False):
                     await get_session().commit()
                     await execute_post_commit_actions()
                     if not interaction.response.is_done() and not command_failed:
-                        logger.warning(f"Context menu command {func.__qualname__} did not respond to interaction.")
+                        logger.warning(f"Context menu command {func.__qualname__} did not respond to interaction.",
+                                       category=AppLogCategory.BOT_GENERAL)
                     reset_context_id(context_token)
 
         return wrapper

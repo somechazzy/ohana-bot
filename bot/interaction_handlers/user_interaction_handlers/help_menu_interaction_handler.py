@@ -18,7 +18,8 @@ class HelpMenuInteractionHandler(UserInteractionHandler):
     @interaction_handler()
     async def go_to_user_menu(self, interaction: discord.Interaction):
         if self.source_interaction.user.id != interaction.user.id:
-            return await interaction.response.defer()
+            await interaction.response.defer()
+            return
         await interaction.response.defer()
         self._selected_menu = CommandCategory.USER
         await self.refresh_message()
@@ -26,7 +27,8 @@ class HelpMenuInteractionHandler(UserInteractionHandler):
     @interaction_handler()
     async def go_to_admin_menu(self, interaction: discord.Interaction):
         if self.source_interaction.user.id != interaction.user.id:
-            return await interaction.response.defer()
+            await interaction.response.defer()
+            return
         await interaction.response.defer()
         self._selected_menu = CommandCategory.ADMIN
         await self.refresh_message()
@@ -34,7 +36,8 @@ class HelpMenuInteractionHandler(UserInteractionHandler):
     @interaction_handler()
     async def go_back(self, interaction: discord.Interaction):
         if self.source_interaction.user.id != interaction.user.id:
-            return await interaction.response.defer()
+            await interaction.response.defer()
+            return
         await interaction.response.defer()
         self._selected_menu = None
         await self.refresh_message()

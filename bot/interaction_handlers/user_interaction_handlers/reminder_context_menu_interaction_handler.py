@@ -47,11 +47,12 @@ class ReminderContextMenuInteractionHandler(UserInteractionHandler):
             )
         except Exception as e:
             self.logger.error(f"Failed at creating reminder for {self.original_user.id}. Error: {e}.")
-            return await interaction.response.send_message(
+            await interaction.response.send_message(
                 embed=get_generic_embed("😔 Failed at setting up your reminder. "
                                         "We're already looking into it."),
                 ephemeral=True
             )
+            return
 
         interactions_handler = ReminderSetupInteractionHandler(
             source_interaction=interaction,

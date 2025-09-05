@@ -18,3 +18,4 @@ pyrebase4==4.8.0
 pytz
 requests~=2.32.3
 sqlalchemy==2.0.41
+sqlalchemy2-stubs==0.0.2a38

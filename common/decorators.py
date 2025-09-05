@@ -3,15 +3,12 @@ import inspect
 import time
 import traceback
 from functools import wraps
-from typing import TYPE_CHECKING
+from types import coroutine
 
 from common.db import execute_post_commit_actions, execute_post_rollback_actions
 
-if TYPE_CHECKING:
-    pass
 
-
-def periodic_worker(name, initial_delay: int = 0, **kwargs_):
+def periodic_worker(name: str, initial_delay: int = 0, **kwargs_):
     """
     Decorator to mark a coroutine function as a periodic worker.
     Args:
@@ -35,7 +32,7 @@ def periodic_worker(name, initial_delay: int = 0, **kwargs_):
     return decorator
 
 
-def self_scheduling_worker(name, initial_delay: int = 0, **kwargs_):
+def self_scheduling_worker(name: str, initial_delay: int = 0, **kwargs_):
     """
     Decorator to mark a coroutine function as a self-scheduling worker.
     Args:
@@ -59,11 +56,12 @@ def self_scheduling_worker(name, initial_delay: int = 0, **kwargs_):
     return decorator
 
 
-def suppress_and_log(log=True):
+def suppress_and_log(log: bool = True, ignore_exceptions: tuple = ()):
     """
     Decorator to catch any exceptions and log them instead of raising.
     Args:
         log: Whether to log the exception.
+        ignore_exceptions: Tuple of exception types to ignore and not log.
     """
     def decorator(func):
         @wraps(func)
@@ -73,8 +71,8 @@ def suppress_and_log(log=True):
             try:
                 return await func(*args, **kwargs)
             except Exception as e:
-                if log:
-                    logger.warning(f"Non-blocking coroutine {func.__name__} raised an exception: {e}\n"
+                if log and not isinstance(e, ignore_exceptions):
+                    logger.warning(f"Suppress-and-log coroutine {func.__name__} raised an exception: {e}\n"
                                    f"{traceback.format_exc()}")
 
         @wraps(func)
@@ -84,8 +82,8 @@ def suppress_and_log(log=True):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                if log:
-                    logger.warning(f"Non-blocking function {func.__name__} raised an exception: {e}\n"
+                if log and not isinstance(e, ignore_exceptions):
+                    logger.warning(f"Suppress-and-log function {func.__name__} raised an exception: {e}\n"
                                    f"{traceback.format_exc()}")
 
         if inspect.iscoroutinefunction(func):
@@ -95,7 +93,7 @@ def suppress_and_log(log=True):
     return decorator
 
 
-def with_retry(count, delay=1):
+def with_retry(count: int, delay: int = 1):
     """
     Decorator to retry a function or coroutine a specified number of times with a delay between attempts.
     Args:
@@ -113,6 +111,7 @@ def with_retry(count, delay=1):
                         if i == count - 1:
                             raise e
                         await asyncio.sleep(delay)
+                return None
         else:
             @wraps(func)
             def wrapper(*args, **kwargs):
@@ -122,7 +121,8 @@ def with_retry(count, delay=1):
                     except Exception as e:
                         if i == count - 1:
                             raise e
-                        asyncio.sleep(delay)
+                        time.sleep(delay)
+                return None
         return wrapper
     return decorator
 
@@ -181,7 +181,7 @@ def rate_limit(timeframe: float, limit: int, args_key: callable):
     return decorator
 
 
-def require_db_session(coro):
+def require_db_session(coro: coroutine):
     """
     Decorator to ensure that a coroutine function runs within a database session context.
     It handles committing the session if the coroutine completes successfully,
