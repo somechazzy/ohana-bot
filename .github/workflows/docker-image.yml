@@ -6,9 +6,12 @@ on:
       version:
         description: "Docker image tag"
         required: true
+      publish_latest:
+        description: "Also publish as latest? (y/n)"
+        required: false
+        default: "n"
 
 jobs:
-
   build:
     name: Build and Push Docker Image to GHCR
     runs-on: ubuntu-latest
@@ -17,20 +20,25 @@ jobs:
       packages: write
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Log in to GHCR
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build the Docker image
-      run:     docker build . 
-        --file Dockerfile 
-        --tag ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
+      - name: Build the Docker image
+        run: |
+          docker build . \
+            --file Dockerfile \
+            --tag ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }} \
+            $( [ "${{ github.event.inputs.publish_latest }}" = "y" ] && echo "--tag ghcr.io/${{ github.repository }}:latest" )
 
-    - name: Push image
-      run: |
-        docker push ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
+      - name: Push image
+        run: |
+          docker push ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
+          if [ "${{ github.event.inputs.publish_latest }}" = "y" ]; then
+            docker push ghcr.io/${{ github.repository }}:latest
+          fi
