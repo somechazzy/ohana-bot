@@ -2,6 +2,7 @@ from io import BytesIO
 
 import discord
 
+from bot.utils.helpers.xp_helpers import get_user_username_for_xp
 from bot.utils.modal_factory.reminder_modals import ReminderSetWhenModal
 from bot.interaction_handlers.user_interaction_handlers.reminder_context_menu_interaction_handler import \
     ReminderContextMenuInteractionHandler
@@ -113,7 +114,7 @@ class UserContextMenus:
 
         image = await XPRankImageComponent().get_member_rank_image(
             user_id=self.target.id,
-            user_username=self.target.display_name,
+            user_username=get_user_username_for_xp(self.target),
             user_avatar=self.target.display_avatar.with_size(256).url if self.target.display_avatar else None,
             guild_id=self.guild.id
         )

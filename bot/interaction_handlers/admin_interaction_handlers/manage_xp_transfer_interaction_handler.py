@@ -7,6 +7,7 @@ from bot.utils.embed_factory.xp_management_embeds import get_transfer_xp_from_me
     get_take_away_xp_from_role_embed, get_reset_xp_for_role_embed, get_reset_xp_for_member_embed, \
     get_transfer_xp_to_member_embed
 from bot.utils.guild_logger import GuildLogger
+from bot.utils.helpers.xp_helpers import get_user_username_for_xp
 from bot.utils.layout_factory.xp_management_layouts import XPTransferLayout, XPTransferSummaryLayout
 from bot.utils.modal_factory import ConfirmationModal
 from bot.utils.modal_factory.xp_transfer_modals import EnterXPAmountModal, EnterUserIDModal
@@ -228,74 +229,80 @@ class ManageXPTransferInteractionHandler(AdminInteractionHandler):
             if self.selected_target_type == XPActionEnums.ActionTargetType.MEMBER:
                 xp_actions.append(XPAction(guild_id=self.guild.id,
                                            member_id=self.selected_user_id or self.selected_member.id,
-                                           username=f"{self.selected_user_id or self.selected_member}",
+                                           username=f"{f'({self.selected_user_id})' if self.selected_user_id
+                                                       else get_user_username_for_xp(self.selected_member)}",
                                            xp_offset=self.xp_amount))
             elif self.selected_target_type == XPActionEnums.ActionTargetType.ROLE:
                 for member in self.selected_role.members:
                     if not member.bot:
                         xp_actions.append(XPAction(guild_id=self.guild.id,
                                                    member_id=member.id,
-                                                   username=str(member),
+                                                   username=get_user_username_for_xp(member),
                                                    xp_offset=self.xp_amount))
             elif self.selected_target_type == XPActionEnums.ActionTargetType.EVERYONE:
                 for member in self.guild.members:
                     if not member.bot:
                         xp_actions.append(XPAction(guild_id=self.guild.id,
                                                    member_id=member.id,
-                                                   username=str(member),
+                                                   username=get_user_username_for_xp(member),
                                                    xp_offset=self.xp_amount))
         elif self.selected_action == XPActionEnums.MainAction.TAKE_AWAY_XP:
             if self.selected_target_type == XPActionEnums.ActionTargetType.MEMBER:
                 xp_actions.append(XPAction(guild_id=self.guild.id,
                                            member_id=self.selected_user_id or self.selected_member.id,
-                                           username=f"{self.selected_user_id or self.selected_member}",
+                                           username=f"{f'({self.selected_user_id})' if self.selected_user_id
+                                                       else get_user_username_for_xp(self.selected_member)}",
                                            xp_offset=-self.xp_amount))
             elif self.selected_target_type == XPActionEnums.ActionTargetType.ROLE:
                 for member in self.selected_role.members:
                     if not member.bot:
                         xp_actions.append(XPAction(guild_id=self.guild.id,
                                                    member_id=member.id,
-                                                   username=str(member),
+                                                   username=get_user_username_for_xp(member),
                                                    xp_offset=-self.xp_amount))
             elif self.selected_target_type == XPActionEnums.ActionTargetType.EVERYONE:
                 for member in self.guild.members:
                     if not member.bot:
                         xp_actions.append(XPAction(guild_id=self.guild.id,
                                                    member_id=member.id,
-                                                   username=str(member),
+                                                   username=get_user_username_for_xp(member),
                                                    xp_offset=-self.xp_amount))
         elif self.selected_action == XPActionEnums.MainAction.TRANSFER_XP:
             if not (member_xp := guild_xp.get_xp_for(self.selected_user_id or self.selected_member.id)):
-                member_xp = guild_xp.initiate_member_xp(user_id=self.selected_user_id or self.selected_member.id,
-                                                        user_username=f"{self.selected_member
-                                                                         or f'({self.selected_user_id})'}")
+                member_xp = guild_xp.initiate_member_xp(
+                    user_id=self.selected_user_id or self.selected_member.id,
+                    user_username=f"{f'({self.selected_user_id})' if self.selected_user_id
+                                     else get_user_username_for_xp(self.selected_member)}"
+                )
             xp_actions.append(XPAction(guild_id=self.guild.id,
                                        member_id=self.selected_user_id or self.selected_member.id,
-                                       username=f"{self.selected_user_id or self.selected_member}",
+                                       username=f"{f'({self.selected_user_id})' if self.selected_user_id
+                                                   else get_user_username_for_xp(self.selected_member)}",
                                        xp_offset=-member_xp.xp))  # noqa
             xp_actions.append(XPAction(guild_id=self.guild.id,
                                        member_id=self.selected_other_member.id,
-                                       username=str(self.selected_other_member),
+                                       username=get_user_username_for_xp(self.selected_other_member),
                                        xp_offset=member_xp.xp))
         elif self.selected_action == XPActionEnums.MainAction.RESET_XP:
             if self.selected_target_type == XPActionEnums.ActionTargetType.MEMBER:
                 xp_actions.append(XPAction(guild_id=self.guild.id,
                                            member_id=self.selected_user_id or self.selected_member.id,
-                                           username=f"{self.selected_user_id or self.selected_member}",
+                                           username=f"{f'({self.selected_user_id})' if self.selected_user_id
+                                                       else get_user_username_for_xp(self.selected_member)}",
                                            reset=True))
             elif self.selected_target_type == XPActionEnums.ActionTargetType.ROLE:
                 for member in self.selected_role.members:
                     if not member.bot:
                         xp_actions.append(XPAction(guild_id=self.guild.id,
                                                    member_id=member.id,
-                                                   username=str(member),
+                                                   username=get_user_username_for_xp(member),
                                                    reset=True))
             elif self.selected_target_type == XPActionEnums.ActionTargetType.EVERYONE:
                 for member in self.guild.members:
                     if not member.bot:
                         xp_actions.append(XPAction(guild_id=self.guild.id,
                                                    member_id=member.id,
-                                                   username=str(member),
+                                                   username=get_user_username_for_xp(member),
                                                    reset=True))
         else:
             raise ValueError(f"Action not recognized: {self.selected_action}")

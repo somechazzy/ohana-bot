@@ -69,7 +69,7 @@ class UserUsernameComponent(BaseUserSettingsComponent):
                 (username for username in user_settings.usernames if username.provider == provider), None
             )
             await user_username_repo.update_user_username(
-                user_settings_id=user_settings.id, provider=provider, new_username=new_username
+                user_username_id=existing_user_username.id, new_username=new_username
             )
             feedback_message = MALStrings.USERNAME_UPDATED.format(username=new_username,
                                                                   old_username=existing_user_username.username)

@@ -11,3 +11,4 @@
 *.pyd
 /test.py
 /extensions/my_extensions
+/scripts/migrations/custom_migrations
