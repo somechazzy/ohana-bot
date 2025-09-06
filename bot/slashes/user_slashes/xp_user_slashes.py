@@ -7,6 +7,7 @@ from bot.interaction_handlers.user_interaction_handlers.xp_leaderboard_interacti
 from bot.slashes.user_slashes import UserSlashes
 from bot.utils.decorators import slash_command
 from bot.utils.embed_factory.xp_user_embeds import get_level_roles_embed
+from bot.utils.helpers.xp_helpers import get_user_username_for_xp
 from common.exceptions import UserInputException
 from components.guild_user_xp_components.guild_user_xp_component import GuildUserXPComponent
 from components.guild_user_xp_components.xp_rank_image_component import XPRankImageComponent
@@ -29,7 +30,7 @@ class XPUserSlashes(UserSlashes):
 
         image = await XPRankImageComponent().get_member_rank_image(
             user_id=member.id,
-            user_username=member.display_name,
+            user_username=get_user_username_for_xp(member),
             user_avatar=member.display_avatar.with_size(256).url if member.display_avatar else None,
             guild_id=self.guild.id
         )

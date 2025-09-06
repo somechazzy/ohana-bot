@@ -49,8 +49,8 @@ class AppLogger:
              log_to_discord: bool = None,
              extras: dict | None = None):
         extras = extras or {}
-        original_category = category
-        category = (category or AppLogCategory.APP_GENERAL).replace('_', ' ').title().replace(' ', '/', 1)
+        original_category = category or AppLogCategory.APP_GENERAL
+        category = original_category.replace('_', ' ').title().replace(' ', '/', 1)
         level = level or AppLogLevel.INFO
         component = component or self.component
         extras.update({"component": component,

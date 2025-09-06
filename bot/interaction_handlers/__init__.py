@@ -49,23 +49,24 @@ class BaseInteractionHandler:
         if self.interactions_restricted and interaction.user.id != self.original_user.id:
             raise InvalidInteractionException("Only the original user can interact with this view.")
 
-        await self.log_interaction(handler=handler)
+        await self.log_interaction(handler=handler, interaction=interaction)
 
-    async def log_interaction(self, handler: coroutine):
+    async def log_interaction(self, handler: coroutine, interaction: discord.Interaction):
         """
         Logs the interaction details.
         Args:
             handler (coroutine): The actual handler being called. Needed to log the handler name.
+            interaction (discord.Interaction): The interaction being processed.
         """
         self.logger.info(f"Interaction handler `{handler.__qualname__}` "
-                         f"called by user: {self.original_user} ({self.original_user.id})."
+                         f"called by user: {interaction.user} ({interaction.user.id})."
                          + (f" Guild: {self.guild.name}" if self.guild else "") +
                          f" Channel: {f'#{self.channel}' if self.channel else 'DM'}",
                          extras={
-                             "interaction_data": self.source_interaction.data,
+                             "interaction_data": interaction.data,
                              "guild_id": self.guild.id if self.guild else None,
                              "channel_id": self.channel.id if self.channel else None,
-                             "user_id": self.original_user.id
+                             "user_id": interaction.user.id
                          },
                          category=AppLogCategory.BOT_INTERACTION_CALLED)
 

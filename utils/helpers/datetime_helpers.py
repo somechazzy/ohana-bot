@@ -111,7 +111,10 @@ def parse_mal_user_entry_date(date_str: str) -> datetime | None:
         day = "01"
     if month == "00":
         month = "01"
-    return datetime.strptime(f"{day}-{month}-{year}", "%d-%m-%y")
+    try:
+        return datetime.strptime(f"{day}-{month}-{year}", "%d-%m-%y")
+    except ValueError:
+        return None
 
 
 def parse_fuzzy_anilist_date_into_str(date: dict[str, int]) -> str | None:

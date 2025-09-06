@@ -5,6 +5,7 @@ from datetime import datetime, UTC, timedelta
 import discord
 
 import cache
+from bot.utils.helpers.xp_helpers import get_user_username_for_xp
 from common.app_logger import AppLogger
 from common.decorators import periodic_worker, require_db_session
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
@@ -104,7 +105,7 @@ class XPService:
                         user_id=message.author.id,
                         guild_id=message.guild.id,
                         message_time=message.created_at,
-                        user_username=message.author.display_name,
+                        user_username=get_user_username_for_xp(message.author),
                         is_booster=message.author.premium_since is not None,
                     )
                     if level_updated:

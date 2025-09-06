@@ -1,5 +1,6 @@
 import discord
 
+from bot.utils.helpers.xp_helpers import get_user_username_for_xp
 from clients import emojis
 from constants import Colour
 from models.dto.cachables import CachedGuildXP
@@ -44,12 +45,7 @@ def get_xp_leaderboard_embed(guild: discord.Guild,
     leaderboard_text = ""
     for idx, member_xp in enumerate(members_xp_page, page_size * (page - 1)):
         if member := guild.get_member(member_xp.user_id):
-            if member.nick and member.nick != member.name:
-                username = f"{member.nick} ({member.name})"
-            elif member.global_name and member.global_name != member.name:
-                username = f"{member.global_name} ({member.name})"
-            else:
-                username = member.name
+            username = get_user_username_for_xp(member)
         else:
             username = member_xp.user_username or f"({member_xp.user_id})"
         leaderboard_text += f"**{emojis.numbers[idx + 1]} ‎ {username}**\n" \
