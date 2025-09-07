@@ -30,6 +30,7 @@ class XPUserSlashes(UserSlashes):
 
         image = await XPRankImageComponent().get_member_rank_image(
             user_id=member.id,
+            display_username=member.display_name,
             user_username=get_user_username_for_xp(member),
             user_avatar=member.display_avatar.with_size(256).url if member.display_avatar else None,
             guild_id=self.guild.id

@@ -54,8 +54,10 @@ class AppWorkers:
 
         guild_music_services_to_kill = set()
         for guild_id, guild_music_service in cache.MUSIC_SERVICES.items():
-            if not discord_client.get_guild(guild_id).voice_client:
+            if not discord_client.get_guild(guild_id) or \
+                    not discord_client.get_guild(guild_id).voice_client:
                 guild_music_services_to_kill.add(guild_id)
+                continue
             cache.MUSIC_SERVICES[guild_id].check_and_update_idle_status()
             if guild_music_service.idle_since \
                     and (datetime.now(UTC) - guild_music_service.idle_since).total_seconds() >= 300:
