@@ -170,6 +170,8 @@ class GuildMusicService:
         """
         try:
             cache.MUSIC_SERVICES.pop(self.guild_id, None)
+            if not self.guild or not self.guild.me:  # no longer in guild
+                return
             self.stop()
             if self.guild.voice_client:
                 try:

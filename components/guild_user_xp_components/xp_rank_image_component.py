@@ -54,6 +54,7 @@ class XPRankImageComponent(BaseGuildUserXPComponent):
 
     async def get_member_rank_image(self,
                                     user_id: int,
+                                    display_username: str,
                                     user_username: str,
                                     user_avatar: str | None,
                                     guild_id: int) -> Image:
@@ -61,7 +62,8 @@ class XPRankImageComponent(BaseGuildUserXPComponent):
         Build the member rank/level image for the given user.
         Args:
             user_id (int): The ID of the user to build the rank image for.
-            user_username (str): The username of the user to display in the rank image.
+            display_username (str): The display name of the user to show in the rank image.
+            user_username (str): The user username required to initiate member XP, if needed.
             user_avatar (str | None): The avatar URL of the user, if available.
             guild_id (int): The ID of the guild the user belongs to.
 
@@ -84,7 +86,7 @@ class XPRankImageComponent(BaseGuildUserXPComponent):
 
         canvas = ImageDraw.Draw(rank_image)
 
-        await self._draw_username(canvas=canvas, username=user_username)
+        await self._draw_username(canvas=canvas, username=display_username)
         await self._draw_avatar(image=rank_image, avatar_url=user_avatar)
         await self._draw_progress(canvas=canvas,
                                   progress=progress_to_next_level,
