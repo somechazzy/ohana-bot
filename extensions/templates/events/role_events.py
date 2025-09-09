@@ -13,6 +13,10 @@ class BaseOnGuildRoleCreateEventHandler(_BaseEventHandler):
     Attributes:
         role (discord.Role): The role that triggered the event.
     """
+
+    _event_group = "role"
+    _event_name = "on_guild_role_create"
+
     def __init__(self, role: discord.Role, **kwargs):
         super().__init__(**kwargs)
         self.role: discord.Role = role
@@ -25,6 +29,9 @@ class BaseOnGuildRoleDeleteEventHandler(_BaseEventHandler):
     Attributes:
         role (discord.Role): The role that triggered the event.
     """
+    _event_group = "role"
+    _event_name = "on_guild_role_delete"
+
     def __init__(self, role: discord.Role, **kwargs):
         super().__init__(**kwargs)
         self.role: discord.Role = role
@@ -38,6 +45,9 @@ class BaseOnGuildRoleUpdateEventHandler(_BaseEventHandler):
         before (discord.Role): The role before the update.
         after (discord.Role): The role after the update.
     """
+    _event_group = "role"
+    _event_name = "on_guild_role_update"
+
     def __init__(self, before: discord.Role, after: discord.Role, **kwargs):
         super().__init__(**kwargs)
         self.before: discord.Role = before

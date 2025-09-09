@@ -13,6 +13,9 @@ class BaseOnMemberJoinEventHandler(_BaseEventHandler):
     Attributes:
         member (discord.Member): The member that triggered the event.
     """
+    _event_group = "member"
+    _event_name = "on_member_join"
+
     def __init__(self, member: discord.Member, **kwargs):
         super().__init__(**kwargs)
         self.member: discord.Member = member
@@ -25,6 +28,9 @@ class BaseOnMemberRemoveEventHandler(_BaseEventHandler):
     Attributes:
         member (discord.Member): The member that triggered the event.
     """
+    _event_group = "member"
+    _event_name = "on_member_remove"
+
     def __init__(self, member: discord.Member, **kwargs):
         super().__init__(**kwargs)
         self.member: discord.Member = member
@@ -37,6 +43,9 @@ class BaseOnRawMemberRemoveEventHandler(_BaseEventHandler):
     Attributes:
         payload: discord.RawMemberRemoveEvent: The payload that triggered the event.
     """
+    _event_group = "member"
+    _event_name = "on_raw_member_remove"
+
     def __init__(self, payload: discord.RawMemberRemoveEvent, **kwargs):
         super().__init__(**kwargs)
         self.payload: discord.RawMemberRemoveEvent = payload
@@ -50,6 +59,9 @@ class BaseOnMemberUpdateEventHandler(_BaseEventHandler):
         before (discord.Member): The member state before the update.
         after (discord.Member): The member state after the update.
     """
+    _event_group = "member"
+    _event_name = "on_member_update"
+
     def __init__(self, before: discord.Member, after: discord.Member, **kwargs):
         super().__init__(**kwargs)
         self.before: discord.Member = before
@@ -64,6 +76,9 @@ class BaseOnUserUpdateEventHandler(_BaseEventHandler):
         before (discord.User): The user state before the update.
         after (discord.User): The user state after the update.
     """
+    _event_group = "member"
+    _event_name = "on_user_update"
+
     def __init__(self, before: discord.User, after: discord.User, **kwargs):
         super().__init__(**kwargs)
         self.before: discord.User = before
@@ -78,6 +93,9 @@ class BaseOnMemberBanEventHandler(_BaseEventHandler):
         guild (discord.Guild): The guild where the ban occurred.
         user (discord.Member | discord.User): The user that was banned.
     """
+    _event_group = "member"
+    _event_name = "on_member_ban"
+
     def __init__(self, guild: discord.Guild, user: discord.Member | discord.User, **kwargs):
         super().__init__(**kwargs)
         self.guild: discord.Guild = guild
@@ -92,6 +110,9 @@ class BaseOnMemberUnbanEventHandler(_BaseEventHandler):
         guild (discord.Guild): The guild where the unban occurred.
         user (discord.User): The user that was unbanned.
     """
+    _event_group = "member"
+    _event_name = "on_member_unban"
+
     def __init__(self, guild: discord.Guild, user: discord.User, **kwargs):
         super().__init__(**kwargs)
         self.guild: discord.Guild = guild
@@ -106,6 +127,9 @@ class BaseOnPresenceUpdateEventHandler(_BaseEventHandler):
         before (discord.Member): The member before the update.
         after (discord.Member): The member after the update.
     """
+    _event_group = "member"
+    _event_name = "on_presence_update"
+
     def __init__(self, before: discord.Member, after: discord.Member, **kwargs):
         super().__init__(**kwargs)
         self.before: discord.Member = before
@@ -119,6 +143,9 @@ class BaseOnRawPresenceUpdateEventHandler(_BaseEventHandler):
     Attributes:
         payload (discord.RawPresenceUpdateEvent): The payload that triggered the event.
     """
+    _event_group = "member"
+    _event_name = "on_raw_presence_update"
+
     def __init__(self, payload: discord.RawPresenceUpdateEvent, **kwargs):
         super().__init__(**kwargs)
         self.payload: discord.RawPresenceUpdateEvent = payload

@@ -25,7 +25,10 @@ class UserSettingsRepo(BaseRepo):
             timezone=timezone,
             relayed_reminders_disabled=relayed_reminders_disabled,
             blocked_from_relaying_reminders=blocked_from_relaying_reminders,
-            preferred_animanga_provider=preferred_animanga_provider
+            preferred_animanga_provider=preferred_animanga_provider,
+            usernames=[],
+            received_reminders=[],
+            owned_reminders=[]
         )
         self._session.add(user_settings)
         await self._session.flush()

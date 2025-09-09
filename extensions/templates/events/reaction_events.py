@@ -14,6 +14,9 @@ class BaseOnReactionAddEventHandler(_BaseEventHandler):
         reaction (discord.Reaction): The reaction that triggered the event.
         member (discord.Member): The member who added the reaction.
     """
+    _event_group = "reaction"
+    _event_name = "on_reaction_add"
+
     def __init__(self, reaction: discord.Reaction, member: discord.Member, **kwargs):
         super().__init__(**kwargs)
         self.reaction: discord.Reaction = reaction
@@ -28,6 +31,9 @@ class BaseOnReactionRemoveEventHandler(_BaseEventHandler):
         reaction (discord.Reaction): The reaction that was removed.
         member (discord.Member): The member who removed the reaction.
     """
+    _event_group = "reaction"
+    _event_name = "on_reaction_remove"
+
     def __init__(self, reaction: discord.Reaction, member: discord.Member, **kwargs):
         super().__init__(**kwargs)
         self.reaction: discord.Reaction = reaction
@@ -42,6 +48,9 @@ class BaseOnReactionClearEventHandler(_BaseEventHandler):
         message (discord.Message): The message from which reactions were cleared.
         reactions (list[discord.Reaction]): List of reactions that were cleared.
     """
+    _event_group = "reaction"
+    _event_name = "on_reaction_clear"
+
     def __init__(self, message: discord.Message, reactions: list[discord.Reaction], **kwargs):
         super().__init__(**kwargs)
         self.message: discord.Message = message
@@ -55,6 +64,9 @@ class BaseOnReactionClearEmojiEventHandler(_BaseEventHandler):
     Attributes:
         reaction (discord.Reaction): The reaction that was cleared.
     """
+    _event_group = "reaction"
+    _event_name = "on_reaction_clear_emoji"
+
     def __init__(self, reaction: discord.Reaction, **kwargs):
         super().__init__(**kwargs)
         self.reaction: discord.Reaction = reaction
@@ -67,6 +79,9 @@ class BaseOnRawReactionAddEventHandler(_BaseEventHandler):
     Attributes:
         payload (discord.RawReactionActionEvent): The raw reaction action event payload.
     """
+    _event_group = "reaction"
+    _event_name = "on_raw_reaction_add"
+
     def __init__(self, payload: discord.RawReactionActionEvent, **kwargs):
         super().__init__(**kwargs)
         self.payload: discord.RawReactionActionEvent = payload
@@ -79,6 +94,9 @@ class BaseOnRawReactionRemoveEventHandler(_BaseEventHandler):
     Attributes:
         payload (discord.RawReactionActionEvent): The raw reaction action event payload.
     """
+    _event_group = "reaction"
+    _event_name = "on_raw_reaction_remove"
+
     def __init__(self, payload: discord.RawReactionActionEvent, **kwargs):
         super().__init__(**kwargs)
         self.payload: discord.RawReactionActionEvent = payload
@@ -91,6 +109,9 @@ class BaseOnRawReactionClearEventHandler(_BaseEventHandler):
     Attributes:
         payload (discord.RawReactionActionEvent): The raw reaction action event payload.
     """
+    _event_group = "reaction"
+    _event_name = "on_raw_reaction_clear"
+
     def __init__(self, payload: discord.RawReactionActionEvent, **kwargs):
         super().__init__(**kwargs)
         self.payload: discord.RawReactionActionEvent = payload
@@ -103,6 +124,9 @@ class BaseOnRawReactionClearEmojiEventHandler(_BaseEventHandler):
     Attributes:
         payload (discord.RawReactionActionEvent): The raw reaction action event payload.
     """
+    _event_group = "reaction"
+    _event_name = "on_raw_reaction_clear_emoji"
+
     def __init__(self, payload: discord.RawReactionActionEvent, **kwargs):
         super().__init__(**kwargs)
         self.payload: discord.RawReactionActionEvent = payload
