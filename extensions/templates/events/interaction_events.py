@@ -13,6 +13,9 @@ class BaseOnInteractionEventHandler(_BaseEventHandler):
     Attributes:
         interaction (discord.Interaction): The interaction that triggered the event.
     """
+    _event_group = "interaction"
+    _event_name = "on_interaction"
+
     def __init__(self, interaction: discord.Interaction, **kwargs):
         super().__init__(**kwargs)
         self.interaction: discord.Interaction = interaction

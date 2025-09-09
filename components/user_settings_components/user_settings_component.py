@@ -28,7 +28,7 @@ class UserSettingsComponent(BaseUserSettingsComponent):
     async def get_user_settings(self, user_id: int,
                                 load_usernames: bool = False) -> UserSettings | None:
         """
-        Fetches the user settings for a given user ID.
+        Fetches the user settings for a given user ID. Creates default settings if none exist.
         Args:
             user_id (int): user Discord ID.
             load_usernames (bool): Whether to load associated usernames.
@@ -39,8 +39,11 @@ class UserSettingsComponent(BaseUserSettingsComponent):
         self.logger.debug(f"Getting user settings for user_id={user_id}")
 
         user_settings_repo = UserSettingsRepo(session=get_session())
-        return await user_settings_repo.get_user_settings_by_user_id(user_id=user_id,
-                                                                     load_usernames=load_usernames)
+        if not (user_settings := await user_settings_repo.get_user_settings_by_user_id(user_id=user_id,
+                                                                                       load_usernames=load_usernames)):
+            self.logger.debug(f"No existing settings found for user_id={user_id}, creating default settings.")
+            user_settings = await self.create_default_user_settings(user_id=user_id)
+        return user_settings
 
     async def update_user_settings(self,
                                    user_id: int | None = None,

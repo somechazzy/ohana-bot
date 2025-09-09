@@ -138,7 +138,7 @@ class OwnerCommandsHandler:
 
     async def extensions_reload(self):
         message = await self.channel.send(embed=get_info_embed("Reloading extensions..."))
-        load_extensions()
+        load_extensions(clear_existing=True)
         await message.edit(content=None, embed=get_success_embed("Extensions reloaded. Check logs for any errors."))
 
     async def ping(self):

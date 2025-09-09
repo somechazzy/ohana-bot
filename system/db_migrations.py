@@ -21,9 +21,6 @@ def _get_current_schema_version(cursor) -> float:
 
 def apply_db_migrations():
     logger = AppLogger('db_migrations')
-    sql_dir = os.path.join("scripts", "sql", "incremental_schema")
-    sql_files = sorted(f for f in os.listdir(sql_dir) if f.endswith(".sql"))
-    logger.info(f"Applying {len(sql_files)} database schema migrations(s)...")
 
     conn = pymysql.connect(
         host=settings.DB_CONFIG['host'],
@@ -36,6 +33,10 @@ def apply_db_migrations():
     cursor = conn.cursor()
     current_schema_version = _get_current_schema_version(cursor)
 
+    sql_dir = os.path.join("scripts", "sql", "incremental_schema")
+    sql_files = sorted(f for f in os.listdir(sql_dir) if f.endswith(".sql"))
+    sql_files_to_execute = []
+
     for file in sql_files:
         version_str = file.rstrip(".sql")
         try:
@@ -46,14 +47,21 @@ def apply_db_migrations():
         if version <= current_schema_version:
             logger.debug(f"Skipping already applied migration: {file}")
             continue
-        with open(os.path.join(sql_dir, file), "r", encoding="utf-8") as f:
-            sql_text = f.read()
-        for statement in sql_text.split(";"):
-            stmt = statement.strip()
-            if stmt:
-                cursor.execute(stmt)
-        conn.commit()
+        sql_files_to_execute.append(file)
+
+    if sql_files_to_execute:
+        logger.info(f"Applying {len(sql_files_to_execute)} database schema migrations(s)...")
+        for file in sql_files_to_execute:
+            with open(os.path.join(sql_dir, file), "r", encoding="utf-8") as f:
+                sql_text = f.read()
+            for statement in sql_text.split(";"):
+                stmt = statement.strip()
+                if stmt:
+                    cursor.execute(stmt)
+            conn.commit()
+        logger.info("Database schema migrations applied.")
+    else:
+        logger.info("Database schema is up to date. No migrations to apply.")
 
     cursor.close()
     conn.close()
-    logger.info("Database schema migrations applied.")
