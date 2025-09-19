@@ -25,8 +25,8 @@ class RadioInteractionHandler(UserInteractionHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.music_service = cache.MUSIC_SERVICES.get(self.guild.id)
-        self.user_voice_channel = self.guild.get_member(self.original_user.id).voice.channel \
-            if self.guild.get_member(self.original_user.id).voice else None
+        self.user_voice_channel = self.original_member.voice.channel \
+            if self.original_member and self.original_member.voice else None
 
     async def handle_action(self, action: str):
         match action:
