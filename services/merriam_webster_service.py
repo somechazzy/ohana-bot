@@ -43,7 +43,7 @@ class MerriamWebsterService(ThirdPartyService):
         }
         return await super()._request(method=method, params=params, **kwargs)
 
-    async def get_definitions(self, term: str) -> list[dict]:
+    async def get_definitions(self, term: str) -> list[dict | str]:
         url = self.API_BASE_URL + self.Endpoint.DEFINE.format(term=re.sub(r"[^a-zA-Z0-9\s]", "", term).strip().lower())
         response = await self._request("GET", url=url, caching_policy=CachingPolicyPresetName.MERRIAM_DEFINITION)
         return self._process_response(response)
