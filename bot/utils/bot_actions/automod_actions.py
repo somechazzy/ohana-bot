@@ -68,6 +68,8 @@ async def apply_persistent_roles_to_member(member: discord.Member) -> bool:
                                          event_message=event_message,
                                          reason="Role persistence", )
             return False
+    else:
+        return False
 
     await guild_logger.log_event(event=GuildLogEvent.ASSIGNED_ROLES,
                                  roles=roles_to_add,

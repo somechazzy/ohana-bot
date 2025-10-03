@@ -64,14 +64,14 @@ async def on_member_update(member_before: discord.Member, member_after: discord.
         await GuildUserRolesComponent().set_guild_user_roles(guild_id=member_after.guild.id,
                                                              user_id=member_after.id,
                                                              role_ids=[role.id for role in member_after.roles])
-        if GUILD_FEATURE_MEMBER_VERIFICATION_GATE_ENABLED in member_before.guild.features:
-            guild_settings = await GuildSettingsComponent().get_guild_settings(member_after.guild.id)
-            if member_before.pending and not member_after.pending:
-                previous_roles_reinstated = False
-                if guild_settings.role_persistence_enabled:
-                    previous_roles_reinstated = await apply_persistent_roles_to_member(member_after)
-                if not member_after.bot and not previous_roles_reinstated and guild_settings.autoroles_ids:
-                    await assign_autoroles_to_member(member_after)
+    if GUILD_FEATURE_MEMBER_VERIFICATION_GATE_ENABLED in member_before.guild.features:
+        guild_settings = await GuildSettingsComponent().get_guild_settings(member_after.guild.id)
+        if member_before.pending and not member_after.pending:
+            previous_roles_reinstated = False
+            if guild_settings.role_persistence_enabled:
+                previous_roles_reinstated = await apply_persistent_roles_to_member(member_after)
+            if not member_after.bot and not previous_roles_reinstated and guild_settings.autoroles_ids:
+                await assign_autoroles_to_member(member_after)
 
 
 @discord_client.event
