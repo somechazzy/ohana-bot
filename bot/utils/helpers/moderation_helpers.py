@@ -28,7 +28,7 @@ def bot_can_moderate_target_member(target: discord.Member):
     """
     if target == target.guild.owner:
         return False
-    return target.top_role > target.top_role
+    return target.guild.me.top_role > target.top_role
 
 
 def actor_can_moderate_target_member(actor: discord.Member, target: discord.Member):
