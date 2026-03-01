@@ -148,9 +148,15 @@ class UserUsernameProvider(DBEnum):
     ANILIST = "ANILIST"
 
 
+class UserLastDMSentStatus(DBEnum):
+    SENT = "SENT"
+    FAILED = "FAILED"
+
+
 class ReminderStatus(DBEnum):
     ACTIVE = "ACTIVE"
     ARCHIVED = "ARCHIVED"
+    FAILED_ARCHIVED = "FAILED_ARCHIVED"
 
 
 class ReminderRecurrenceStatus(DBEnum):

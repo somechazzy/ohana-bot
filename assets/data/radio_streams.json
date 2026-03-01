@@ -3,6 +3,7 @@
         "code": "PLAZA",
         "category": "DEFAULT",
         "name": "Nightwave Plaza",
+        "is_enabled": true,
         "description": "Driving into the sunset.",
         "genres": [
             "Vaporwave",
@@ -60,6 +61,7 @@
         "code": "YGGDRASIL",
         "category": "DEFAULT",
         "name": "Yggdrasil Radio",
+        "is_enabled": true,
         "description": "J-Pop from anime and games. You can request songs through the website.",
         "genres": [
             "Anime",
@@ -117,6 +119,7 @@
         "code": "RM_FM_STUDY",
         "category": "DEFAULT",
         "name": "rm.fm/study",
+        "is_enabled": false,
         "description": "A little motivation boost for your studies.",
         "genres": [
             "Lo-Fi",
@@ -165,6 +168,7 @@
         "code": "FAIROUZ",
         "category": "ARABIC",
         "name": "Fairuzyat FM",
+        "is_enabled": true,
         "description": "24/7 stream of Fairouz classics from Palestinian radio \"Sawtelghad\". Fairuz is considered the musical icon of Lebanon and is popularly known as the soul of Lebanon.",
         "genres": [
             "Arabic Classics",
@@ -193,6 +197,7 @@
         "code": "UMM_KULTHUM",
         "category": "ARABIC",
         "name": "Umm Kulthum",
+        "is_enabled": true,
         "description": "24/7 stream of Umm Kulthum classics from Palestinian radio \"Sawtelghad\". Umm Kulthum is considered an Egyptian national icon and has been dubbed the Star of the East in the Arab world.",
         "genres": [
             "Arabic Classics",
@@ -220,6 +225,7 @@
         "code": "HOT_21",
         "category": "HIPHOP",
         "name": "Hot 21 Radio",
+        "is_enabled": true,
         "description": "Hot 21 Radio is a live radio station from New York City.",
         "genres": [
             "Hip-hop",
@@ -277,6 +283,7 @@
         "code": "HOT_108",
         "category": "HIPHOP",
         "name": "Hot 108 Jamz",
+        "is_enabled": true,
         "description": "Hot 108 Jamz is part of the Powerhitz Network.",
         "genres": [
             "Hip-hop",
@@ -312,6 +319,7 @@
         "code": "CLASSIC_FM",
         "category": "CLASSIC",
         "name": "Classic FM",
+        "is_enabled": true,
         "description": "Classic FM is the largest national commercial radio station in the UK.",
         "genres": [
             "Classical"
@@ -345,6 +353,7 @@
         "code": "WJZD",
         "category": "CLASSIC",
         "name": "WJZD Radio",
+        "is_enabled": true,
         "description": "WJZD Radio is a live radio station from Detroit.",
         "genres": [
             "Jazz",
@@ -376,6 +385,7 @@
         "code": "MEGATON_CAFE",
         "category": "CLASSIC",
         "name": "Megaton Cafe Radio (20s-50s)",
+        "is_enabled": true,
         "description": "Megaton Cafe Radio is playing original recordings from their original eras, which means all the original artists, commercials, PSAs, Radio Theaters and their original sound, as close as possible to the core of the songs and the way they were originally recorded back then. All songs mostly captured from vinyl records with few or no electric instruments used.",
         "genres": [
             "Classical",
@@ -411,6 +421,7 @@
         "code": "SF70S",
         "category": "ROCK",
         "name": "San Francisco's 70s HITS",
+        "is_enabled": true,
         "description": "70s hits.",
         "genres": [
             "Classic Rock",
@@ -447,6 +458,7 @@
         "code": "181_FM_BUZZ",
         "category": "ROCK",
         "name": "181.FM - The Buzz",
+        "is_enabled": true,
         "description": "Part of 181.FM stream network.",
         "genres": [
             "Alt Rock"
@@ -480,6 +492,7 @@
         "code": "947_THE_BEAST",
         "category": "ROCK",
         "name": "94.7/102.9 The Beast",
+        "is_enabled": true,
         "description": "WOZZ (94.7 FM, \"94.7/102.9 The Beast\") is a mainstream rock radio station licensed to Mosinee, Wisconsin.",
         "genres": [
             "Rock",
@@ -504,6 +517,7 @@
         "code": "HEAR_ME_00S_ROCK",
         "category": "ROCK",
         "name": "HearMe.fm - 00s Rock",
+        "is_enabled": true,
         "description": "Part of HearMe.fm radio network.",
         "genres": [
             "Rock",
@@ -536,6 +550,7 @@
         "code": "MEGAROCK",
         "category": "ROCK",
         "name": "Megarock Radio",
+        "is_enabled": true,
         "description": "You can make requests [here](https://megarockradio.net/requests/web/playlist.php).",
         "genres": [
             "Rock",
@@ -571,6 +586,7 @@
         "code": "ONLY_HITS_POP",
         "category": "Pop",
         "name": "Only Hits",
+        "is_enabled": true,
         "description": "Part of Only Hits Radio network.",
         "genres": [
             "Pop"
@@ -593,6 +609,7 @@
         "code": "977_TODAYS_HITS",
         "category": "POP",
         "name": ".977 Today's Hits",
+        "is_enabled": true,
         "description": "From the Black Eyed Peas to Usher, the Hitz Channel plays Todays Best Music, not just some of it. You'll also get a taste of the old skool mixed in for flava. The hottest music from today's hottest stars can be found right here on .977 The Hits Channel.",
         "genres": [
             "Pop"
@@ -622,6 +639,7 @@
         "code": "THAT_70S_CHANNEL",
         "category": "POP",
         "name": "That 70's Channel",
+        "is_enabled": true,
         "description": "That 70's Channel is an internet radio station from Sacramento, California, United States, providing Classic Rock, Pop and R&B from the 1970s.",
         "genres": [
             "Pop",
@@ -653,6 +671,7 @@
         "code": "BIG_B_RADIO_KPOP",
         "category": "KOREAN",
         "name": "Big B Radio - KPOP",
+        "is_enabled": true,
         "description": "Part of the Big B Radio group.",
         "genres": [
             "K-Pop"
@@ -675,6 +694,7 @@
         "code": "113_FM_KPOP",
         "category": "KOREAN",
         "name": "113.FM K-Pop",
+        "is_enabled": true,
         "description": "Part of 113.FM radio network.",
         "genres": [
             "K-pop"
@@ -704,6 +724,7 @@
         "code": "ONLY_HITS_KPOP",
         "category": "KOREAN",
         "name": "Only Hits K-Pop",
+        "is_enabled": true,
         "description": "Part of Only Hits Radio network.",
         "genres": [
             "K-Pop"
@@ -726,6 +747,7 @@
         "code": "ADR_JROCK",
         "category": "JAPANESE",
         "name": "J-Rock Powerplay",
+        "is_enabled": true,
         "description": "Part of Asia Dream Radio network.",
         "genres": [
             "J-Rock"
@@ -778,6 +800,7 @@
         "code": "BIG_B_RADIO_JPOP",
         "category": "JAPANESE",
         "name": "Big B Radio - JPOP",
+        "is_enabled": true,
         "description": "Part of the Big B Radio group.",
         "genres": [
             "J-Pop"
@@ -808,6 +831,7 @@
         "code": "ONLY_HITS_JAPAN",
         "category": "JAPANESE",
         "name": "Only Hits Japan",
+        "is_enabled": true,
         "description": "Part of Only Hits Radio network.",
         "genres": [
             "J-Pop"
@@ -838,6 +862,7 @@
         "code": "RUTA_CITYPOP",
         "category": "JAPANESE",
         "name": "Ruta Citypop",
+        "is_enabled": true,
         "description": "Japanese citypop.",
         "genres": [
             "J-pop",
@@ -876,6 +901,7 @@
         "code": "NICHIJOU_SHUFFLE",
         "category": "JAPANESE",
         "name": "Nichijou Shuffle",
+        "is_enabled": true,
         "description": "A fan made radio that streams everything nichijou from official soundtracks, remixes, character songs to special CD exclusives and radio digests.",
         "genres": [
             "Anime",
@@ -910,6 +936,7 @@
         "code": "FINAL_FANTASY_CO",
         "category": "JAPANESE",
         "name": "Final Fantasy Radio",
+        "is_enabled": true,
         "description": "Music from the Final Fantasy OST as well as fan-made music and remixes.",
         "genres": [
             "Anime",

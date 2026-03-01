@@ -206,6 +206,7 @@ CREATE TABLE IF NOT EXISTS user_settings
     id                              INT AUTO_INCREMENT PRIMARY KEY,
     user_id                         VARCHAR(30)                                         NOT NULL,
     timezone                        VARCHAR(64)                                         NULL,
+    last_dm_sent_status             ENUM ('SENT', 'FAILED') DEFAULT NULL                NULL,
     relayed_reminders_disabled      TINYINT                 DEFAULT 0                   NOT NULL,
     blocked_from_relaying_reminders TINYINT                 DEFAULT 0                   NOT NULL,
     preferred_animanga_provider     ENUM ('ANILIST', 'MAL') DEFAULT 'MAL'               NOT NULL,
@@ -229,15 +230,15 @@ CREATE TABLE IF NOT EXISTS user_username
 CREATE TABLE IF NOT EXISTS user_reminder
 (
     id                         INT AUTO_INCREMENT PRIMARY KEY,
-    owner_user_settings_id     INT                                  NOT NULL,
-    recipient_user_settings_id INT                                  NOT NULL,
-    reminder_text              VARCHAR(4096)                        NOT NULL,
-    reminder_time              DATETIME                             NOT NULL,
-    is_snoozed                 TINYINT  DEFAULT 0                   NOT NULL,
-    snoozed_from_reminder_id   INT                                  NULL,
-    status                     ENUM ('ACTIVE', 'ARCHIVED')          NOT NULL DEFAULT 'ACTIVE',
-    created_at                 DATETIME DEFAULT CURRENT_TIMESTAMP() NOT NULL,
-    updated_at                 DATETIME DEFAULT CURRENT_TIMESTAMP() NULL ON UPDATE CURRENT_TIMESTAMP(),
+    owner_user_settings_id     INT                                            NOT NULL,
+    recipient_user_settings_id INT                                            NOT NULL,
+    reminder_text              VARCHAR(4096)                                  NOT NULL,
+    reminder_time              DATETIME                                       NOT NULL,
+    is_snoozed                 TINYINT  DEFAULT 0                             NOT NULL,
+    snoozed_from_reminder_id   INT                                            NULL,
+    status                     ENUM ('ACTIVE', 'ARCHIVED', 'FAILED_ARCHIVED') NOT NULL DEFAULT 'ACTIVE',
+    created_at                 DATETIME DEFAULT CURRENT_TIMESTAMP()           NOT NULL,
+    updated_at                 DATETIME DEFAULT CURRENT_TIMESTAMP()           NULL ON UPDATE CURRENT_TIMESTAMP(),
     CONSTRAINT user_reminder_id_uq UNIQUE (id),
     CONSTRAINT user_reminder_owner_user_settings_id_user_settings_fk FOREIGN KEY (owner_user_settings_id) REFERENCES user_settings (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT user_reminder_recipient_user_settings_id_user_settings_fk FOREIGN KEY (recipient_user_settings_id) REFERENCES user_settings (id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -293,6 +294,6 @@ CREATE TABLE IF NOT EXISTS custom_data
 ) collate = utf8mb4_general_ci;
 
 INSERT INTO custom_data (name, code, data)
-VALUES ('Current database schema metadata', 'db_schema_metadata', '{"version": 3.11}')
+VALUES ('Current database schema metadata', 'db_schema_metadata', '{"version": 3.20}')
 ON DUPLICATE KEY UPDATE
     data = VALUES(data);

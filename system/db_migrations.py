@@ -59,6 +59,7 @@ def apply_db_migrations():
                 if stmt:
                     cursor.execute(stmt)
             conn.commit()
+            logger.info(f"Applied {file}")
         logger.info("Database schema migrations applied.")
     else:
         logger.info("Database schema is up to date. No migrations to apply.")

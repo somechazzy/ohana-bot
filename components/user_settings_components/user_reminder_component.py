@@ -263,17 +263,22 @@ class UserReminderComponent(BaseUserSettingsComponent):
         if reminder_blocked_user:
             raise UserReadableException("You have been blocked by the recipient from relaying reminders to them.")
 
-    async def handle_reminder_post_delivery(self, reminder_id: int):
+    async def handle_reminder_post_delivery(self, reminder_id: int, delivery_permanently_failed: bool = False):
         """
         Handle post-delivery actions for a reminder, such as updating its status and next delivery time if recurring.
         Args:
             reminder_id (int): ID of the reminder.
+            delivery_permanently_failed (bool): Whether the delivery of the reminder has permanently failed
+                (e.g., due to being able to message user).
         """
         self.logger.debug(f"Handling post-delivery for reminder with ID {reminder_id}.")
         repo = UserReminderRepo(session=get_session())
         reminder = await self.get_reminder(reminder_id=reminder_id,
                                            load_user_settings=True,
                                            load_recurrence_settings=True)
+        if delivery_permanently_failed:
+            await repo.update_reminder(reminder_id=reminder_id, status=ReminderStatus.FAILED_ARCHIVED)
+            return
         if not reminder.recurrence:
             await repo.update_reminder(reminder_id=reminder_id, status=ReminderStatus.ARCHIVED)
             return

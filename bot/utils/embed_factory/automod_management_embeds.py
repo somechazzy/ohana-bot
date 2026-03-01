@@ -60,7 +60,8 @@ def get_auto_responses_setup_embed(auto_responses: list[CachedGuildSettings.Auto
         color=Colour.PRIMARY_ACCENT
     )
 
-    for idx, auto_response in enumerate(auto_responses[(page - 1) * page_size: page * page_size], 1):
+    for idx, auto_response in enumerate(auto_responses[(page - 1) * page_size: page * page_size],
+                                        (page - 1) * page_size + 1):
         embed.add_field(
             name=emojis.numbers[idx],
             value=f"**Trigger**: \"{auto_response.trigger}\"\n"

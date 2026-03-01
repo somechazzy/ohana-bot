@@ -2,11 +2,14 @@ import asyncio
 from collections import defaultdict
 from datetime import datetime, UTC, timedelta
 
+import discord
+
 from common.app_logger import AppLogger
 from common.decorators import periodic_worker, require_db_session
 from common.exceptions import UserReadableException
 from components.user_settings_components.user_reminder_component import UserReminderComponent
-from constants import BackgroundWorker, AppLogCategory
+from components.user_settings_components.user_settings_component import UserSettingsComponent
+from constants import BackgroundWorker, AppLogCategory, UserLastDMSentStatus
 from models.dto.cachables import CachedReminder
 
 
@@ -20,6 +23,7 @@ class ReminderService:
     def __init__(self):
         super().__init__()
         self.reminder_component = UserReminderComponent()
+        self.user_settings_component = UserSettingsComponent()
         self._queue: asyncio.PriorityQueue['CachedReminder'] = asyncio.PriorityQueue()
         self._user_id_reminder_map: dict[int, set[CachedReminder]] = defaultdict(set)
         self._reminder_id_reminder_map: dict[int, CachedReminder] = {}
@@ -97,19 +101,29 @@ class ReminderService:
             reminder: The reminder to send.
         """
         from bot.utils.bot_actions.utility_actions import send_reminder_to_user, handle_reminder_delivery_failure
+        delivery_permanently_failed = False
         try:
             if reminder.is_relayed:
                 await self.reminder_component.validate_relayed_reminder_deliverability(
                     reminder_id=reminder.user_reminder_id
                 )
             await send_reminder_to_user(reminder=reminder)
+            await self.user_settings_component.update_user_settings(user_id=reminder.recipient_user_id,
+                                                                    last_dm_sent_status=UserLastDMSentStatus.SENT)
         except Exception as e:
             if not isinstance(e, UserReadableException):
                 self.logger.warning(f"Failed to send reminder {reminder.user_reminder_id} "
                                     f"to user {reminder.recipient_user_id}: {e}",
                                     extras={"user_id": reminder.recipient_user_id},
                                     category=AppLogCategory.BOT_GENERAL)
+            if isinstance(e, discord.Forbidden) and e.code == 50278:  # Cannot send messages to this user
+                delivery_permanently_failed = True
+                await self.user_settings_component.update_user_settings(user_id=reminder.recipient_user_id,
+                                                                        last_dm_sent_status=UserLastDMSentStatus.FAILED)
             if reminder.is_relayed:
                 await handle_reminder_delivery_failure(reminder=reminder,
                                                        error=e)
-        await self.reminder_component.handle_reminder_post_delivery(reminder_id=reminder.user_reminder_id)
+        await self.reminder_component.handle_reminder_post_delivery(
+            reminder_id=reminder.user_reminder_id,
+            delivery_permanently_failed=delivery_permanently_failed
+        )

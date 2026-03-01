@@ -33,7 +33,7 @@ def get_role_menu_view(role_menu_type: str, role_menu_mode: str, role_menu_roles
                                 emoji='❌')] + [
             SelectOption(label=role.alias, value=str(role.role_id), emoji=role.emoji) for role in role_menu_roles
         ]
-        max_selections = len(role_menu_roles) if role_menu_mode == RoleMenuMode.MULTI else 1
+        max_selections = (len(role_menu_roles) or 1) if role_menu_mode == RoleMenuMode.MULTI else 1
         view.add_item(Select(options=options, max_values=max_selections))
     else:
         for i, role in enumerate(role_menu_roles):
@@ -65,15 +65,15 @@ def get_role_menu_setup_view(interactions_handler: 'ManageRoleMenuInteractionHan
     basic_setup_button.callback = interactions_handler.go_to_basic_setup
     view.add_item(basic_setup_button)
 
+    menu_mode_button = Button(label="Change Selection Mode", style=ButtonStyle.blurple, row=0,
+                              custom_id="rm_change_menu_mode", emoji=emojis.action.select)
+    menu_mode_button.callback = interactions_handler.change_menu_mode
+    view.add_item(menu_mode_button)
+
     menu_type_button = Button(label="Change Menu Type", style=ButtonStyle.blurple, row=0,
                               custom_id="rm_change_menu_type", emoji=emojis.general.orientation)
     menu_type_button.callback = interactions_handler.change_menu_type
     view.add_item(menu_type_button)
-
-    menu_mode_button = Button(label="Change Role Mode", style=ButtonStyle.blurple, row=0,
-                              custom_id="rm_change_menu_mode", emoji=emojis.action.select)
-    menu_mode_button.callback = interactions_handler.change_menu_mode
-    view.add_item(menu_mode_button)
 
     restrict_menu_button = Button(label="Restrict Menu" if not is_restricted else "Edit menu restriction", row=1,
                                   style=ButtonStyle.green, custom_id="restrict_menu", emoji=emojis.general.chain)

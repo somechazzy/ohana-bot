@@ -49,6 +49,7 @@ class UserSettingsComponent(BaseUserSettingsComponent):
                                    user_id: int | None = None,
                                    user_settings: UserSettings | None = None,
                                    timezone: str | None = None,
+                                   last_dm_sent_status: str | None = None,
                                    relayed_reminders_disabled: bool | None = None,
                                    blocked_from_relaying_reminders: bool | None = None,
                                    preferred_animanga_provider: str | None = None) -> None:
@@ -61,6 +62,8 @@ class UserSettingsComponent(BaseUserSettingsComponent):
                 The user settings object to update.
             timezone (str | None):
                 The timezone to set for the user. None to leave unchanged.
+            last_dm_sent_status (str | None):
+                The status of the last DM sent to the user. None to leave unchanged.
             relayed_reminders_disabled (bool | None):
                 Whether relayed reminders are disabled. None to leave unchanged.
             blocked_from_relaying_reminders (bool | None):
@@ -80,6 +83,8 @@ class UserSettingsComponent(BaseUserSettingsComponent):
         update_data = {}
         if timezone is not None:
             update_data["timezone"] = timezone
+        if last_dm_sent_status is not None:
+            update_data['last_dm_sent_status'] = last_dm_sent_status
         if relayed_reminders_disabled is not None:
             update_data['relayed_reminders_disabled'] = relayed_reminders_disabled
         if blocked_from_relaying_reminders is not None:

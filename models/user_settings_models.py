@@ -5,7 +5,7 @@ from sqlalchemy import ForeignKey
 
 from constants import (AnimangaProvider, UserUsernameProvider, ReminderRecurrenceStatus,
                        ReminderRecurrenceType, ReminderRecurrenceBasicUnit, ReminderRecurrenceConditionedType,
-                       ReminderStatus)
+                       ReminderStatus, UserLastDMSentStatus)
 from models import BaseModel, BaseModelMixin, SnowflakeID, Json, AwareDateTime
 
 
@@ -14,6 +14,9 @@ class UserSettings(BaseModel, BaseModelMixin):
 
     user_id: Mapped[int] = mapped_column(SnowflakeID(), nullable=False)  # type: ignore[arg-type]
     timezone: Mapped[str] = mapped_column(nullable=True)
+    last_dm_sent_status: Mapped[str] = mapped_column(UserLastDMSentStatus.as_orm_enum(),
+                                                     default=None,
+                                                     nullable=True)
     relayed_reminders_disabled: Mapped[bool] = mapped_column(default=False, nullable=False)
     blocked_from_relaying_reminders: Mapped[bool] = mapped_column(default=False, nullable=False)
     preferred_animanga_provider: Mapped[str] = mapped_column(AnimangaProvider.as_orm_enum(),
