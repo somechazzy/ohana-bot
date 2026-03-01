@@ -750,7 +750,8 @@ class AnimeInfo:
             native_title=anime_data['title'].get('romaji'),
             english_title=anime_data['title'].get('english'),
             score=round(anime_data['meanScore']/10, 2) if anime_data.get('meanScore') else None,
-            score_count=sum(score['amount'] for score in anime_data['stats']['scoreDistribution']),
+            score_count=sum(score['amount'] for score in anime_data['stats']['scoreDistribution'])
+            if anime_data['stats']['scoreDistribution'] else 0,
             user_count=anime_data['popularity'],
             rank=rated_all_time_rank[0]['rank'] if rated_all_time_rank else None,
             episode_count=anime_data['episodes'],
@@ -765,7 +766,7 @@ class AnimeInfo:
             themes=[tag['name'] for tag in anime_data['tags']
                     if not tag['isMediaSpoiler'] and not tag['isGeneralSpoiler']],
             studios=[studio['name'] for studio in anime_data['studios']['nodes']],
-            synopsis=clean_text_with_html_tags(html_text=anime_data.get('description')),
+            synopsis=clean_text_with_html_tags(html_text=anime_data.get('description') or 'No synopsis available.'),
             media_type=ANILIST_ANIME_MEDIA_TYPE_MAPPING.get(anime_data['format'].lower(),
                                                             anime_data['format'].replace('_', ' ').title())
             if anime_data.get('format') else None,
@@ -859,7 +860,7 @@ class MangaInfo:
                 + ((' (' + author['role'] + ')') if author.get('role') else '')
                 for author in manga_data.get('authors', [])
             ],
-            synopsis=manga_data.get('synopsis'),
+            synopsis=manga_data.get('synopsis') or 'No synopsis available.',
             media_type=MAL_MANGA_MEDIA_TYPE_MAPPING.get(manga_data.get('media_type', '').lower(),
                                                         manga_data.get('media_type').replace('_', ' ').title())
             if manga_data.get('media_type') else None,
@@ -884,7 +885,8 @@ class MangaInfo:
             native_title=manga_data['title'].get('romaji'),
             english_title=manga_data['title'].get('english'),
             score=round(manga_data['meanScore']/10, 2) if manga_data.get('meanScore') else None,
-            score_count=sum(score['amount'] for score in manga_data['stats']['scoreDistribution']),
+            score_count=sum(score['amount'] for score in manga_data['stats']['scoreDistribution'])
+            if manga_data['stats']['scoreDistribution'] else 0,
             user_count=manga_data['popularity'],
             rank=rated_all_time_rank[0]['rank'] if rated_all_time_rank else None,
             chapter_count=manga_data.get('chapters'),
@@ -897,7 +899,7 @@ class MangaInfo:
             themes=[tag['name'] for tag in manga_data['tags']
                     if not tag['isMediaSpoiler'] and not tag['isGeneralSpoiler']],
             authors=authors,
-            synopsis=clean_text_with_html_tags(html_text=manga_data.get('description')),
+            synopsis=clean_text_with_html_tags(html_text=manga_data.get('description') or 'No synopsis available.'),
             media_type=ANILIST_MANGA_MEDIA_TYPE_MAPPING.get(manga_data['format'].lower(),
                                                             manga_data['format'].replace('_', ' ').title())
             if manga_data.get('format') else None,
@@ -1222,7 +1224,7 @@ class UserAnimeAnalysis:
         else:
             anime_paused_analysis = None
 
-        if total_count > 30 and completed_days:
+        if total_count > 30 and completed_days and statistics['lengths']:
             if statistics['lengths'][0]['length'] == "1":
                 anime_length_analysis = AnilistStrings.ANALYSIS_ANIME_LENGTH_1
             elif statistics['lengths'][0]['length'] == "2-6":

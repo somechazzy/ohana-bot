@@ -12,7 +12,7 @@ from bot.utils.embed_factory.general_embeds import get_generic_embed, get_succes
 from common.exceptions import UserInputException
 from components.user_settings_components.user_reminder_component import UserReminderComponent
 from components.user_settings_components.user_settings_component import UserSettingsComponent
-from constants import DiscordTimestamp
+from constants import DiscordTimestamp, UserLastDMSentStatus
 from strings.commands_strings import UserSlashCommandsStrings
 from utils.helpers.text_manipulation_helpers import get_human_readable_time
 from utils.helpers.text_parsing_helpers import get_time_in_minutes_from_user_text
@@ -52,16 +52,23 @@ class RemindUserSlashes(UserSlashes):
             )
             return
 
+        user_settings = await UserSettingsComponent().get_user_settings(self.user.id)
+
         interactions_handler = ReminderSetupInteractionHandler(
             source_interaction=self.interaction,
             context=self.context,
-            user_settings=await UserSettingsComponent().get_user_settings(self.user.id),
+            user_settings=user_settings,
             guild_settings=self.guild_settings,
             reminder=reminder,
             view=ReminderSetupInteractionHandler.ReminderSetupView.REMINDER_CONFIRMATION
         )
 
-        embed, view = interactions_handler.get_embed_and_view()
+        if not user_settings.last_dm_sent_status or (user_settings.last_dm_sent_status == UserLastDMSentStatus.FAILED):
+            feedback = "⚠️ " + UserSlashCommandsStrings.PROMPT_TO_SEND_INITIAL_DM
+        else:
+            feedback = None
+
+        embed, view = interactions_handler.get_embed_and_view(feedback=feedback)
 
         await self.interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 

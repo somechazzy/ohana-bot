@@ -95,12 +95,14 @@ def get_xp_setup_embed(guild: discord.Guild,
                     inline=False)
     embed.add_field(name="Ignored Channels",
                     value=f"{', '.join(guild.get_channel(channel_id).mention
-                                       for channel_id in xp_settings.ignored_channel_ids) or 'None selected.'}\n"
+                                       for channel_id in xp_settings.ignored_channel_ids 
+                                       if guild.get_channel(channel_id)) or 'None selected.'}\n"
                           f"⚙ Sending a message in these channels will not give XP.",
                     inline=False)
     embed.add_field(name="Ignored Roles",
                     value=f"{', '.join(guild.get_role(role_id).mention
-                                       for role_id in xp_settings.ignored_role_ids) or 'None selected.'}\n"
+                                       for role_id in xp_settings.ignored_role_ids 
+                                       if guild.get_role(role_id)) or 'None selected.'}\n"
                           f"⚙ Members with any of these roles will not gain XP.",
                     inline=False)
     if feedback_message:

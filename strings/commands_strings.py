@@ -102,6 +102,8 @@ class UserSlashCommandsStrings(GeneralCommandsStrings):
                                                "We're already looking into it.")
     REMIND_OTHER_SUCCESS_FEEDBACK = ("Okie. I'll remind {member_name} ({member_mention}) "
                                      "about that in {duration} ({timestamp}).")
+    PROMPT_TO_SEND_INITIAL_DM = ("Please note that if we had no previous DMs then Ohana won't be able to send "
+                                 "you the reminder. If that's the case, drop me a quick hi to avoid this issue!")
 
     # Utility Commands
     STICKER_INVALID_MESSAGE_ID_ERROR_MESSAGE = "Invalid message ID"

@@ -22,6 +22,8 @@ class MusicComponent(BaseComponent):
         radio_streams_data = await asset_component.get_json_asset(DefinedAsset.RADIO_STREAMS)
         for radio_stream_data in radio_streams_data:
             radio_stream = RadioStream.from_dict(radio_stream_data)
+            if not radio_stream.is_enabled:
+                continue
             cache.RADIO_STREAMS[radio_stream.code] = radio_stream
             if radio_stream.category not in cache.RADIO_STREAMS_BY_CATEGORY:
                 cache.RADIO_STREAMS_BY_CATEGORY[radio_stream.category] = []

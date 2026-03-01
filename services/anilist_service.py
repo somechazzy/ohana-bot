@@ -385,7 +385,7 @@ class AnilistService(ThirdPartyService):
         ANIME_SEARCH_QUERY = """
         query Media($search: String) {
             Page(perPage: 10) {
-                media(search: $search, type: ANIME) {
+                media(search: $search, type: ANIME, isAdult: false) {
                     id
                     title {
                         english
@@ -418,7 +418,7 @@ class AnilistService(ThirdPartyService):
         MANGA_SEARCH_QUERY = """
         query Media($search: String) {
             Page(perPage: 10) {
-                media(search: $search, type: MANGA) {
+                media(search: $search, type: MANGA, isAdult: false) {
                     id
                     title {
                         english

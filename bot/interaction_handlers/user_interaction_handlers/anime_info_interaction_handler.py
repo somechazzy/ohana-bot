@@ -70,7 +70,8 @@ class AnimeInfoInteractionHandler(UserInteractionHandler, NavigationInteractionH
         anime_info = await self.animanga_component.get_anime_info(anime_id=selected_anime_id)
         try:
             user_stats = await self.animanga_component.get_user_stats_for_anime(anime_id=selected_anime_id,
-                                                                                username=self._user_username)
+                                                                                username=self._user_username) \
+                if self._user_username else None
         except Exception as e:
             if getattr(e, 'alert_worthy', True):
                 self.logger.error(f"Error fetching user stats for anime {selected_anime_id}: {e}")

@@ -18,12 +18,13 @@ class RadioStream:
         DEFAULT = "DEFAULT"
         CUSTOM = "CUSTOM"
 
-    def __init__(self, code: str, category: str, name: str, description: str, genres: list, website_url: str,
-                 stream_url: str, stream_format: str, dynamic_image: 'RadioStreamDynamicImage',
+    def __init__(self, code: str, category: str, name: str, is_enabled: bool, description: str, genres: list,
+                 website_url: str, stream_url: str, stream_format: str, dynamic_image: 'RadioStreamDynamicImage',
                  static_image_urls: list, image_refresh_rate: int, status_check: 'RadioStreamStatusCheck | None'):
         self.code: str = code
         self.category: str = category
         self.name: str = name
+        self.is_enabled: bool = is_enabled
         self.description: str = description
         self.genres: list[str] = genres
         self.website_url: str = website_url
@@ -82,6 +83,7 @@ class RadioStream:
             code=info_dict['code'],
             category=info_dict['category'],
             name=info_dict['name'],
+            is_enabled=info_dict['is_enabled'],
             description=info_dict['description'],
             genres=info_dict['genres'],
             website_url=info_dict['website_url'],

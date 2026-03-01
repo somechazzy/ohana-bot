@@ -14,6 +14,7 @@ class UserSettingsRepo(BaseRepo):
     async def create_user_settings(self,
                                    user_id: int,
                                    timezone: str | None = None,
+                                   last_dm_sent_status: str | None = None,
                                    relayed_reminders_disabled: bool = False,
                                    blocked_from_relaying_reminders: bool = False,
                                    preferred_animanga_provider: str = AnimangaProvider.MAL) -> UserSettings:
@@ -23,6 +24,7 @@ class UserSettingsRepo(BaseRepo):
         user_settings = UserSettings(
             user_id=user_id,
             timezone=timezone,
+            last_dm_sent_status=last_dm_sent_status,
             relayed_reminders_disabled=relayed_reminders_disabled,
             blocked_from_relaying_reminders=blocked_from_relaying_reminders,
             preferred_animanga_provider=preferred_animanga_provider,
