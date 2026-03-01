@@ -244,7 +244,7 @@ def get_manga_info_embed(manga_info: MangaInfo,
     embed.set_thumbnail(url=manga_info.poster_url or logo)
     embed.set_image(url=manga_info.banner_url)
     embed.set_author(name=f"Rated {manga_info.score or '?'} "
-                          f"by{get_human_readable_number(manga_info.score_count) or '?'} users "
+                          f"by {get_human_readable_number(manga_info.score_count) or '?'} users "
                           f"| Ranked #{manga_info.rank or '?'}",
                      url=manga_info.web_url,
                      icon_url=logo)
