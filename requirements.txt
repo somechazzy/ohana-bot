@@ -4,7 +4,7 @@ aiohttp-cors==0.7.0
 aiomysql==0.3.0
 asyncmy==0.2.11
 beautifulsoup4==4.13.4
-discord.py==2.7.1
+discord.py[voice]==2.7.1
 dnspython==2.6.1
 emoji==2.2.0
 greenlet==3.2.2
