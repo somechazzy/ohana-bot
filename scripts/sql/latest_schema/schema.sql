@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS guild_xp_settings
     created_at                     DATETIME                              DEFAULT CURRENT_TIMESTAMP() NOT NULL,
     updated_at                     DATETIME                              DEFAULT CURRENT_TIMESTAMP() NULL ON UPDATE CURRENT_TIMESTAMP(),
     CONSTRAINT guild_xp_settings_id_uq UNIQUE (id),
+    CONSTRAINT guild_xp_settings_guild_settings_id_uq UNIQUE (guild_settings_id),
     CONSTRAINT guild_xp_settings_guild_settings_id_guild_settings_fk FOREIGN KEY (guild_settings_id) REFERENCES guild_settings (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) collate = utf8mb4_general_ci;
 
@@ -196,6 +197,7 @@ CREATE TABLE IF NOT EXISTS guild_music_settings
     created_at              DATETIME    DEFAULT CURRENT_TIMESTAMP() NOT NULL,
     updated_at              DATETIME    DEFAULT CURRENT_TIMESTAMP() NULL ON UPDATE CURRENT_TIMESTAMP(),
     CONSTRAINT guild_music_settings_id_uq UNIQUE (id),
+    CONSTRAINT guild_music_settings_guild_settings_id_uq UNIQUE (guild_settings_id),
     CONSTRAINT guild_music_settings_guild_settings_id_guild_settings_fk FOREIGN KEY (guild_settings_id) REFERENCES guild_settings (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) collate = utf8mb4_general_ci;
 

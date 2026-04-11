@@ -1,3 +1,5 @@
+from datetime import datetime, UTC, timedelta
+
 import discord
 
 from bot.slashes.user_slashes import UserSlashes
@@ -6,9 +8,9 @@ from bot.utils.bot_actions.moderation_actions import mute_member, unmute_member,
 
 from bot.utils.decorators import slash_command
 from common.exceptions import UserInputException
+from constants import DiscordTimestamp
 from strings.commands_strings import UserSlashCommandsStrings
-from utils.helpers.text_manipulation_helpers import get_human_readable_time
-from utils.helpers.text_parsing_helpers import get_time_in_minutes_from_user_text
+from utils.helpers.text_parsing_helpers import get_future_time_from_user_text
 
 
 class ModerationUserSlashes(UserSlashes):
@@ -21,23 +23,23 @@ class ModerationUserSlashes(UserSlashes):
         /mute
         Mute a member
         """
-        duration_in_minutes = get_time_in_minutes_from_user_text(duration)
-        if not duration_in_minutes:
+        target_time = get_future_time_from_user_text(duration)
+        if not target_time:
             raise UserInputException(UserSlashCommandsStrings.INVALID_DURATION_ERROR_MESSAGE)
-
-        if duration_in_minutes >= 28 * 24 * 60:
+        if target_time > datetime.now(UTC) + timedelta(weeks=4):
             raise UserInputException(UserSlashCommandsStrings.MUTE_DURATION_INVALID_ERROR_MESSAGE)
 
         await self.interaction.response.defer(thinking=True, ephemeral=self.send_as_ephemeral())
         await mute_member(member=member,
-                          duration_in_minutes=duration_in_minutes,
+                          mute_expiry=target_time,
                           actor=self.member,
                           reason=reason)
 
         await self.interaction.followup.send(
             embed=get_success_embed(UserSlashCommandsStrings.MUTE_SUCCESS_FEEDBACK.format(
                 member=member.mention,
-                duration=get_human_readable_time(duration_in_minutes)
+                date_and_time=DiscordTimestamp.LONG_DATE_TIME.format(timestamp=int(target_time.timestamp())),
+                relative_time=DiscordTimestamp.RELATIVE_TIME.format(timestamp=int(target_time.timestamp()))
             )),
             ephemeral=self.send_as_ephemeral()
         )

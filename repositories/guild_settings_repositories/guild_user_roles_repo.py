@@ -1,4 +1,5 @@
 from sqlalchemy import update, select, delete
+from sqlalchemy.dialects.mysql import insert
 
 from models.guild_settings_models import GuildUserRoles
 from repositories import BaseRepo
@@ -6,36 +7,22 @@ from repositories import BaseRepo
 
 class GuildUserRolesRepo(BaseRepo):
 
-    # noinspection PyTypeChecker
-    async def create_guild_user_roles(self,
-                                      guild_settings_id: int,
-                                      user_id: int,
-                                      role_ids: list) -> GuildUserRoles:
-        """
-        Create a new GuildUserRoles entry.
-        """
-        guild_user_roles = GuildUserRoles(
-            guild_settings_id=guild_settings_id,
-            user_id=user_id,
-            role_ids=role_ids
-        )
-        self._session.add(guild_user_roles)
-        await self._session.flush()
-        return guild_user_roles
-
-    async def update_guild_user_roles(self,
+    async def upsert_guild_user_roles(self,
                                       guild_settings_id: int,
                                       user_id: int,
                                       role_ids: list[int]):
         """
-        Update the role IDs for a specific guild member.
+        Create or update GuildUserRoles entry for a specific guild member.
         """
-        await self._session.execute(
-            update(GuildUserRoles).where(
-                GuildUserRoles.guild_settings_id == guild_settings_id,
-                GuildUserRoles.user_id == user_id
-            ).values(role_ids=role_ids)
+        stmt = insert(GuildUserRoles).values(
+            guild_settings_id=guild_settings_id,
+            user_id=user_id,
+            role_ids=role_ids,
+        ).on_duplicate_key_update(
+            role_ids=role_ids,
         )
+        await self._session.execute(stmt)
+        await self._session.flush()
 
     async def get_guild_user_roles(self, guild_settings_id: int, user_id: int) -> GuildUserRoles | None:
         """

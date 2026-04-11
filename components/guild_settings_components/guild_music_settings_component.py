@@ -61,17 +61,7 @@ class GuildMusicSettingsComponent(BaseGuildSettingsComponent):
             update_data['music_player_message_id'] = music_player_message_id
             guild_settings.music_player_message_id = music_player_message_id
 
-        if not await guild_music_settings_repo.get_guild_music_settings(
-            guild_settings_id=guild_settings_id
-        ):
-            await guild_music_settings_repo.create_guild_music_settings(
-                guild_settings_id=guild_settings_id,
-                music_channel_id=music_channel_id if music_channel_id is not NOT_SET else None,
-                music_header_message_id=music_header_message_id if music_header_message_id is not NOT_SET else None,
-                music_player_message_id=music_player_message_id if music_player_message_id is not NOT_SET else None
-            )
-        else:
-            await guild_music_settings_repo.update_guild_music_settings(
-                guild_settings_id=guild_settings_id,
-                **update_data
-            )
+        await guild_music_settings_repo.upsert_guild_music_settings(
+            guild_settings_id=guild_settings_id,
+            **update_data
+        )

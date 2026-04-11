@@ -85,7 +85,8 @@ async def refresh_music_header_message(guild: discord.Guild):
 
 
 @suppress_and_log(ignore_exceptions=(discord.Forbidden, discord.HTTPException,
-                                     aiohttp.client_exceptions.ServerDisconnectedError))
+                                     aiohttp.client_exceptions.ServerDisconnectedError),
+                  default_return=False)
 async def refresh_music_player_message(guild: discord.Guild) -> bool:
     """
     Sends or refreshes the music player message in the specified guild's music channel.

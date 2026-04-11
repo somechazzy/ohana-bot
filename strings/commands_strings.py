@@ -88,7 +88,7 @@ class UserSlashCommandsStrings(GeneralCommandsStrings):
 
     # Moderation Commands
     MUTE_DURATION_INVALID_ERROR_MESSAGE = "Maximum mute duration must be less than 28 days."
-    MUTE_SUCCESS_FEEDBACK = "{member} has been muted for {duration}."
+    MUTE_SUCCESS_FEEDBACK = "{member} has been muted until {date_and_time} (will be unmuted in {relative_time})."
     UNMUTE_NON_MUTED_ERROR_MESSAGE = "{member} is not muted."
     UNMUTE_SUCCESS_FEEDBACK = "{member} has been unmuted."
     KICK_SUCCESS_FEEDBACK = "{member} has been kicked."
@@ -97,11 +97,11 @@ class UserSlashCommandsStrings(GeneralCommandsStrings):
     UNBAN_SUCCESS_FEEDBACK = "User {user} ({user_id}) has been unbanned."
 
     # Reminder Commands
-    REMIND_EXCEEDS_MAX_ERROR_MESSAGE = "Maximum reminder time is 1 year."
+    REMIND_EXCEEDS_MAX_ERROR_MESSAGE = "Maximum reminder time is 5 years."
     GENERIC_REMINDER_CREATION_ERROR_MESSAGE = ("😔 Failed at setting up your reminder. "
                                                "We're already looking into it.")
     REMIND_OTHER_SUCCESS_FEEDBACK = ("Okie. I'll remind {member_name} ({member_mention}) "
-                                     "about that in {duration} ({timestamp}).")
+                                     "about that @ {date_and_time} ({relative_time}).")
     PROMPT_TO_SEND_INITIAL_DM = ("Please note that if we had no previous DMs then Ohana won't be able to send "
                                  "you the reminder. If that's the case, drop me a quick hi to avoid this issue!")
 

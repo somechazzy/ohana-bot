@@ -56,12 +56,13 @@ def self_scheduling_worker(name: str, initial_delay: int = 0, **kwargs_):
     return decorator
 
 
-def suppress_and_log(log: bool = True, ignore_exceptions: tuple = ()):
+def suppress_and_log(log: bool = True, ignore_exceptions: tuple = (), default_return=None):
     """
     Decorator to catch any exceptions and log them instead of raising.
     Args:
         log: Whether to log the exception.
         ignore_exceptions: Tuple of exception types to ignore and not log.
+        default_return: Value to return if an exception is caught (default is None).
     """
     def decorator(func):
         @wraps(func)
@@ -74,6 +75,7 @@ def suppress_and_log(log: bool = True, ignore_exceptions: tuple = ()):
                 if log and not isinstance(e, ignore_exceptions):
                     logger.warning(f"Suppress-and-log coroutine {func.__name__} raised an exception: {e}\n"
                                    f"{traceback.format_exc()}")
+                return default_return
 
         @wraps(func)
         def sync_wrapper(*args, **kwargs):
@@ -85,6 +87,7 @@ def suppress_and_log(log: bool = True, ignore_exceptions: tuple = ()):
                 if log and not isinstance(e, ignore_exceptions):
                     logger.warning(f"Suppress-and-log function {func.__name__} raised an exception: {e}\n"
                                    f"{traceback.format_exc()}")
+                return default_return
 
         if inspect.iscoroutinefunction(func):
             return async_wrapper

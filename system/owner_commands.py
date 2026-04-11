@@ -116,8 +116,9 @@ class OwnerCommandsHandler:
             if not guild.chunked:
                 continue
             chunked_guilds += 1
-            total_humans += len([member for member in guild.members if not member.bot])
-            total_bots += len([member for member in guild.members if member.bot])
+            humans_count = len([member for member in guild.members if not member.bot])
+            total_humans += humans_count
+            total_bots += len(guild.members) - humans_count
         human_percentage = round(total_humans * 100 / (total_humans + total_bots), 2) if total_members else 0
         bot_percentage = round(total_bots * 100 / (total_humans + total_bots), 2) if total_members else 0
         current_radio_connections = len(cache.MUSIC_SERVICES)

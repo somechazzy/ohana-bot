@@ -89,10 +89,10 @@ class APIService:
         Returns:
             web.Response: The response object.
         """
-        token = set_context_id()
-        response_status_code = 500
-        error = None
         async with session_context():
+            token = set_context_id()
+            response_status_code = 500
+            error = None
             try:
                 if not hasattr(handler, 'AUTH_REQUIRED'):
                     response_status_code = 404
@@ -122,6 +122,7 @@ class APIService:
             finally:
                 await get_session().commit()
                 await execute_post_commit_actions()
+                loggable_headers = {k: v for k, v in request.headers.items() if k.lower() not in ['authorization']}
                 if getattr(handler, 'LOG_REQUEST', True) or error:
                     logging_method = self.logger.error if error else self.logger.info
                     logging_method(message=f"{request.method} {request.url} -> status {response_status_code}",  # noqa
@@ -129,7 +130,7 @@ class APIService:
                                    extras={
                                        "method": request.method,
                                        "url": str(request.url),
-                                       "headers": dict(request.headers),
+                                       "headers": loggable_headers,
                                        "query_params": dict(request.query),
                                        "body": await request.text() if request.can_read_body else None,
                                        "response": {
