@@ -205,8 +205,7 @@ class AppLogger:
 
 class AsyncFileLogHandler:
     def __init__(self):
-        self.path = Path(LOGGING_DIRECTORY) / f"{datetime.now(UTC).strftime("%Y.%m.%d")}.txt"
-        self.path.parent.mkdir(parents=True, exist_ok=True)
+        Path(LOGGING_DIRECTORY).mkdir(parents=True, exist_ok=True)
 
     async def log(self, log_record_data: 'LogRecordData'):
         line = (f"\n{log_record_data.log_time.strftime("%Y-%m-%d %H:%M:%S")}"
@@ -214,8 +213,12 @@ class AsyncFileLogHandler:
                 f" {log_record_data.category}"
                 f" - {log_record_data.message} \n"
                 + " ".join(f"[{k}={v}]" for k, v in log_record_data.extras.items()))
-        async with aiofiles.open(self.path, mode='a', encoding='utf-8') as f:
+        async with aiofiles.open(self.log_file_path, mode='a', encoding='utf-8') as f:
             await f.write(line)
+
+    @property
+    def log_file_path(self):
+        return Path(LOGGING_DIRECTORY) / f"{datetime.now(UTC).strftime("%Y.%m.%d")}.txt"
 
 
 class DiscordLogHandler:

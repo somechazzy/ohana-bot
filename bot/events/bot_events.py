@@ -13,7 +13,7 @@ from settings import ENABLE_API_SERVICE, SYNC_COMMANDS_ON_STARTUP, SYNC_EMOJIS_O
 from system.checks import verify_slashes_decorators
 from utils.helpers.context_helpers import create_isolated_task
 from ..utils.decorators import extensible_event
-from ..utils.helpers.application_emojis_helper import sync_up_application_emojis
+from ..utils.helpers.application_emojis_helpers import sync_up_application_emojis
 from ..utils.helpers.client_helpers import lazy_chunk_guilds, sync_commands_on_discord
 
 from common.app_logger import AppLogger

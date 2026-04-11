@@ -14,8 +14,7 @@ from components.user_settings_components.user_reminder_component import UserRemi
 from components.user_settings_components.user_settings_component import UserSettingsComponent
 from constants import DiscordTimestamp, UserLastDMSentStatus
 from strings.commands_strings import UserSlashCommandsStrings
-from utils.helpers.text_manipulation_helpers import get_human_readable_time
-from utils.helpers.text_parsing_helpers import get_time_in_minutes_from_user_text
+from utils.helpers.text_parsing_helpers import get_future_time_from_user_text
 
 
 class RemindUserSlashes(UserSlashes):
@@ -30,17 +29,16 @@ class RemindUserSlashes(UserSlashes):
         /remind me
         Remind me of something at a specific time
         """
-        minutes = get_time_in_minutes_from_user_text(when)
-
-        if not minutes:
+        target_time = get_future_time_from_user_text(when)
+        if not target_time:
             raise UserInputException(UserSlashCommandsStrings.INVALID_DURATION_ERROR_MESSAGE)
-        if minutes > 60 * 24 * 366:
+        if target_time > datetime.now(UTC) + timedelta(minutes=60 * 24 * 366 * 5):
             raise UserInputException(UserSlashCommandsStrings.REMIND_EXCEEDS_MAX_ERROR_MESSAGE)
 
         try:
             reminder = await self.reminder_component.create_reminder(
                 reminder_text=what,
-                reminder_time=datetime.now(UTC) + timedelta(minutes=minutes),
+                reminder_time=target_time,
                 owner_user_id=self.user.id,
                 recipient_user_id=self.user.id
             )
@@ -78,18 +76,16 @@ class RemindUserSlashes(UserSlashes):
         /remind someone
         Remind someone of something at a specific time
         """
-        minutes = get_time_in_minutes_from_user_text(when)
-
-        if not minutes:
+        target_time = get_future_time_from_user_text(when)
+        if not target_time:
             raise UserInputException(UserSlashCommandsStrings.INVALID_DURATION_ERROR_MESSAGE)
-        if minutes > 60 * 24 * 366:
+        if target_time > datetime.now(UTC) + timedelta(minutes=60 * 24 * 366 * 5):
             raise UserInputException(UserSlashCommandsStrings.REMIND_EXCEEDS_MAX_ERROR_MESSAGE)
 
-        reminder_time = datetime.now(UTC) + timedelta(minutes=minutes)
         try:
             await self.reminder_component.create_reminder(
                 reminder_text=what,
-                reminder_time=reminder_time,
+                reminder_time=target_time,
                 owner_user_id=self.user.id,
                 recipient_user_id=who.id
             )
@@ -106,8 +102,8 @@ class RemindUserSlashes(UserSlashes):
                 UserSlashCommandsStrings.REMIND_OTHER_SUCCESS_FEEDBACK.format(
                     member_name=who.display_name,
                     member_mention=who.mention,
-                    duration=get_human_readable_time(minutes),
-                    timestamp=DiscordTimestamp.SHORT_DATE_TIME.format(timestamp=int(reminder_time.timestamp()))
+                    date_and_time=DiscordTimestamp.LONG_DATE_TIME.format(timestamp=int(target_time.timestamp())),
+                    relative_time=DiscordTimestamp.RELATIVE_TIME.format(timestamp=int(target_time.timestamp()))
                 )
             ),
             ephemeral=True

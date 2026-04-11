@@ -14,20 +14,19 @@ from bot.utils.helpers.client_helpers import force_fetch_member
 from bot.utils.helpers.moderation_helpers import assert_hierarchy
 from common.app_logger import AppLogger
 from common.exceptions import UserInputException
-from constants import GuildLogEvent, AppLogCategory
-from utils.helpers.text_manipulation_helpers import get_human_readable_time
+from constants import GuildLogEvent, AppLogCategory, DiscordTimestamp
 from common.exceptions import ModerationHierarchyError
 
 logger = AppLogger(component=__name__)
 
 
-async def mute_member(member: discord.Member, duration_in_minutes: int, actor: discord.Member,
+async def mute_member(member: discord.Member, mute_expiry: datetime.datetime, actor: discord.Member,
                       reason: str | None):
     """
     Mute a member in a guild for a specified duration.
     Args:
         member (discord.Member | discord.User): The member to mute.
-        duration_in_minutes (int): Duration of the mute in minutes.
+        mute_expiry (datetime.datetime): The datetime when the mute should expire.
         actor (discord.Member): The moderator performing the mute action.
         reason (str | None): Reason for the mute action.
     Raises:
@@ -37,7 +36,7 @@ async def mute_member(member: discord.Member, duration_in_minutes: int, actor: d
     if isinstance(member, discord.User):
         member = await force_fetch_member(user_id=member.id, guild=actor.guild)
     assert_hierarchy(actor=actor, target=member)
-    await member.timeout(datetime.timedelta(minutes=duration_in_minutes),
+    await member.timeout(mute_expiry,
                          reason=reason or "Not provided" + f" - Moderator: {actor}")
 
     await GuildLogger(guild=member.guild).log_event(
@@ -45,10 +44,11 @@ async def mute_member(member: discord.Member, duration_in_minutes: int, actor: d
         actor=actor,
         member=member,
         reason=reason or "No reason provided",
-        fields=[GuildLogEventField("Duration", get_human_readable_time(duration_in_minutes)),
+        fields=[GuildLogEventField("Until",
+                                   DiscordTimestamp.LONG_DATE_TIME.format(timestamp=int(mute_expiry.timestamp()))),
                 GuildLogEventField("Moderator", actor.mention)]
     )
-    logger.info(f"Muted {member} in guild {member.guild} for {duration_in_minutes} minutes.",
+    logger.info(f"Muted {member} in guild {member.guild} for until {mute_expiry.isoformat()}.",
                 extras={"member_id": member.id, "guild_id": member.guild.id, "moderator_id": actor.id},
                 category=AppLogCategory.BOT_GENERAL)
 

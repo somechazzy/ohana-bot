@@ -70,7 +70,8 @@ class MangaInfoInteractionHandler(UserInteractionHandler, NavigationInteractionH
         manga_info = await self.animanga_component.get_manga_info(manga_id=selected_manga_id)
         try:
             user_stats = await self.animanga_component.get_user_stats_for_manga(manga_id=selected_manga_id,
-                                                                                username=self._user_username)
+                                                                                username=self._user_username) \
+                if self._user_username else None
         except Exception as e:
             if getattr(e, 'alert_worthy', True):
                 self.logger.error(f"Error fetching user stats for manga {selected_manga_id}: {e}")

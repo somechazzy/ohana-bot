@@ -69,18 +69,8 @@ class GuildUserRolesComponent(BaseGuildSettingsComponent):
         self.logger.debug(f"Creating guild user roles for user {user_id} in guild {guild_id}.")
         guild_settings = await GuildSettingsComponent().get_guild_settings(guild_id)
         guild_user_roles_repo = GuildUserRolesRepo(session=get_session())
-        if not await guild_user_roles_repo.get_guild_user_roles(
+        await guild_user_roles_repo.upsert_guild_user_roles(
             guild_settings_id=guild_settings.guild_settings_id,
-            user_id=user_id
-        ):
-            await guild_user_roles_repo.create_guild_user_roles(
-                guild_settings_id=guild_settings.guild_settings_id,
-                user_id=user_id,
-                role_ids=role_ids
-            )
-        else:
-            await guild_user_roles_repo.update_guild_user_roles(
-                guild_settings_id=guild_settings.guild_settings_id,
-                user_id=user_id,
-                role_ids=role_ids
-            )
+            user_id=user_id,
+            role_ids=role_ids
+        )

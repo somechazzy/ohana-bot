@@ -9,18 +9,21 @@ import cache
 from bot.utils.bot_actions.utility_actions import refresh_music_player_message
 from clients import discord_client
 from common.app_logger import AppLogger
+from common.decorators import require_db_session
 from common.exceptions import UserReadableException, ExternalServiceException
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
 from constants import AppLogCategory
 from models.dto.cachables import CachedGuildSettings
 from models.dto.radio_stream import RadioStream
-from utils.helpers.context_helpers import create_task
+from utils.helpers.context_helpers import create_isolated_task
 
 
 class GuildMusicService:
     """
     Service object meant to represent the state of a guild's Ohana Music connection.
     """
+    TICK_INTERVAL_SECONDS = 0.05
+    TICKS_PER_SECOND = 1 / TICK_INTERVAL_SECONDS
 
     def __init__(self,
                  guild_id: int,
@@ -37,7 +40,7 @@ class GuildMusicService:
         self.current_stream: RadioStream | None = None
         self.is_running: bool = False
         self.idle_since: datetime | None = datetime.now(UTC)
-        self.time_playing_seconds: int = 0
+        self.time_playing_ticks: int = 0
         self._current_stream_session_id = None  # set on start
 
         self._logger = AppLogger(component=self.__class__.__name__)
@@ -109,7 +112,7 @@ class GuildMusicService:
         try:
             self.is_running = True
             self.idle_since = None
-            self.time_playing_seconds = 0
+            self.time_playing_ticks = 0
             self._current_stream_session_id = uuid.uuid4().hex
             if not self.current_stream:
                 raise Exception("Start called without a valid stream set.")
@@ -137,22 +140,30 @@ class GuildMusicService:
                         },
                         alert_worthy=True
                     )
-            create_task(refresh_music_player_message(guild=self.guild))
+            create_isolated_task(self._refresh_music_player_message())
             while self.voice_client and self.voice_client.is_playing() and self.current_stream:
-                await asyncio.sleep(0.05)
-                self.time_playing_seconds += 0.05
+                await asyncio.sleep(self.TICK_INTERVAL_SECONDS)
+                self.time_playing_ticks += 1
                 self.is_running = True
-                if self.time_playing_seconds % 30 == 0:
+                if self.time_playing_ticks % (30 * self.TICKS_PER_SECOND) == 0:
                     self.check_and_update_idle_status()
                 if self.current_stream and self.current_stream.image_refresh_rate and \
-                        self.time_playing_seconds % self.current_stream.image_refresh_rate == 0:
-                    create_task(refresh_music_player_message(guild=self.guild))
+                        self.time_playing_ticks % (self.current_stream.image_refresh_rate * self.TICKS_PER_SECOND) == 0:
+                    create_isolated_task(self._refresh_music_player_message())
         finally:
             self.idle_since = datetime.now(UTC)
             self.is_running = False
-            self.time_playing_seconds = 0
+            self.time_playing_ticks = 0
             self._current_stream_session_id = None
-            await refresh_music_player_message(guild=self.guild)
+            create_isolated_task(self._refresh_music_player_message())
+
+    @require_db_session
+    async def _refresh_music_player_message(self):
+        """
+        Refreshes the music player message for the guild.
+        Primarily meant to be called from start() loop due to its lack of DB session.
+        """
+        await refresh_music_player_message(guild=self.guild)
 
     def stop(self):
         """

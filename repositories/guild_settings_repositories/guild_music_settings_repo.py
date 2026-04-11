@@ -1,6 +1,7 @@
-from sqlalchemy import select, update
+from sqlalchemy import update
+from sqlalchemy.dialects.mysql import insert
 
-from models.guild_settings_models import GuildMusicSettings, GuildSettings
+from models.guild_settings_models import GuildMusicSettings
 from repositories import BaseRepo
 
 
@@ -25,31 +26,17 @@ class GuildMusicSettingsRepo(BaseRepo):
         await self._session.flush()
         return settings
 
-    async def get_guild_music_settings(self,
-                                       guild_id: int | None = None,
-                                       guild_settings_id: int | None = None) -> GuildMusicSettings | None:
+    async def upsert_guild_music_settings(self,
+                                          guild_settings_id: int,
+                                          **update_data):
         """
-        Retrieve guild music settings. Must provide either guild_id or guild_settings_id.
+        Create or update GuildMusicSettings entry for a specific guild.
         """
-        if guild_id is None and guild_settings_id is None:
-            raise ValueError("Either guild_id or guild_settings_id must be provided.")
-        if guild_id:
-            return await self._session.execute(
-                select(GuildMusicSettings)
-                .join(GuildMusicSettings.guild_settings)
-                .where(GuildSettings.guild_id == guild_id)
-            ).scalar_one_or_none()
-        return (await self._session.execute(
-            select(GuildMusicSettings).where(GuildMusicSettings.guild_settings_id == guild_settings_id)
-        )).scalar_one_or_none()
-
-    async def update_guild_music_settings(self, guild_settings_id: int, **update_data) -> None:
-        """
-        Update music settings for a specific guild.
-        """
-        await self._session.execute(
-            update(GuildMusicSettings)
-            .where(GuildMusicSettings.guild_settings_id == guild_settings_id)
-            .values(**update_data)
+        stmt = insert(GuildMusicSettings).values(
+            guild_settings_id=guild_settings_id,
+            **update_data
+        ).on_duplicate_key_update(
+            **update_data
         )
+        await self._session.execute(stmt)
         await self._session.flush()

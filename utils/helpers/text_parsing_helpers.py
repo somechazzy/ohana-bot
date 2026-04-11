@@ -1,7 +1,9 @@
 import codecs
 import re
+from datetime import datetime, timedelta, UTC
 
 from constants import OFFENSIVE_WORDS_LIST
+from utils.helpers.datetime_helpers import from_timestamp
 
 
 def clean_text_with_html_tags(html_text: str) -> str:
@@ -32,6 +34,31 @@ def extract_emojis_from_discord_message(message: str) -> list[tuple[bool, str, i
     """
     emojis = re.findall(r'<(a)?:([^:]+):([0-9]+)>', message)
     return [(bool(a), name, int(id_)) for a, name, id_ in emojis]
+
+
+def get_future_time_from_user_text(text: str) -> datetime | None:
+    """
+    Extracts a future datetime from the given text. Can be in the format of a timestamp or a duration.
+    Args:
+        text (str): The input text containing a future time reference.
+    Returns:
+        datetime | None: The extracted future datetime, or None if no valid future time is found.
+    Raises:
+
+    """
+    timestamp_match = re.search(r"(\d+)", text)
+    if timestamp_match:
+        timestamp = int(timestamp_match.group(1))
+        future_time = from_timestamp(timestamp)
+        if future_time > datetime.now(UTC):
+            return future_time
+
+    duration_minutes = get_time_in_minutes_from_user_text(text)
+    if duration_minutes > 0:
+        future_time = datetime.now(UTC) + timedelta(minutes=duration_minutes)
+        return future_time
+
+    return None
 
 
 def get_time_in_minutes_from_user_text(text: str) -> int:
