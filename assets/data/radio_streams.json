@@ -116,6 +116,69 @@
         }
     },
     {
+        "code": "CYBERPUNK_2077",
+        "category": "DEFAULT",
+        "name": "Cyberpunk 2077 Radio",
+        "is_enabled": true,
+        "description": "Music from the Cyberpunk 2077 game & anime soundtracks. Powered by Ohana Radio.",
+        "genres": [
+            "Cyberpunk",
+            "Electronic",
+            "Rock"
+        ],
+        "website_url": "https://radio.ohanabot.xyz/stations/cyberpunk/",
+        "stream": {
+            "url": "https://radio.ohanabot.xyz/stations/cyberpunk/stream/192",
+            "format": "mpeg"
+        },
+        "images": {
+            "dynamic": {
+            },
+            "static": {
+                "urls": [
+                    "https://assets.ohanabot.xyz/images/radio/cyberpunk/radio_image_1.jpg",
+                    "https://assets.ohanabot.xyz/images/radio/cyberpunk/radio_image_2.jpg",
+                    "https://assets.ohanabot.xyz/images/radio/cyberpunk/radio_image_3.jpg",
+                    "https://assets.ohanabot.xyz/images/radio/cyberpunk/radio_image_4.jpg",
+                    "https://assets.ohanabot.xyz/images/radio/cyberpunk/radio_image_5.jpg"
+                ]
+            }
+        },
+        "image_refresh_rate": 300,
+        "status_check": {
+            "api": "https://radio.ohanabot.xyz/stations/cyberpunk/status",
+            "currently_playing_path": {
+                "title": [
+                    "current_track",
+                    "title"
+                ],
+                "artist": [
+                    "current_track",
+                    "artist"
+                ],
+                "extra": [
+                    "current_track",
+                    "album"
+                ]
+            },
+            "artwork_path": [
+                "current_track",
+                "image",
+                "thumbnail"
+            ],
+            "progress_path": [
+                "current_track",
+                "progress"
+            ],
+            "duration_path": [
+                "current_track",
+                "duration"
+            ],
+            "duration_time_format": "seconds",
+            "artwork_url_prefix": "https://radio.ohanabot.xyz"
+        }
+    },
+    {
         "code": "RM_FM_STUDY",
         "category": "DEFAULT",
         "name": "rm.fm/study",

@@ -155,6 +155,7 @@ class GuildMusicService:
             self.is_running = False
             self.time_playing_ticks = 0
             self._current_stream_session_id = None
+            self.set_radio_stream(None)
             create_isolated_task(self._refresh_music_player_message())
 
     @require_db_session
