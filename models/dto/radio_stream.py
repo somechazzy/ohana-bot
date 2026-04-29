@@ -74,7 +74,8 @@ class RadioStream:
                 duration_path=info_dict['status_check'].get('duration_path', None),
                 artwork_path=info_dict['status_check'].get('artwork_path', None),
                 duration_time_format=info_dict['status_check'].get('duration_time_format',
-                                                                   RadioStreamStatusCheck.TimeFormat.SECONDS)
+                                                                   RadioStreamStatusCheck.TimeFormat.SECONDS),
+                artwork_url_prefix=info_dict['status_check'].get('artwork_url_prefix', None)
             )
         else:
             status_check = None
@@ -109,7 +110,8 @@ class RadioStream:
         return None
 
     async def get_ffmpeg_audio_source(self) -> discord.AudioSource:
-        ffmpeg_options = {'before_options': '-reconnect 1 ', 'options': '-vn'}
+        ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 10 ',
+                          'options': '-vn'}
         if not self.stream_url.startswith("http"):
             ffmpeg_options.pop('before_options')
         if self.stream_format == self.StreamFormat.OPUS:
@@ -165,7 +167,8 @@ class RadioStreamStatusCheck:
             self.artwork_url: str = artwork_url
 
     def __init__(self, url: str, method: str, request_data: dict, currently_playing_path: dict,
-                 progress_path: list, duration_path: list, artwork_path: list, duration_time_format: str):
+                 progress_path: list, duration_path: list, artwork_path: list, duration_time_format: str,
+                 artwork_url_prefix: str | None):
         self.url: str = url
         self.method: str = method
         self.request_data: dict = request_data
@@ -174,6 +177,7 @@ class RadioStreamStatusCheck:
         self.duration_path: list = duration_path
         self.artwork_path: list = artwork_path
         self.duration_time_format: str = duration_time_format
+        self.artwork_url_prefix: str | None = artwork_url_prefix
 
         self._logger = AppLogger(component=f"{self.__class__.__name__}")
 
@@ -260,7 +264,10 @@ class RadioStreamStatusCheck:
     def _extract_artwork_url(self, stream_status_data) -> str | None:
         if not self.artwork_path:
             return None
-        return self._get_value_from_path(data=stream_status_data, path=self.artwork_path)
+        artwork_url = self._get_value_from_path(data=stream_status_data, path=self.artwork_path)
+        if artwork_url and self.artwork_url_prefix:
+            artwork_url = self.artwork_url_prefix + artwork_url
+        return artwork_url
 
     @staticmethod
     def _get_value_from_path(data: dict, path: list) -> str:
