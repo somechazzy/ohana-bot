@@ -311,7 +311,7 @@ class ReminderSetupInteractionHandler(UserInteractionHandler):
                 interactions_handler=self,
                 timezone_set=bool(self.user_settings.timezone),
                 add_back_button=bool(self.list_interaction_handler),
-                show_recurrence=self.reminder.owner_user_settings_id == self.reminder.recipient_user_settings_id
+                show_recurrence=not self.reminder.is_relayed
             )
         elif self.selected_view == self.ReminderSetupView.DELETE_CONFIRMATION:
             embed = get_reminder_delete_confirmation_embed()

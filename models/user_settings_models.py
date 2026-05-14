@@ -88,6 +88,10 @@ class UserReminder(BaseModel, BaseModelMixin):
         return self.owner_user_settings_id != self.recipient_user_settings_id
 
     @property
+    def is_recurring(self) -> bool:
+        return self.recurrence is not None and self.recurrence.status == ReminderRecurrenceStatus.ACTIVE
+
+    @property
     def clean_reminder_text(self) -> str:
         """
         Returns the reminder text without any accents (`).
@@ -108,7 +112,7 @@ class UserReminderRecurrence(BaseModel, BaseModelMixin):
     recurrence_type: Mapped[str] = mapped_column(ReminderRecurrenceType.as_orm_enum(), nullable=False)
     basic_interval: Mapped[int | None] = mapped_column(nullable=True)
     basic_unit: Mapped[str | None] = mapped_column(ReminderRecurrenceBasicUnit.as_orm_enum(), nullable=True)
-    conditioned_type: Mapped[str] = mapped_column(ReminderRecurrenceConditionedType.as_orm_enum(), nullable=False)
+    conditioned_type: Mapped[str] = mapped_column(ReminderRecurrenceConditionedType.as_orm_enum(), nullable=True)
     conditioned_days: Mapped[list | None] = mapped_column(Json(), nullable=True)  # type: ignore[arg-type]
     conditioned_year_day: Mapped[str | None] = mapped_column(nullable=True)
 

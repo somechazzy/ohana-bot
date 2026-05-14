@@ -36,9 +36,8 @@ def get_reminder_delivery_view(reminder: CachedReminder) -> View:
                SelectOption(label="Snooze custom...",
                             value=f"{ReminderDeliveryAction.SNOOZE_CUSTOM}")]
     if not reminder.was_snoozed:
-        is_recurring = bool(reminder.recurrence)
         if not reminder.is_relayed:
-            if is_recurring:
+            if reminder.is_recurring:
                 options.append(SelectOption(
                     label="Edit recurrence",
                     value=f"{ReminderDeliveryAction.EDIT}"
@@ -161,7 +160,7 @@ def get_reminder_setup_view(interactions_handler: 'ReminderSetupInteractionHandl
                                   value=interactions_handler.RecurrenceSelectValue.MONTHLY_DAYS,
                                   description="You'll be asked to enter your timezone" if not timezone_set else None)]
         )
-        if reminder.recurrence:
+        if reminder.is_recurring:
             recurrence_select.options.insert(0,
                                              SelectOption(label="Remove recurrence",
                                                           value=interactions_handler.RecurrenceSelectValue.DELETE,

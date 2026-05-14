@@ -6,22 +6,24 @@ from aiohttp import web
 from aiohttp.web_request import Request
 from aiohttp_cors import CorsViewMixin
 
+from common.app_logger import AppLogger
 from utils.helpers.api_helpers import api_response
 
 
 class BaseAPIView(CorsViewMixin, web.View):
     API_VERSION = None
-    route = None
+    ROUTE = None
     AUTH_REQUIRED = False
     LOG_REQUEST = True
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.logger = AppLogger(component=self.__class__.__name__,)
         self.request_body: dict = {}
 
     def __new__(cls, *args, **kwargs):
         if cls is BaseAPIView:
-            raise TypeError("_APIView class cannot be instantiated.")
+            raise TypeError("BaseAPIView class cannot be instantiated.")
         return super().__new__(cls)
 
     async def head(self, *args, **kwargs):

@@ -1,3 +1,5 @@
+from itertools import chain
+
 import discord
 
 import cache
@@ -43,7 +45,11 @@ async def handle_roles_and_level_up_message_on_level_update(guild_id: int,
         level_role_level: role_ids for level_role_level, role_ids
         in xp_settings.level_role_ids_map.items() if level_role_level <= member_xp.level
     }
-    new_member_level_roles = set()
+    all_level_roles = {guild.get_role(role_id)
+                       for role_id in chain.from_iterable(xp_settings.level_role_ids_map.values())
+                       if guild.get_role(role_id) is not None and bot_can_assign_role(guild.get_role(role_id))}
+
+    new_member_level_roles = set()  # new here means the new set of roles, not the roles that member just gained
     if level_roles_map_member_is_eligible_for:
         if xp_settings.stack_level_roles:
             for level_role_level, role_ids in level_roles_map_member_is_eligible_for.items():
@@ -59,10 +65,10 @@ async def handle_roles_and_level_up_message_on_level_update(guild_id: int,
             )
 
     existing_member_roles = set(member.roles)
-    new_member_roles = set(member.roles) | set(new_member_level_roles)
+    new_member_roles = (existing_member_roles - all_level_roles) | new_member_level_roles
 
     added_roles = set()
-    if existing_member_roles != (existing_member_roles | new_member_level_roles):
+    if existing_member_roles != new_member_roles:
         added_roles = new_member_roles - existing_member_roles
         removed_roles = existing_member_roles - new_member_roles
 

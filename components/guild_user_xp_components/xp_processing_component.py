@@ -108,6 +108,16 @@ class XPProcessingComponent(BaseGuildUserXPComponent):
 
         return level != level_before_action
 
+    async def reset_user_xp_decay(self, guild_id: int, user_id: int) -> None:
+        """
+        Reset user XP decay by updating the latest_message_time to now.
+        Args:
+            guild_id (int): guild ID.
+            user_id (int): user ID.
+        """
+        member_xp = await self._get_member_xp(guild_id=guild_id, user_id=user_id, user_username="")
+        member_xp.reset_xp_decay()
+
     # noinspection PyMethodMayBeStatic
     async def _get_member_xp(self, guild_id: int, user_id: int, user_username: str) -> CachedGuildXP.MemberXP:
         """

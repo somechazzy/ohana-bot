@@ -161,7 +161,7 @@ class UserReminderRepo(BaseRepo):
         Delete a reminder by its ID.
         """
         await self._session.execute(
-            select(UserReminder).where(UserReminder.id == reminder_id)
+            delete(UserReminder).where(UserReminder.id == reminder_id)
         )
         await self._session.flush()
 

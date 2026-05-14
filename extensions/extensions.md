@@ -2,7 +2,11 @@
 # Quick guide to extensions
 
 * Extensions can be structured in any way in this directory as long as it's outside `templates` directory.
-* All extensions must be in the form of a class that inherits a particular event's template class.
+* All extensions must be in the form of a class that inherits a particular template class.
+
+## Event extensions
+
+* Template classes to inherit from are location in `extensions/templates/events`.
 * Each of these classes must implement `check` and `handle_event` methods. 
   * Your extension's event handler will be called if `check` returns `True`.
   * Your check method should be as lightweight as possible.
@@ -29,3 +33,8 @@ class WelcomeMessageOnGuildJoin(BaseOnGuildJoinEventHandler):
                                                                    "Use `/help` to get started."))
                 break
 ```
+
+## API extensions
+
+* API extensions are much simpler. Simply follow the implementation seen in any of `api/views/v1` views.
+* The template class to inherit from is located in `extensions/templates/api/__init__.py`.

@@ -49,7 +49,7 @@ class ModerationUserBlueprint(Cog):
         member: discord.Member | discord.User
             Member to mute (you can enter a user ID)
         duration: str
-            Mute duration (ex: 10m, 1h, 1d, 1w - default: 10m)
+            Mute duration (ex: 10m, 1h, 1d, 1w, @time in 5 minutes - default: 10m)
         reason: str
             Reason for muting the member
         """

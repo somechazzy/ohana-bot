@@ -70,16 +70,22 @@ class ModerationHierarchyError(InvalidCommandUsageException):
         self.user_message: str = user_message
 
 
+class MusicChannelCreationError(UserReadableException):
+    def __init__(self, user_message: str | None = None, **kwargs):
+        super().__init__(user_message, **kwargs)
+        self.user_message: str = user_message
+
+
 ### API Exceptions
 
 
 class APIException(HTTPException):
     status = 500
 
-    def __new__(cls, **kwargs):
+    def __new__(cls, *args, **kwargs):
         if cls is APIException:
             raise TypeError("APIException class cannot be instantiated directly.")
-        return super().__new__(cls, **kwargs)
+        return super().__new__(cls, *args, **kwargs)
 
     def __init__(self, message: str, **kwargs):
         super().__init__(text=message, **kwargs)

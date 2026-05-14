@@ -7,7 +7,7 @@ from components.guild_settings_components import BaseGuildSettingsComponent
 from constants import GuildEventType
 from models.dto.cachables import CachedGuildSettings
 from models.guild_settings_models import GuildSettings
-from repositories.guild_settings_repositories.guild_settings_repository import GuildSettingsRepo
+from repositories.guild_settings_repositories.guild_settings_repo import GuildSettingsRepo
 
 NOT_SET = NOT_SET_()
 

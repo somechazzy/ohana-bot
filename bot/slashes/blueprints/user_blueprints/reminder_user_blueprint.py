@@ -36,7 +36,7 @@ class RemindUserBlueprint(GroupCog, group_name="remind"):
         interaction: discord.Interaction
             Interaction to handle
         when: str
-            When to remind you (Ex: 12h, 1d6h, 1h30m, 1w3d)
+            When to remind you (Ex: 12h, 1d6h, 1h30m, 1w3d, @time in 5 minutes)
         what: str
             What to remind you of
         """
@@ -59,7 +59,7 @@ class RemindUserBlueprint(GroupCog, group_name="remind"):
         who: discord.Member | discord.User
             Member to remind (you can enter a user ID)
         when: str
-            When to remind them (Ex: 12h, 1d6h, 1h30m, 1w3d)
+            When to remind them (Ex: 12h, 1d6h, 1h30m, 1w3d, @time in 5 minutes)
         what: str
             What to remind them of
         """

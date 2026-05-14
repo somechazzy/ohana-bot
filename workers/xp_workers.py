@@ -115,6 +115,7 @@ class XPService:
                             level_change_reason="XP - level up from message",
                             channel_id=message.channel.id,
                         )
+                self._member_lock_map.pop((message.guild.id, message.author.id), None)
 
             self._message_queue.task_done()
 
@@ -135,6 +136,7 @@ class XPService:
                             user_id=xp_action.member_id,
                             level_change_reason="XP update from direct XP action",
                         )
+                self._member_lock_map.pop((xp_action.guild_id, xp_action.member_id), None)
             self._action_queue.task_done()
 
     @require_db_session
@@ -168,6 +170,7 @@ class XPService:
                     ))
                     async with self._member_lock_map[(guild_id, member_xp.user_id)]:
                         self._guild_members_pending_decay.add((guild_id, member_xp.user_id))
+                    self._member_lock_map.pop((guild_id, member_xp.user_id), None)
 
     @require_db_session
     @periodic_worker(name=BackgroundWorker.XP_DECAY_QUEUE_CONSUMER, initial_delay=30)
@@ -192,6 +195,27 @@ class XPService:
                 self._decay_queue.task_done()
                 await self._decay_queue.put(decay_item)
                 break
+
+    async def reset_user_xp_decay(self, guild_id: int, user_id: int):
+        """
+        Reset a user's XP decay status, removing them from pending decay and resetting their decay timer.
+        Args:
+            guild_id (int): The guild ID of the user.
+            user_id (int): The user ID of the user.
+        """
+        if guild_id not in cache.CACHED_GUILD_XP:
+            await self.guild_user_xp_component.fetch_guild_xp(guild_id)
+        if guild_id not in cache.CACHED_GUILD_XP:
+            self.logger.error(f"Guild ID {guild_id} not found in cache when trying to reset user XP decay.")
+            return
+        cached_guild_xp = cache.CACHED_GUILD_XP[guild_id]
+        if not cached_guild_xp.get_xp_for(user_id):
+            self.logger.error(f"User ID {user_id} not found in cache for guild ID {guild_id}"
+                              f" when trying to reset user XP decay.")
+            return
+        async with self._member_lock_map[(guild_id, user_id)]:
+            self._guild_members_pending_decay.discard((guild_id, user_id))
+            await self.xp_processing_component.reset_user_xp_decay(guild_id=guild_id, user_id=user_id)
 
     @require_db_session
     @periodic_worker(name=BackgroundWorker.XP_DB_SYNC)

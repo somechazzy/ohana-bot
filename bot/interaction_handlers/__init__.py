@@ -17,7 +17,7 @@ class BaseInteractionHandler:
     VIEW_NAME = "View"  # should be overridden in subclasses
 
     def __init__(self, source_interaction: discord.Interaction, context: str,
-                 guild_settings: 'None | GuildSettings' = None):
+                 guild_settings: None | CachedGuildSettings = None):
         self.source_interaction: discord.Interaction = source_interaction
         self.guild: discord.Guild | None = source_interaction.guild if context == CommandContext.GUILD else None
         self.channel: discord.TextChannel | discord.DMChannel = source_interaction.channel
@@ -28,7 +28,7 @@ class BaseInteractionHandler:
         self._is_closed = False
         self._embed_color: hex = Colour.PRIMARY_ACCENT
         self.context: str = context  # CommandContext
-        self.guild_settings: CachedGuildSettings = guild_settings
+        self.guild_settings: CachedGuildSettings | None = guild_settings
         self.logger = AppLogger(component=self.__class__.__name__)
 
     def __new__(cls, *args, **kwargs):

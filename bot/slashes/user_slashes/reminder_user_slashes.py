@@ -34,6 +34,8 @@ class RemindUserSlashes(UserSlashes):
             raise UserInputException(UserSlashCommandsStrings.INVALID_DURATION_ERROR_MESSAGE)
         if target_time > datetime.now(UTC) + timedelta(minutes=60 * 24 * 366 * 5):
             raise UserInputException(UserSlashCommandsStrings.REMIND_EXCEEDS_MAX_ERROR_MESSAGE)
+        if len(what) > 2000:
+            raise UserInputException(UserSlashCommandsStrings.REMINDER_TEXT_TOO_LONG_ERROR_MESSAGE)
 
         try:
             reminder = await self.reminder_component.create_reminder(
@@ -81,6 +83,8 @@ class RemindUserSlashes(UserSlashes):
             raise UserInputException(UserSlashCommandsStrings.INVALID_DURATION_ERROR_MESSAGE)
         if target_time > datetime.now(UTC) + timedelta(minutes=60 * 24 * 366 * 5):
             raise UserInputException(UserSlashCommandsStrings.REMIND_EXCEEDS_MAX_ERROR_MESSAGE)
+        if len(what) > 2000:
+            raise UserInputException(UserSlashCommandsStrings.REMINDER_TEXT_TOO_LONG_ERROR_MESSAGE)
 
         try:
             await self.reminder_component.create_reminder(

@@ -5,7 +5,7 @@ from datetime import datetime, UTC
 
 from common import NOT_SET_
 from constants import ReminderRecurrenceType, ReminderRecurrenceConditionedType, REMINDER_YEAR_DAY_FORMAT, \
-    DiscordTimestamp
+    DiscordTimestamp, ReminderRecurrenceStatus
 from models.guild_settings_models import GuildSettings, GuildChannelSettings, GuildAutorole, GuildAutoResponse, \
     GuildRoleMenu, GuildXPSettings, GuildMusicSettings
 from models.guild_settings_models import GuildUserXP
@@ -367,7 +367,7 @@ class CachedReminder:
             conditioned_type=reminder.recurrence.conditioned_type,
             conditioned_days=reminder.recurrence.conditioned_days,
             conditioned_year_day=reminder.recurrence.conditioned_year_day,
-            ends_at=reminder.recurrence.ends_at if reminder.recurrence else None
+            ends_at=reminder.recurrence.ends_at if reminder.recurrence.ends_at else None
         ) if reminder.recurrence else None
         return cls(
             user_reminder_id=reminder.id,
@@ -396,6 +396,10 @@ class CachedReminder:
         return self.owner_user_id != self.recipient_user_id
 
     @property
+    def is_recurring(self) -> bool:
+        return self.recurrence is not None and self.recurrence.status == ReminderRecurrenceStatus.ACTIVE
+
+    @property
     def clean_reminder_text(self) -> str:
         """
         Returns the reminder text without any accents (`).
@@ -417,7 +421,7 @@ class CachedReminder:
             conditioned_type=reminder.recurrence.conditioned_type,
             conditioned_days=reminder.recurrence.conditioned_days,
             conditioned_year_day=reminder.recurrence.conditioned_year_day,
-            ends_at=reminder.recurrence.ends_at if reminder.recurrence else None
+            ends_at=reminder.recurrence.ends_at if reminder.recurrence.ends_at else None
         ) if reminder.recurrence else None
 
 
@@ -489,6 +493,12 @@ class CachedGuildXP:
 
         def register_level_up_message(self):
             self.latest_level_up_message_time = datetime.now(UTC)
+            self.is_synced = False
+
+        def reset_xp_decay(self):
+            self.decayed_xp = 0
+            self.latest_message_time = datetime.now(UTC)
+            self.latest_decay_time = None
             self.is_synced = False
 
         @classmethod

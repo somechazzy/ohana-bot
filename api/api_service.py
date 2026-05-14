@@ -30,7 +30,7 @@ class APIService:
 
     def __init__(self):
         self.app = web.Application(middlewares=[self.request_middleware])
-        self.runner = None
+        self.__runner = None
         self.site = None
         self.port = API_SERVICE_PORT
         self.cors = None
@@ -43,10 +43,13 @@ class APIService:
         Returns:
             None
         """
+        if self.__runner:
+            self.logger.warning("API service start() called while it's already running. Call ignored.")
+            return
         self._register_routes()
-        self.runner = web.AppRunner(self.app)
-        await self.runner.setup()
-        self.site = web.TCPSite(self.runner, '0.0.0.0', self.port)
+        self.__runner = web.AppRunner(self.app)
+        await self.__runner.setup()
+        self.site = web.TCPSite(self.__runner, '0.0.0.0', self.port)
         await self.site.start()
         self.logger.info(f"API service started on port {self.port}", log_to_discord=True)
 
@@ -64,7 +67,12 @@ class APIService:
             )
         })
         for view in views:
-            self._register_view(view, path=rf"/api/{view.API_VERSION.strip('/')}/{view.route.lstrip('/')}")
+            self._register_view(view, path=rf"/api/{view.API_VERSION.strip('/')}/{view.ROUTE.lstrip('/')}")
+        for view in extension_views:
+            try:
+                self._register_view(view, path=rf"/api/{view.API_VERSION.strip('/')}/{view.ROUTE.lstrip('/')}")
+            except Exception as e:
+                self.logger.error(f"Failed to register extension view {view.__name__}: {e}")
 
     def _register_view(self, view_class: type(web.View), path: str):
         """
@@ -149,3 +157,4 @@ views = [
     EmojisSyncView,
     InvalidateGuildCacheView
 ]
+extension_views = []

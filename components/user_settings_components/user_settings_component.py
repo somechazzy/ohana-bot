@@ -26,7 +26,7 @@ class UserSettingsComponent(BaseUserSettingsComponent):
                                                              preferred_animanga_provider=preferred_animanga_provider)
 
     async def get_user_settings(self, user_id: int,
-                                load_usernames: bool = False) -> UserSettings | None:
+                                load_usernames: bool = False) -> UserSettings:
         """
         Fetches the user settings for a given user ID. Creates default settings if none exist.
         Args:

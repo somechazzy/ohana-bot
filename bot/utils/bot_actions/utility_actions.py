@@ -2,6 +2,7 @@ from datetime import UTC, datetime, timedelta
 
 import aiohttp
 import discord
+from discord import HTTPException as DiscordHTTPException
 
 import cache
 from bot.utils.embed_factory.general_embeds import get_error_embed
@@ -13,11 +14,12 @@ from bot.utils.view_factory.reminder_views import get_reminder_delivery_view
 from clients import discord_client
 from common.app_logger import AppLogger
 from common.decorators import with_retry, suppress_and_log
-from common.exceptions import UserReadableException
+from common.exceptions import UserReadableException, MusicChannelCreationError
 from components.guild_settings_components.guild_music_settings_component import GuildMusicSettingsComponent
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
 from constants import MusicDefaults, AppLogCategory
 from models.dto.cachables import CachedReminder
+from strings.commands_strings import AdminSlashCommandsStrings
 
 logger = AppLogger(component=__name__)
 
@@ -60,6 +62,46 @@ async def handle_reminder_delivery_failure(reminder: CachedReminder, error: Exce
                            raise_on_error=False)
 
 
+async def create_music_channel(guild: discord.Guild | None = None,
+                               guild_id: int | None = None) -> discord.TextChannel | None:
+    """
+    Creates a music channel in the specified guild or guild_id.
+    Args:
+        guild (discord.Guild): The guild where the music channel should be created.
+        guild_id (int): The ID of the guild where the music channel should be created.
+    Returns:
+        discord.TextChannel | None: The created music channel, or None if the channel could not be created.
+    """
+    if not guild and not guild_id:
+        raise ValueError("Either guild or guild_id must be provided.")
+    if not guild and guild_id:
+        guild = discord_client.get_guild(guild_id)
+        if not guild:
+            raise MusicChannelCreationError(f"Music channel could not be created due to invalid guild_id: {guild_id}")
+    try:
+        return await guild.create_text_channel(
+            name="🎵-ohana-player",
+            topic=AdminSlashCommandsStrings.MUSIC_CREATE_CHANNEL_CHANNEL_DESCRIPTION,
+            reason="Ohana music channel",
+            overwrites={
+                guild.me: discord.PermissionOverwrite(
+                    read_messages=True,
+                    send_messages=True,
+                    read_message_history=True,
+                    embed_links=True,
+                    manage_messages=True
+                ),
+                guild.default_role: discord.PermissionOverwrite(
+                    read_messages=True,
+                    send_messages=False,
+                    read_message_history=True
+                ),
+            }
+        )
+    except DiscordHTTPException as e:
+        raise MusicChannelCreationError(f"Music channel could not be created due to:\n{e}")
+
+
 async def refresh_music_header_message(guild: discord.Guild):
     """
     Sends or refreshes the music header message in the specified guild's music channel.
@@ -80,7 +122,6 @@ async def refresh_music_header_message(guild: discord.Guild):
             pass
     message = await channel.send(embed=get_music_header_embed())
     await GuildMusicSettingsComponent().update_guild_music_settings(guild_id=guild.id,
-                                                                    guild_settings_id=guild_settings.guild_settings_id,
                                                                     music_header_message_id=message.id)
 
 
@@ -121,6 +162,5 @@ async def refresh_music_player_message(guild: discord.Guild) -> bool:
                                  embed=get_music_player_embed(guild=guild, music_service=music_service),
                                  view=get_music_player_view(music_service=music_service))
     await GuildMusicSettingsComponent().update_guild_music_settings(guild_id=guild.id,
-                                                                    guild_settings_id=guild_settings.guild_settings_id,
                                                                     music_player_message_id=message.id)
     return True

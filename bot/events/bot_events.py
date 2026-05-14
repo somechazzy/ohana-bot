@@ -3,9 +3,8 @@ This module contains general event handlers related to the bot's lifecycle.
 """
 import sys
 
-from api.api_service import APIService
 from bot import register_cogs
-from clients import discord_client, emojis, worker_manager_service
+from clients import discord_client, emojis, worker_manager_service, api_service
 from components.guild_user_xp_components.xp_model_component import XPModelComponent
 from components.music_component import MusicComponent
 from constants import ChunkGuildsSetting, AppLogCategory
@@ -31,7 +30,7 @@ async def on_connect():
     on_connect.already_run = True
 
     if ENABLE_API_SERVICE:
-        create_isolated_task(APIService().start())
+        create_isolated_task(api_service.start())
     verify_slashes_decorators()
 
 

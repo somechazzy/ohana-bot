@@ -3,10 +3,15 @@ from datetime import datetime
 
 class XPAction:
 
-    def __init__(self, guild_id: int, member_id: int, username: str, xp_offset: int = 0, reset: bool = False):
+    def __init__(self,
+                 guild_id: int,
+                 member_id: int,
+                 username: str | None = None,
+                 xp_offset: int = 0,
+                 reset: bool = False):
         self.guild_id: int = guild_id
         self.member_id: int = member_id
-        self.username: str = username
+        self.username: str | None = username
         self.xp_offset: int = xp_offset
         self.reset: bool = reset
 

@@ -1,5 +1,4 @@
 from api.views.base_view import APIViewV1
-from bot.utils.helpers.client_helpers import sync_commands_on_discord
 from common.exceptions import APIBadRequestException
 from utils.helpers.api_helpers import api_response
 from components.commands_component import CommandsComponent
@@ -7,7 +6,7 @@ from constants import CommandQueryType
 
 
 class CommandsView(APIViewV1):
-    route = '/commands'
+    ROUTE = '/commands'
 
     async def get(self):
         """
@@ -25,7 +24,7 @@ class CommandsView(APIViewV1):
 
 
 class CommandsSyncView(APIViewV1):
-    route = '/commands/sync'
+    ROUTE = '/commands/sync'
     AUTH_REQUIRED = True
 
     async def post(self):
@@ -34,5 +33,6 @@ class CommandsSyncView(APIViewV1):
         Parameters:
             - guild_id (optional): Guild ID to sync commands to. If not provided, commands will be synced globally.
         """
+        from bot.utils.helpers.client_helpers import sync_commands_on_discord
         await sync_commands_on_discord(guild_id=self.request_body.get('guild_id', None))
         return api_response({'message': 'Commands synced successfully'})

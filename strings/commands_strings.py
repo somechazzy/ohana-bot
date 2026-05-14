@@ -100,6 +100,7 @@ class UserSlashCommandsStrings(GeneralCommandsStrings):
     REMIND_EXCEEDS_MAX_ERROR_MESSAGE = "Maximum reminder time is 5 years."
     GENERIC_REMINDER_CREATION_ERROR_MESSAGE = ("😔 Failed at setting up your reminder. "
                                                "We're already looking into it.")
+    REMINDER_TEXT_TOO_LONG_ERROR_MESSAGE = "Reminder text must be 2000 characters or less."
     REMIND_OTHER_SUCCESS_FEEDBACK = ("Okie. I'll remind {member_name} ({member_mention}) "
                                      "about that @ {date_and_time} ({relative_time}).")
     PROMPT_TO_SEND_INITIAL_DM = ("Please note that if we had no previous DMs then Ohana won't be able to send "

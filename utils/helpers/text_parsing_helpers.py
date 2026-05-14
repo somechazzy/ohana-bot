@@ -49,9 +49,13 @@ def get_future_time_from_user_text(text: str) -> datetime | None:
     timestamp_match = re.search(r"(\d+)", text)
     if timestamp_match:
         timestamp = int(timestamp_match.group(1))
-        future_time = from_timestamp(timestamp)
-        if future_time > datetime.now(UTC):
-            return future_time
+        try:
+            future_time = from_timestamp(timestamp)
+        except (ValueError, OSError):
+            pass
+        else:
+            if future_time > datetime.now(UTC):
+                return future_time
 
     duration_minutes = get_time_in_minutes_from_user_text(text)
     if duration_minutes > 0:

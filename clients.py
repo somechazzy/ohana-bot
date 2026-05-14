@@ -2,6 +2,8 @@
 This module is meant to contain various singletons (clients, services, etc...) used throughout the application.
 """
 from discord.ext import commands
+
+from api.api_service import APIService
 from models.dto.emoji import EmojiWarehouse
 from bot.discord_service import DiscordService
 from workers.reminder_workers import ReminderService
@@ -13,3 +15,4 @@ emojis: EmojiWarehouse = EmojiWarehouse()
 worker_manager_service: WorkerManagerService = WorkerManagerService()
 reminder_service: ReminderService = ReminderService()
 xp_service: XPService = XPService()
+api_service = APIService()

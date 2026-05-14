@@ -33,7 +33,6 @@ class GuildMusicSettingsComponent(BaseGuildSettingsComponent):
 
     async def update_guild_music_settings(self,
                                           guild_id: int,
-                                          guild_settings_id: int,
                                           music_channel_id: int | NOT_SET_ = NOT_SET,
                                           music_header_message_id: int | NOT_SET_ = NOT_SET,
                                           music_player_message_id: int | NOT_SET_ = NOT_SET):
@@ -41,7 +40,6 @@ class GuildMusicSettingsComponent(BaseGuildSettingsComponent):
         Update the music channel settings for a guild.
         Args:
             guild_id (int): The ID of the guild to update settings for.
-            guild_settings_id (int): The GuildSettings ID related.
             music_channel_id (int | NOT_SET_): The ID of the music channel to set.
             music_header_message_id (int | NOT_SET_): The ID of the music header message to set.
             music_player_message_id (int | NOT_SET_): The ID of the music player message to set.
@@ -62,6 +60,6 @@ class GuildMusicSettingsComponent(BaseGuildSettingsComponent):
             guild_settings.music_player_message_id = music_player_message_id
 
         await guild_music_settings_repo.upsert_guild_music_settings(
-            guild_settings_id=guild_settings_id,
+            guild_settings_id=guild_settings.guild_settings_id,
             **update_data
         )

@@ -4,21 +4,24 @@ import pathlib
 import sys
 import traceback
 
+from extensions.templates.api import BaseExtendedAPIViewV1
 from extensions.templates.events import _BaseEventHandler  # noqa
 
 from utils.helpers.context_helpers import create_isolated_task
 
-extensions: dict[str, dict[str, list[type]]] = {
+event_extensions: dict[str, dict[str, list[type(object)]]] = {
     # event_group: {event_name: [list of extension classes]}
 }
+__loaded_api_extensions: list[type(object)] = []
 
 
 def load_extensions(clear_existing: bool = False):
     from common.app_logger import AppLogger
+    from api.api_service import extension_views as api_views
     logger = AppLogger("extensions_management")
     base_path = pathlib.Path(r"extensions").resolve()
     if clear_existing:
-        extensions.clear()
+        event_extensions.clear()
     loaded_extensions_count = 0
     for path in base_path.rglob("*.py"):
         if not path.is_file() or base_path.joinpath("templates") in path.parents:
@@ -37,11 +40,16 @@ def load_extensions(clear_existing: bool = False):
                     continue
                 try:
                     if issubclass(cls, _BaseEventHandler):
-                        if cls.event_group() not in extensions:
-                            extensions[cls.event_group()] = {}
-                        if cls.event_name() not in extensions[cls.event_group()]:
-                            extensions[cls.event_group()][cls.event_name()] = []
-                        extensions[cls.event_group()][cls.event_name()].append(cls)
+                        if cls.event_group() not in event_extensions:
+                            event_extensions[cls.event_group()] = {}
+                        if cls.event_name() not in event_extensions[cls.event_group()]:
+                            event_extensions[cls.event_group()][cls.event_name()] = []
+                        event_extensions[cls.event_group()][cls.event_name()].append(cls)
+                    elif issubclass(cls, BaseExtendedAPIViewV1):
+                        if cls in __loaded_api_extensions:
+                            continue
+                        api_views.append(cls)
+                        __loaded_api_extensions.append(cls)
                     else:
                         loaded_extensions_count -= 1
                 except Exception as e:
@@ -55,17 +63,17 @@ def load_extensions(clear_existing: bool = False):
     logger.info(f"Loaded {loaded_extensions_count} extensions.")
 
 
-async def propagate_to_extensions(*args, event_group: str, event: str):
+async def propagate_event_to_extensions(*args, event_group: str, event: str):
     """
     Executes the appropriate extension handlers based on the event type.
     """
     from common.app_logger import AppLogger
     logger = AppLogger("extensions_management")
-    event_extensions = extensions.get(event_group, {}).get(event, [])
-    if not event_extensions:
+    current_event_extensions = event_extensions.get(event_group, {}).get(event, [])
+    if not current_event_extensions:
         return
-    logger.debug(f"Propagating event {event_group}.{event} to {len(event_extensions)} extensions")
-    for extension_class in event_extensions:
+    logger.debug(f"Propagating event {event_group}.{event} to {len(current_event_extensions)} extensions")
+    for extension_class in current_event_extensions:
         try:
             extension_handler = extension_class(*args)
             if await extension_handler.check():

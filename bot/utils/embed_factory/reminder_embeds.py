@@ -18,7 +18,6 @@ def get_reminder_delivery_embed(reminder: CachedReminder) -> discord.Embed:
         discord.Embed: The embed to send.
     """
     minutes_late = (datetime.now(UTC) - reminder.reminder_time).total_seconds() // 60
-    is_recurring = bool(reminder.recurrence)
 
     embed = discord.Embed(
         description=f"{reminder.reminder_text}",
@@ -41,7 +40,7 @@ def get_reminder_delivery_embed(reminder: CachedReminder) -> discord.Embed:
         embed.add_field(name="Relayed by", value=f"<@!{reminder.owner_user_id}> ({reminder.owner_user_id})\n",
                         inline=False)
         embed.set_footer(text="You can take actions (report, block, etc..) using the menu below")
-    elif is_recurring:
+    elif reminder.is_recurring:
         embed.set_footer(text=f"This reminder repeats: {reminder.recurrence}")
 
     return embed
@@ -75,7 +74,7 @@ def get_reminder_confirmation_embed(reminder: UserReminder, feedback_message: st
         embed.add_field(name="Who", value=f"<@!{reminder.recipient.user_id}>",
                         inline=False)
 
-    if reminder.recurrence:
+    if reminder.is_recurring:
         embed.add_field(
             name="Recurrence",
             value=f"{CachedReminder.RecurrenceSettings.get_recurrence_descriptor_from_orm_object(reminder.recurrence)}",
@@ -118,7 +117,7 @@ def get_reminder_setup_embed(reminder: UserReminder, feedback_message: str | Non
         embed.add_field(name="Who", value=f"<@!{reminder.recipient.user_id}>",
                         inline=False)
 
-    if reminder.recurrence:
+    if reminder.is_recurring:
         embed.add_field(
             name="Recurrence",
             value=f"{CachedReminder.RecurrenceSettings.get_recurrence_descriptor_from_orm_object(reminder.recurrence)}",

@@ -279,7 +279,7 @@ class UserReminderComponent(BaseUserSettingsComponent):
         if delivery_permanently_failed:
             await repo.update_reminder(reminder_id=reminder_id, status=ReminderStatus.FAILED_ARCHIVED)
             return
-        if not reminder.recurrence:
+        if not reminder.is_recurring:
             await repo.update_reminder(reminder_id=reminder_id, status=ReminderStatus.ARCHIVED)
             return
 

@@ -3,7 +3,7 @@ from utils.helpers.api_helpers import api_response
 
 
 class HealthcheckView(APIViewV1):
-    route = '/healthcheck'
+    ROUTE = '/healthcheck'
     LOG_REQUEST = False
 
     async def get(self):

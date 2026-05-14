@@ -10,7 +10,7 @@ from common.exceptions import OhanaException, ExternalServiceException, UserRead
 from constants import AppLogCategory
 from strings.commands_strings import GeneralCommandsStrings
 from strings.general_strings import GeneralStrings
-from system.extensions_management import propagate_to_extensions
+from system.extensions_management import propagate_event_to_extensions
 from utils.helpers.context_helpers import set_context_id, reset_context_id
 if TYPE_CHECKING:
     from bot.context_menus.user_context_menus import UserContextMenus
@@ -263,9 +263,7 @@ def extensible_event(group: str):
             except Exception as e:
                 logger.error(f"Extensible event `{event_name}` in group `{group}` failed.\nError: `{e}`",
                              category=AppLogCategory.BOT_GENERAL)
-            await propagate_to_extensions(*args,
-                                          event_group=group,
-                                          event=event_name)
+            await propagate_event_to_extensions(*args, event_group=group, event=event_name)
 
             reset_context_id(context_token)
 

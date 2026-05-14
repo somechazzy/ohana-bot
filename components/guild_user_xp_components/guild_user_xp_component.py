@@ -6,7 +6,7 @@ from components.guild_settings_components.guild_settings_component import GuildS
 from components.guild_user_xp_components import BaseGuildUserXPComponent
 import cache
 from models.dto.cachables import CachedGuildXP
-from repositories.guild_settings_repositories.guild_settings_repository import GuildSettingsRepo
+from repositories.guild_settings_repositories.guild_settings_repo import GuildSettingsRepo
 from repositories.guild_settings_repositories.guild_user_xp_repo import GuildUserXPRepo
 
 
