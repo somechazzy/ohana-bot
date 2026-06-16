@@ -90,8 +90,8 @@ class AnilistStrings(GeneralIntegrationStrings):
     ANALYSIS_ANIME_RELEASE_YEARS_2000P = "Prefers things released after the year 2000."
     ANALYSIS_ANIME_RELEASE_YEARS_OLD_NEW = "Likes new and old anime just the same."
     ANALYSIS_ANIME_RELEASE_YEARS_OLD = "Not the biggest fan of newer releases."
-    ANALYSIS_ANIME_RELEASE_YEARS_2010P = "Likes newer anime (2010+) more than anything."
-    ANALYSIS_ANIME_RELEASE_YEARS_2000_TO_2010 = "Prefers anime from 2000-2010 more than anything."
+    ANALYSIS_ANIME_RELEASE_YEARS_2015P = "Likes newer anime (2015+) more than anything."
+    ANALYSIS_ANIME_RELEASE_YEARS_2000_TO_2015 = "Prefers anime from 2000-2015 more than anything."
     ANALYSIS_ANIME_RELEASE_YEARS_PRE_2000 = "Big fan of old-school anime (pre-2000)."
 
     ANALYSIS_ANIME_GENRES_3P = ("Watches a lot of **{genre_1}**, **{genre_2}**, and **{genre_3}**."

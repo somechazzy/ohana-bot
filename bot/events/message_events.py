@@ -1,6 +1,8 @@
 """
 This module contains event handlers for message-related events.
 """
+import random
+
 import discord
 
 from bot.utils.bot_actions.automod_actions import perform_message_automoderation
@@ -35,7 +37,8 @@ async def on_message(message: discord.Message):
         return
 
     if message.channel.type == discord.ChannelType.private:
-        await message.channel.send(GeneralStrings.DM_RESPONSE)
+        response_list = [*[GeneralStrings.DM_RESPONSE_1]*8, GeneralStrings.DM_RESPONSE_2, GeneralStrings.DM_RESPONSE_3]
+        await message.channel.send(random.choice(response_list))
         log_dm(message=message)
         return
 

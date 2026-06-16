@@ -1242,32 +1242,32 @@ class UserAnimeAnalysis:
 
         if total_count > 20 and completed_days:
             year_2000_minus = 0
-            year_2001_2010 = 0
-            year_2011_plus = 0
+            year_2001_2015 = 0
+            year_2015_plus = 0
             for release_year, count in [(year_stat['releaseYear'], year_stat['count'])
                                         for year_stat in statistics['releaseYears']]:
                 if release_year <= 2000:
                     year_2000_minus += count
-                elif release_year in range(2001, 2011):
-                    year_2001_2010 += count
+                elif release_year in range(2001, 2015):
+                    year_2001_2015 += count
                 else:
-                    year_2011_plus += count
-            max_period = max(year_2011_plus, year_2001_2010, year_2000_minus)
+                    year_2015_plus += count
+            max_period = max(year_2015_plus, year_2001_2015, year_2000_minus)
             close_range = range(0, total_count // 8 + 2)
-            if max_period == year_2011_plus \
-                    and year_2011_plus - year_2001_2010 in close_range \
-                    and year_2011_plus - year_2000_minus in close_range:
+            if max_period == year_2015_plus \
+                    and year_2015_plus - year_2001_2015 in close_range \
+                    and year_2015_plus - year_2000_minus in close_range:
                 release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_ALL
-            elif max_period == year_2011_plus and year_2011_plus - year_2001_2010 in close_range:
+            elif max_period == year_2015_plus and year_2015_plus - year_2001_2015 in close_range:
                 release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_2000P
-            elif max_period == year_2011_plus and year_2011_plus - year_2000_minus in close_range:
+            elif max_period == year_2015_plus and year_2015_plus - year_2000_minus in close_range:
                 release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_OLD_NEW
-            elif max_period == year_2001_2010 and year_2001_2010 - year_2000_minus in close_range:
+            elif max_period == year_2001_2015 and year_2001_2015 - year_2000_minus in close_range:
                 release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_OLD
-            elif max_period == year_2011_plus:
-                release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_2010P
-            elif max_period == year_2001_2010:
-                release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_2000_TO_2010
+            elif max_period == year_2015_plus:
+                release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_2015P
+            elif max_period == year_2001_2015:
+                release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_2000_TO_2015
             elif max_period == year_2000_minus:
                 release_years_analysis = AnilistStrings.ANALYSIS_ANIME_RELEASE_YEARS_PRE_2000
             else:

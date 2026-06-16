@@ -7,7 +7,7 @@ import discord
 import cache
 from bot.utils.helpers.xp_helpers import get_user_username_for_xp
 from common.app_logger import AppLogger
-from common.decorators import periodic_worker, require_db_session
+from common.decorators import periodic_worker, require_db_session, suppress_and_log
 from components.guild_settings_components.guild_settings_component import GuildSettingsComponent
 from components.guild_user_xp_components.guild_user_xp_component import GuildUserXPComponent
 from components.guild_user_xp_components.xp_processing_component import XPProcessingComponent
@@ -227,6 +227,7 @@ class XPService:
             await self.guild_user_xp_component.sync_up_guild_user_xp()
 
     @staticmethod
+    @suppress_and_log()
     async def handle_roles_and_level_up_message_on_level_update(guild_id: int, user_id: int,
                                                                 level_change_reason: str, channel_id: int = None):
         """

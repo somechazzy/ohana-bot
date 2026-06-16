@@ -256,7 +256,7 @@ class GuildUserXP(BaseModel, BaseModelMixin):
     message_count: Mapped[int] = mapped_column(default=0, nullable=False)
     latest_gain_time: Mapped[datetime] = mapped_column(AwareDateTime(),  # type: ignore[arg-type]
                                                        nullable=False,
-                                                       default=datetime.now(UTC))
+                                                       default=lambda: datetime.now(UTC))
     latest_level_up_message_time: Mapped[datetime] = mapped_column(AwareDateTime(),  # type: ignore[arg-type]
                                                                    nullable=True)
     decayed_xp: Mapped[int] = mapped_column(default=0, nullable=False)
@@ -264,6 +264,6 @@ class GuildUserXP(BaseModel, BaseModelMixin):
                                                         nullable=True)
     latest_message_time: Mapped[datetime] = mapped_column(AwareDateTime(),  # type: ignore[arg-type]
                                                           nullable=False,
-                                                          default=datetime.now(UTC))
+                                                          default=lambda: datetime.now(UTC))
 
     guild_settings: Mapped['GuildSettings'] = relationship('GuildSettings', back_populates='user_xps')

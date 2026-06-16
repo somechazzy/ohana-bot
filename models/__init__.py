@@ -51,7 +51,7 @@ class BaseModelMixin:
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     created_at: Mapped[datetime] = mapped_column(AwareDateTime(),  # type: ignore[arg-type]
-                                                 default=datetime.now(UTC))
+                                                 default=lambda: datetime.now(UTC))
     updated_at: Mapped[datetime] = mapped_column(AwareDateTime(),  # type: ignore[arg-type]
-                                                 default=datetime.now(UTC),
-                                                 onupdate=datetime.now(UTC))
+                                                 default=lambda: datetime.now(UTC),
+                                                 onupdate=lambda: datetime.now(UTC))
